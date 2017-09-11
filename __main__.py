@@ -24,8 +24,6 @@ if __name__ == "__main__":
         data = json.load(f_in)
 
     table = data.get("table")
-    conf = SparkConf().setAppName("sleep_mapper")
-    sc = SparkContext(conf=conf)
     sqlContext = HiveContext(sc)
     sqlContext.sql("use pruebas_cuadre")
     sqlContext.sql("FROM "+table+" SELECT count(*)").show()
