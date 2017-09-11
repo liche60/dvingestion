@@ -4,7 +4,7 @@
 from __future__ import print_function
 from os.path import expanduser, join, abspath
 
-from pyspark.context import SparkContext
+from pyspark import SparkConf, SparkContext
 from pyspark.sql import HiveContext
 
 
