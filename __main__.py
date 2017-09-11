@@ -20,9 +20,9 @@ from pyspark.sql import HiveContext
 if __name__ == "__main__":
     logging.getLogger("py4j").setLevel(logging.ERROR)
 
-    with open("config.json") as f_in:
+    with open("conf.json") as f_in:
         data = json.load(f_in)
-        
+
     table = data.get("table")
     conf = SparkConf().setAppName("sleep_mapper")
     sc = SparkContext(conf=conf)
