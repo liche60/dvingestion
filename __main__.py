@@ -4,7 +4,7 @@
 from __future__ import print_function
 from os.path import expanduser, join, abspath
 
-from pyspark import SparkConf, SparkContext
+from pyspark.context import SparkContext
 from pyspark.sql import HiveContext
 
 
@@ -14,8 +14,6 @@ from pyspark.sql import HiveContext
 
 
 if __name__ == "__main__":
-    conf = SparkConf().setAppName('dv ingestion')
-    sc = SparkContext(conf=conf)
     sqlContext = HiveContext(sc)
     sqlContext.sql("use pruebas_cuadre")
     sqlContext.sql("FROM p17 SELECT count(*)").show()
