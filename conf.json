@@ -1,1 +1,12 @@
-{"table": "p17"}
+{  
+    "process_name": "flujo1",
+    "stages": [
+        {
+            "stage_name": "stage1"
+            
+        },{
+            "stage_name": "stage2"
+            
+        }
+    ]
+}

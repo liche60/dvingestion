@@ -1,10 +1,10 @@
-#
+#!/usr/bin/env python
 #
 
 from __future__ import print_function
 from os.path import expanduser, join, abspath
 
-import time
+#import time
 import json
 import logging
 
@@ -23,7 +23,10 @@ if __name__ == "__main__":
     with open("conf.json") as f_in:
         data = json.load(f_in)
 
-    table = data.get("table")
+    process_name = data.get("process_name")
+    for stage in data.get("stages"):
+        print(stage["stage_name"])
+
     sqlContext = HiveContext(sc)
     sqlContext.sql("use pruebas_cuadre")
-    sqlContext.sql("FROM "+table+" SELECT count(*)").show()
+    #sqlContext.sql("FROM "+table+" SELECT count(*)").show()
