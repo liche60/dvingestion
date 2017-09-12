@@ -10,6 +10,7 @@ import logging
 
 from pyspark.context import SparkContext
 from pyspark.sql import HiveContext
+from pyspark import SparkContext
 
 
 """
@@ -26,7 +27,8 @@ if __name__ == "__main__":
     process_name = data.get("process_name")
     for stage in data.get("stages"):
         print(stage["stage_name"])
-
+    
+    sc =SparkContext()
     sqlContext = HiveContext(sc)
     sqlContext.sql("use pruebas_cuadre")
-    #sqlContext.sql("FROM "+table+" SELECT count(*)").show()
+    sqlContext.sql("FROM p17 SELECT count(*)").show()
