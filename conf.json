@@ -11,7 +11,7 @@
                     "destination_table":"cdav_final",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "fechacomprobanteok","destination":"fec_proc"},
+                        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
                         {"source": "valorok","destination":"valor"}
                     ]
                 },
