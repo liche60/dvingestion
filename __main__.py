@@ -11,7 +11,7 @@ import logging
 #from impala.dbapi import connect
 #from impala.util import as_pandas
 from pyspark.context import SparkContext
-from pyspark.sql import HiveContext, SQLContext
+from pyspark.sql import HiveContext
 from pyspark import SparkConf, SparkContext
 from pyspark.sql.types import *
 """
@@ -19,8 +19,8 @@ from pyspark.sql.types import *
 """
 sc =SparkContext()
 sc.setLogLevel("OFF")
-sql = SQLContext(sc)
-
+sql = HiveContext(sc)
+"""
 experto = (sql.read
         .format("com.databricks.spark.csv")
         .option("header", "true")
@@ -29,9 +29,9 @@ cdav = (sql.read
         .format("com.databricks.spark.csv")
         .option("header", "true")
         .load("cdav.csv"))
-
-sql.registerDataFrameAsTable(experto, "experto")
-sql.registerDataFrameAsTable(cdav, "cdav")
+"""
+#sql.registerDataFrameAsTable(experto, "experto")
+#sql.registerDataFrameAsTable(cdav, "cdav")
 
 def columns_query_builder(table):
     first_val = True
@@ -87,16 +87,9 @@ def stage_executer(process,stage):
         step_handler(process,stage,step)
 
 if __name__ == "__main__":
-    #logging.getLogger("py4j").setLevel(logging.ERROR)
     with open("conf.json") as f_in:
-        data = json.load(f_in)
-    for stage in data.get("stages"):
-        stage_executer(data,stage)
-    
-
-    
-    #rows = baby_names.map(lambda line: line.split(","))
-    #for row in rows.take(rows.count()): print(row[2])
-    #sqlContext = HiveContext(sc)
-    #sqlContext.sql("use pruebas_cuadre")
-    #sqlContext.sql("FROM p17 SELECT count(*)").show()
+        process = json.load(f_in)
+    database_name = process.get("database_name")
+    sql.sql("use "+database_name)
+    for stage in process.get("stages"):
+        stage_executer(process,stage)

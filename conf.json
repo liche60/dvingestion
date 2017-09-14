@@ -7,21 +7,21 @@
             "steps":[
                 {
                     "type":"join",
-                    "source_table":"experto",
-                    "destination_table":"cdav",
+                    "source_table":"experto_fina",
+                    "destination_table":"cdav_final",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "fechacomprobante","destination":"fec_proc"},
-                        {"source": "valor","destination":"valor"}
+                        {"source": "fechacomprobanteok","destination":"fec_proc"},
+                        {"source": "valorok","destination":"valor"}
                     ]
                 },
                 {
                     "type":"join",
-                    "source_table":"experto",
-                    "destination_table":"cdav",
+                    "source_table":"experto_fina",
+                    "destination_table":"cdav_final",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "valor","destination":"valor"}
+                        {"source": "valorok","destination":"valor"}
                     ]
                 }
             ]
