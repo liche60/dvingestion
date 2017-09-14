@@ -1,12 +1,32 @@
 {  
     "process_name": "flujo1",
+    "database_name": "pruebas_cuadre",
     "stages": [
         {
-            "stage_name": "stage1"
-            
-        },{
-            "stage_name": "stage2"
-            
+            "stage_name": "stage1",
+            "steps":[
+                {
+                    "type":"join",
+                    "source_table":"experto",
+                    "destination_table":"cdav",
+                    "join":[
+                        {"source": "nrocuenta","destination":"tnum_tarje"},
+                        {"source": "fechacomprobante","destination":"fec_proc"},
+                        {"source": "valor","destination":"valor"}
+                    ]
+                },
+                {
+                    "type":"join",
+                    "source_table":"experto",
+                    "destination_table":"cdav",
+                    "join":[
+                        {"source": "nrocuenta","destination":"tnum_tarje"},
+                        {"source": "valor","destination":"valor"}
+                    ]
+                }
+            ]
         }
     ]
 }
+
+
