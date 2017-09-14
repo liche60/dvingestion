@@ -38,10 +38,10 @@ def columns_query_builder(table):
     query_cols = ""
     for col in sql.table(table).columns:
         if first_val:
-            query_cols = table+"."+col+" "+table+"_"+col
+            query_cols = table+".`"+col+"` `"+table+"_"+col+"`"
             first_val = False
         else:
-            query_cols = query_cols + ","+table+"."+col+" "+ table+"_"+col
+            query_cols = query_cols + ","+table+".`"+col+"` `"+ table+"_"+col+"`"
     return query_cols
 
 def join_query_builder(source_table,destination_table,ids,join_type):
@@ -51,9 +51,9 @@ def join_query_builder(source_table,destination_table,ids,join_type):
     for col in ids:
         if first_val:
             first_val = False
-            join_query = join_query + " "+source_table+"."+col.get("source")+" = "+destination_table+"."+col.get("destination")
+            join_query = join_query + " "+source_table+".`"+col.get("source")+"` = "+destination_table+".`"+col.get("destination")+"`"
         else:
-            join_query = join_query + " AND "+source_table+"."+col.get("source")+" = "+destination_table+"."+col.get("destination")
+            join_query = join_query + " AND "+source_table+".`"+col.get("source")+"` = "+destination_table+".`"+col.get("destination")+"`"
     return join_query
 
 def join_executer(process,stage,join):
