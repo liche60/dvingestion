@@ -70,7 +70,7 @@ def join_executer(process,stage,join):
         colname = "`"+destination_table +"_"+ col.get("destination")+"`"
         outputdf = outputdf.filter(colname+" is not NULL")
     outputdf.show()
-    outputdf.count()
+    outputdf.count().show()
 
     """
     Try:
