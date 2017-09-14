@@ -23,6 +23,14 @@
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "valorok","destination":"valor"}
                     ]
+                },
+                {
+                    "type":"join",
+                    "source_table":"experto_fina",
+                    "destination_table":"cdav_final",
+                    "join":[
+                        {"source": "nrocuenta","destination":"tnum_tarje"}
+                    ]
                 }
             ]
         }
