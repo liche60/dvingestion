@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env spark-submit
 #
 
 from __future__ import print_function
@@ -8,8 +8,8 @@ from os.path import expanduser, join, abspath
 import json
 import logging
 
-from impala.dbapi import connect
-from impala.util import as_pandas
+#from impala.dbapi import connect
+#from impala.util import as_pandas
 from pyspark.context import SparkContext
 from pyspark.sql import HiveContext, SQLContext
 from pyspark import SparkConf, SparkContext
