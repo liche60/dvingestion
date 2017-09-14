@@ -62,6 +62,7 @@ def join_executer(process,stage,join):
     destination_table = join.get("destination_table")
     ids = join.get("join")
     join_query = join_query_builder(source_table,destination_table,ids,"FULL OUTER JOIN")
+    print(join_query)
     outputdf = sql.sql(join_query)
     outputdf.show()
 
