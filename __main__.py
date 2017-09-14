@@ -64,6 +64,7 @@ def join_executer(process,stage,join):
     join_query = join_query_builder(source_table,destination_table,ids,"FULL OUTER JOIN")
     print(join_query)
     outputdf = sql.sql(join_query)
+    #n_outputdf
     for col in ids:
         colname = "`"+source_table +"_"+ col.get("source")+"`"
         outputdf = outputdf.filter(colname+" is not NULL")
