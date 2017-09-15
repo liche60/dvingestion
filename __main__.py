@@ -33,6 +33,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def register_inputs_as_tables(inputs):
+        print("Registering temp inputs: "+json.dumps(inputs))
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
@@ -159,8 +160,8 @@ class Step():
     def execute(self):
         print("Executing Step...")
         if self.type == "join":
-            step = JoinStep(self.config,self.stage_inputs,self.inputs)
-            step.execute()
+            joinstep = JoinStep(self.config,self.stage_inputs,self.inputs)
+            joinstep.execute()
         else:
             print("Step type: "+self.type+" not supported")
 
