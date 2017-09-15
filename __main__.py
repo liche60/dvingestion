@@ -67,6 +67,11 @@ class DataFrameEngineUtils():
     def get_mem_table_columns(table):
         print("Returning columns for table: "+table)
         return sql.table(table).columns
+    
+    @staticmethod
+    def get_mem_table(table):
+        print("Returning mem table: "+table)
+        return sql.table(table)
 
 class InputEngineUtils():
     
@@ -82,11 +87,9 @@ class InputEngineUtils():
 
     @staticmethod
     def get_mem_input(input_item):
-        hive_db = input_item.get("hive_db")
-        hive_table = input_item.get("hive_table")
+        mem_table_name = input_item.get("mem_table_name")
+        dataframe = DataFrameEngineUtils.get_mem_table(mem_table_name)
         filters = input_item.get("filters")
-        hive.sql("use "+hive_db)
-        dataframe = hive.sql("select * from "+hive_table)
         dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
 
     @staticmethod
