@@ -153,7 +153,7 @@ class Step():
 
     def execute(self):
         print("Executing Step...")
-        if self.type == "Join":
+        if self.type == "join":
             step = JoinStep(self.config,self.stage_inputs,self.inputs)
             step.execute()
         else:
