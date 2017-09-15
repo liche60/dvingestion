@@ -143,7 +143,8 @@ class JoinStep():
 
     def join_query_builder(self):
         query_cols = self.columns_query_builder(self.source_table) + "," + self.columns_query_builder(self.destination_table)
-        join_query = "select "+query_cols+" from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
+        #join_query = "select "+query_cols+" from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
+        join_query = "select * from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
         first_val = True
         for col in self.ids:
             if first_val:
