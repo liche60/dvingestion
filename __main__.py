@@ -104,6 +104,7 @@ class InputEngineUtils():
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
             in_mem_table_name = input_item.get("in_mem_table_name")
+            print("creating input, name: "+in_mem_table_name+" dataframe size: "+input_df.count())
             inputs_result.append({"name": in_mem_table_name, "data": input_df})
         return inputs_result
 
