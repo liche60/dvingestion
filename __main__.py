@@ -53,6 +53,8 @@ class DataFrameEngineUtils():
         print("Executing query on hive database: "+db+" query: "+query)
         hive.sql("use "+db)
         dataframe = hive.sql(query)
+        count = str(dataframe.count()
+        print("Query returned "+count" records!")
         return dataframe
     
     @staticmethod
@@ -104,7 +106,7 @@ class InputEngineUtils():
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
             in_mem_table_name = input_item.get("in_mem_table_name")
-            print("creating input, name: "+in_mem_table_name+" dataframe size: "+str(input_df.count()))
+            print("Creating input dataframe, name: "+in_mem_table_name)
             inputs_result.append({"name": in_mem_table_name, "data": input_df})
         return inputs_result
 
