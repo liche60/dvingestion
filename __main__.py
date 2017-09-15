@@ -157,7 +157,8 @@ class JoinStep():
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_mem_query(join_query)
-        dataframe.show()
+        count = str(dataframe.count())
+        print("Records returned: "+count)
         drop_temp_tables(self.inputs)
 
 class Step():
