@@ -36,27 +36,32 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
+            print("Registering temp table name: "+name)
             sql.registerDataFrameAsTable(name,data)
 
     @staticmethod
     def drop_temp_tables(inputs):
         for input_item in inputs:
             name = input_item.get("name")
+            print("Droping temp table name: "+name)
             sql.dropTempTable(name)
 
     @staticmethod
-    def execute_hive_query(db,query):
+    def execute_hive_query(db,query):"
+        print("Executing query on hive database: "+db+" query: "+query)
         hive.sql("use "+db)
         dataframe = hive.sql(query)
         return dataframe
     
     @staticmethod
     def execute_mem_query(query):
+        print("Executing query on memory: "+query)
         dataframe = sql.sql(query)
         return dataframe
 
     @staticmethod
-    def get_mam_table_columns(table):
+    def get_mem_table_columns(table):
+        print("Returning columns for table: "+table)
         return sql.table(table).columns
 
 class InputEngineUtils():
@@ -113,7 +118,7 @@ class JoinStep():
     def columns_query_builder(self,table):
         first_val = True
         query_cols = ""
-        for col in DataFrameEngineUtils.get_mam_table_columns(table):
+        for col in DataFrameEngineUtils.get_mem_table_columns(table):
             if first_val:
                 query_cols = table+".`"+col+"` `"+table+"_"+col+"`"
                 first_val = False
