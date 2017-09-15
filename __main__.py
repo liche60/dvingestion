@@ -53,7 +53,7 @@ class DataFrameEngineUtils():
         print("Executing query on hive database: "+db+" query: "+query)
         hive.sql("use "+db)
         dataframe = hive.sql(query)
-        count = str(dataframe.count()
+        count = str(dataframe.count())
         print("Query returned "+count+" records!")
         return dataframe
     
