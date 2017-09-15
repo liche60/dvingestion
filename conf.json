@@ -1,22 +1,77 @@
 {  
     "process_name": "flujo1",
-    "database_name": "pruebas_cuadre",
     "stages": [
         {
             "stage_name": "stage1",
+            "inputs": [
+                {
+                    "type": "hive",
+                    "hive_db": "pruebas_cuadre",
+                    "hive_table": "experto_fina",
+                    "in_mem_table_name": "experto_fina",
+                    "filters":[
+                        { "expresion": "" }
+                    ]
+                },
+                {
+                    "type": "hive",
+                    "hive_db": "pruebas_cuadre",
+                    "hive_table": "cdav_final",
+                    "mem_table_name": "cdav_final",
+                    "filters":[
+                        { "expresion": "" }
+                    ]
+                }
+            ],
             "steps":[
                 {
+                    "inputs": [
+                        {
+                            "type": "mem",
+                            "mem_table_name": "experto_fina",
+                            "in_mem_table_name": "experto_fina",
+                            "filters":[
+                                { "expresion": "" }
+                            ]
+                        },
+                        {
+                            "type": "mem",
+                            "mem_table_name": "cdav_final",
+                            "in_mem_table_name": "cdav_final",
+                            "filters":[
+                                { "expresion": "" }
+                            ]
+                        }
+                    ],
                     "type":"join",
+                    "join_type":"FULL OUTER JOIN",
                     "source_table":"experto_fina",
                     "destination_table":"cdav_final",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
                         {"source": "valorok","destination":"valor"}
+                    ],
+                    "outputs":[
+                        {
+                            "mem_table_name": "join_match",
+                            "persist": "FALSE",
+                            "filters":[
+                                { "expresion": "" }
+                            ]
+                        },
+                        {
+                            "mem_table_name": "join_nomatch",
+                            "persist": "FALSE",
+                            "filters":[
+                                { "expresion": "" }
+                            ]
+                        }
                     ]
                 },
                 {
                     "type":"join",
+                    "join_type":"FULL OUTER JOIN",
                     "source_table":"experto_fina",
                     "destination_table":"cdav_final",
                     "join":[
@@ -26,6 +81,7 @@
                 },
                 {
                     "type":"join",
+                    "join_type":"FULL OUTER JOIN",
                     "source_table":"experto_fina",
                     "destination_table":"cdav_final",
                     "join":[
