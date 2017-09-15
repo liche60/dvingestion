@@ -39,6 +39,7 @@ class DataFrameEngineUtils():
             name = input_item.get("name")
             data = input_item.get("data")
             print("Registering temp table name: "+name)
+            print(data)
             sql.registerDataFrameAsTable(name,data)
 
     @staticmethod
