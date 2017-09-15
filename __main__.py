@@ -108,8 +108,7 @@ class InputEngineUtils():
 
 
 class JoinStep():
-    def __init__(self, config, stage_inputs,inputs):
-        self.stage_inputs = stage_inputs
+    def __init__(self, config,inputs):
         self.inputs = inputs
         self.source_table = config.get("source_table")
         self.destination_table = config.get("destination_table")
@@ -141,27 +140,24 @@ class JoinStep():
         return join_query
 
     def execute(self):
-        DataFrameEngineUtils.register_inputs_as_tables(self.stage_inputs)
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         join_query = self.join_query_builder()
         print("Join Query: "+join_query)
         dataframe = DataFrameEngineUtils.execute_mem_query(join_query)
         dataframe.show()
-        drop_temp_tables(self.stage_inputs)
         drop_temp_tables(self.inputs)
 
 class Step():
-    def __init__(self, config, stage_inputs):
+    def __init__(self, config):
         self.type = config.get("type")
         self.config = config
-        self.stage_inputs = stage_inputs
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         print("Step type: "+self.type+" initialized!")
 
     def execute(self):
         print("Executing Step...")
         if self.type == "join":
-            joinstep = JoinStep(self.config,self.stage_inputs,self.inputs)
+            joinstep = JoinStep(self.config,self.inputs)
             joinstep.execute()
         else:
             print("Step type: "+self.type+" not supported")
@@ -175,9 +171,11 @@ class Stage():
     
     def execute(self):
         print("Executing Steps...")
+        DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         for step_config in self.steps:
-            step = Step(step_config,self.inputs)
+            step = Step(step_config)
             step.execute()
+        drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
