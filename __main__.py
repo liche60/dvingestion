@@ -35,7 +35,6 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def register_inputs_as_tables(inputs):
-        print("Registering temp inputs: "+json.dumps(inputs))
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
