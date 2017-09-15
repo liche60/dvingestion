@@ -17,7 +17,7 @@
                     "type": "hive",
                     "hive_db": "pruebas_cuadre",
                     "hive_table": "cdav_final",
-                    "in_mem_table_name": "experto_fina",
+                    "in_mem_table_name": "cdav_final",
                     "filters":[
                         
                     ]
