@@ -17,7 +17,7 @@
                     "type": "hive",
                     "hive_db": "pruebas_cuadre",
                     "hive_table": "cdav_final",
-                    "mem_table_name": "cdav_final",
+                    "in_mem_table_name": "experto_fina",
                     "filters":[
                         
                     ]
@@ -29,7 +29,7 @@
                         {
                             "type": "mem",
                             "mem_table_name": "experto_fina",
-                            "in_mem_table_name": "experto_fina",
+                            "in_mem_table_name": "experto_fina2",
                             "filters":[
                                
                             ]
@@ -37,7 +37,7 @@
                         {
                             "type": "mem",
                             "mem_table_name": "cdav_final",
-                            "in_mem_table_name": "cdav_final",
+                            "in_mem_table_name": "cdav_final2",
                             "filters":[
                                 
                             ]
@@ -45,8 +45,8 @@
                     ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_fina",
-                    "destination_table":"cdav_final",
+                    "source_table":"experto_fina2",
+                    "destination_table":"cdav_final2",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
