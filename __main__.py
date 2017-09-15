@@ -26,8 +26,10 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def get_filtered_dataframe(dataframe,filters):
+        print("filtering dataframe ")
         for filter_item in filters:
             exp = filter_item.get("expresion")
+            print("\tfilter expression: "+exp)
             dataframe = dataframe.filter(exp)
         return dataframe
 

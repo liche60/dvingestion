@@ -10,7 +10,7 @@
                     "hive_table": "experto_fina",
                     "in_mem_table_name": "experto_fina",
                     "filters":[
-                        { "expresion": "" }
+                        //{ "expresion": "" }
                     ]
                 },
                 {
@@ -19,7 +19,7 @@
                     "hive_table": "cdav_final",
                     "mem_table_name": "cdav_final",
                     "filters":[
-                        { "expresion": "" }
+                        //{ "expresion": "" }
                     ]
                 }
             ],
@@ -31,7 +31,7 @@
                             "mem_table_name": "experto_fina",
                             "in_mem_table_name": "experto_fina",
                             "filters":[
-                                { "expresion": "" }
+                                //{ "expresion": "" }
                             ]
                         },
                         {
@@ -39,7 +39,7 @@
                             "mem_table_name": "cdav_final",
                             "in_mem_table_name": "cdav_final",
                             "filters":[
-                                { "expresion": "" }
+                                //{ "expresion": "" }
                             ]
                         }
                     ],
@@ -57,14 +57,14 @@
                             "mem_table_name": "join_match",
                             "persist": "FALSE",
                             "filters":[
-                                { "expresion": "" }
+                                //{ "expresion": "" }
                             ]
                         },
                         {
                             "mem_table_name": "join_nomatch",
                             "persist": "FALSE",
                             "filters":[
-                                { "expresion": "" }
+                                //{ "expresion": "" }
                             ]
                         }
                     ]
