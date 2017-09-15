@@ -72,6 +72,7 @@ class DataFrameEngineUtils():
     @staticmethod
     def get_mem_table(table):
         print("Returning mem table: "+table)
+        sql.tables().show()
         return sql.table(table)
 
 class InputEngineUtils():
