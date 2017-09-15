@@ -168,7 +168,7 @@ class Stage():
     
     def execute(self):
         print("Executing Steps...")
-        for step_config in self.steps
+        for step_config in self.steps:
             step = Step(step_config,self.inputs)
             step.execute()
 
@@ -180,7 +180,7 @@ class Process():
     
     def execute(self):
         print("Executing stages...")
-        for stage_config in self.stages
+        for stage_config in self.stages:
             stage = Stage(stage_config)
             stage.execute()
         
