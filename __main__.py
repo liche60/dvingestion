@@ -47,7 +47,7 @@ class DataFrameEngineUtils():
             sql.dropTempTable(name)
 
     @staticmethod
-    def execute_hive_query(db,query):"
+    def execute_hive_query(db,query):
         print("Executing query on hive database: "+db+" query: "+query)
         hive.sql("use "+db)
         dataframe = hive.sql(query)
