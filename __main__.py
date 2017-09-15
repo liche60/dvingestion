@@ -54,7 +54,7 @@ class DataFrameEngineUtils():
         hive.sql("use "+db)
         dataframe = hive.sql(query)
         count = str(dataframe.count()
-        print("Query returned "+count" records!")
+        print("Query returned "+count+" records!")
         return dataframe
     
     @staticmethod
