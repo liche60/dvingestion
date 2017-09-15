@@ -81,6 +81,7 @@ class InputEngineUtils():
     def get_hive_input(input_item):
         hive_db = input_item.get("hive_db")
         hive_table = input_item.get("hive_table")
+        print("Getting table from hive: "+hive_table)
         filters = input_item.get("filters")
         query = "select * from "+hive_table
         dataframe = DataFrameEngineUtils.execute_hive_query(hive_db,query)
@@ -90,9 +91,11 @@ class InputEngineUtils():
     @staticmethod
     def get_mem_input(input_item):
         mem_table_name = input_item.get("mem_table_name")
+        print("Getting table from memory: "+mem_table_name)
         dataframe = DataFrameEngineUtils.get_mem_table(mem_table_name)
         filters = input_item.get("filters")
         dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
+        return dataframe
 
     @staticmethod
     def get_input(input_item):
