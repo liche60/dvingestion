@@ -40,7 +40,7 @@ class DataFrameEngineUtils():
             data = input_item.get("data")
             print("Registering temp table name: "+name)
             print(data)
-            sql.registerDataFrameAsTable(name,data)
+            sql.registerDataFrameAsTable(data,name)
 
     @staticmethod
     def drop_temp_tables(inputs):
