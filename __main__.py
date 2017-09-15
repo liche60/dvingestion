@@ -60,6 +60,8 @@ class DataFrameEngineUtils():
     
     @staticmethod
     def execute_mem_query(query):
+        print("On memory tables: ")
+        sql.tables().show()
         print("Executing query on memory: "+query)
         dataframe = sql.sql(query)
         return dataframe
@@ -154,7 +156,6 @@ class JoinStep():
     def execute(self):
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         join_query = self.join_query_builder()
-        print("Join Query: "+join_query)
         dataframe = DataFrameEngineUtils.execute_mem_query(join_query)
         dataframe.show()
         drop_temp_tables(self.inputs)
