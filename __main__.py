@@ -31,7 +31,7 @@ class DataFrameEngineUtils():
     def get_filtered_dataframe(dataframe,filters):
         print("filtering dataframe ")
         for filter_item in filters:
-            exp = filter_item.get("expresion")
+            exp = filter_item.get("expression")
             print("\tfilter expression: "+exp)
             dataframe = dataframe.filter(exp)
         return dataframe

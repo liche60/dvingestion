@@ -37,7 +37,7 @@
                             "table": "STAGE1_JOIN_2",
                             "persist": "TRUE",
                             "filters":[
-                                
+                                {"expression" : "experto_nombres_nrocuenta is null or cdav_nombres_canje_tnum_tarje is null"}
                             ]
                         }
                     ]
