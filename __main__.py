@@ -96,7 +96,10 @@ class InputEngineUtils():
             dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
             persist = output_item.get("persist")
             if persist == "TRUE":
-                dataframe.write.insertInto(table,overwrite=True)
+                hive.sql("drop table if exists "+table)
+                dataframe.createOrReplaceTempView(table+"_temporary")
+                hive.sql("create table "+table+" as select * from "+table+"_temporary"))
+                hive.dropTempTable(table+"_temporary"))
             else:
                 output ={
                     "name": table, 
