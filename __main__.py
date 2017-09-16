@@ -24,9 +24,8 @@ from pyspark.sql.types import *
 sc =SparkContext()
 hive = HiveContext(sc)
 sc.setLogLevel("OFF")
-log4jLogger = sc._jvm.org.apache.log4j
-LOGGER = log4jLogger.LogManager.getLogger(__name__)
-LOGGER.info("pyspark script logger initialized")
+
+logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filename='dvengine.log',level=logging.DEBUG)
 
 class DataFrameEngineUtils():
 
@@ -193,7 +192,7 @@ class Stage():
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         self.steps = config.get("steps")
-        LOGGER.info("["+self.process.name+"] "+"Stage: "+self.name+" initialized!")
+        logging.info("["+self.process.name+"] "+"Stage: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing Steps...")
@@ -209,7 +208,7 @@ class Process():
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        LOGGER.info("Process: "+self.name+" initialized!")
+        logging.info("Process: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing stages...")
