@@ -34,14 +34,14 @@
                     ],
                     "outputs":[
                         {
-                            "table": "STAGE1_MATCH",
+                            "table": "STAGE1_NOMATCH",
                             "persist": "TRUE",
                             "filters":[
                                 {"expression" : "experto_nombres_nrocuenta is null or cdav_nombres_canje_tnum_tarje is null"}
                             ]
                         },
                         {
-                            "table": "STAGE1_NOMATCH",
+                            "table": "STAGE1_MATCH",
                             "persist": "TRUE",
                             "filters":[
                                 {"expression" : "experto_nombres_nrocuenta is not null and cdav_nombres_canje_tnum_tarje is not null"}
