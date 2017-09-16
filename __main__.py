@@ -64,7 +64,7 @@ class DataFrameEngineUtils():
         dataframe.registerTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" created")
         hive.sql("create table "+name+" as select * from "+name+"_"+id)
-        hive.dropTempTable(table+"_"+id)
+        hive.dropTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" droped")
 
     @staticmethod
