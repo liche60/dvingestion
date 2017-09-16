@@ -34,7 +34,7 @@
                     ],
                     "outputs":[
                         {
-                            "table": "STAGE1_JOIN",
+                            "table": "STAGE1_JOIN_2",
                             "persist": "TRUE",
                             "filters":[
                                 
