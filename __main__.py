@@ -51,7 +51,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def execute_query(query):
-        print("Executing query on hive database: "+db+" query: "+query)
+        print("Executing query: "+query)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
         print("Query returned "+count+" records!")
