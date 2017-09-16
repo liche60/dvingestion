@@ -7,14 +7,14 @@
             "inputs": [
                 {
                     "source": "EXPERTO_NOMBRES",
-                    "destination": "experto_stage1",
+                    "destination": "EXPERTO_NOMBRES",
                     "filters":[
                       
                     ]
                 },
                 {
                     "source": "CDAV_NOMBRES_CANJE",
-                    "destination": "cdav_stage1",
+                    "destination": "CDAV_NOMBRES_CANJE",
                     "filters":[
                         
                     ]
@@ -25,11 +25,11 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_stage1",
-                    "destination_table":"cdav_stage1",
+                    "source_table":"EXPERTO_NOMBRES",
+                    "destination_table":"CDAV_NOMBRES_CANJE",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "fechacomprobanteok","destination":"fec_proc"},
+                        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
                         {"source": "valorok","destination":"cdav_valor"}
                     ],
                     "outputs":[
@@ -53,8 +53,8 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_stage1",
-                    "destination_table":"cdav_stage1",
+                    "source_table":"EXPERTO_NOMBRES",
+                    "destination_table":"CDAV_NOMBRES_CANJE",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "valorok","destination":"cdav_valor"}
