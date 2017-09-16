@@ -96,7 +96,7 @@ class InputEngineUtils():
             dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
             persist = output_item.get("persist")
             if persist == "TRUE":
-                dataframe.saveAsTable(table,format='parquet',mode='overwrite')
+                dataframe.write.saveAsTable(table,format="parquet",mode="overwrite")
             else:
                 output ={
                     "name": table, 
