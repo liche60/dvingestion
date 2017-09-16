@@ -34,15 +34,8 @@
                     ],
                     "outputs":[
                         {
-                            "source": "join_match",
-                            "persist": "FALSE",
-                            "filters":[
-                                
-                            ]
-                        },
-                        {
-                            "source": "join_nomatch",
-                            "persist": "FALSE",
+                            "table": "STAGE1_JOIN",
+                            "persist": "TRUE",
                             "filters":[
                                 
                             ]

@@ -85,6 +85,26 @@ class InputEngineUtils():
             print("Creating input dataframe, name: "+destination)
             inputs_result.append({"name": destination, "data": input_df})
         return inputs_result
+    
+    @staticmethod
+    def get_outputs(outputs,dataframe):
+        print("building outputs "+json.dumps(outputs))
+        output_result = []
+        for output_item in outputs:
+            table = output_item.get("table")
+            filters = output_item.get("filters")
+            dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
+            persist = output_item.get("persist")
+            if persist == "TRUE":
+                dataframe.saveAsTable(table,mode='overwrite')
+            else:
+                output ={
+                    "name": table, 
+                    "data": dataframe
+                }
+                print("Creating output dataframe, name: "+table)
+                output_result.append(output)
+        return output_result
 
 
 class JoinStep():
@@ -94,6 +114,7 @@ class JoinStep():
         self.destination_table = config.get("destination_table")
         self.type = config.get("join_type")
         self.ids = config.get("join")
+        self.outputs = config.get("outputs")
         print("Join type: "+self.type+" initialized!")
 
     def columns_query_builder(self,table):
@@ -123,9 +144,11 @@ class JoinStep():
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
+        outputs_list = InputEngineUtils.get_outputs(self.outputs,dataframe)
         count = str(dataframe.count())
         print("Records returned: "+count)
-        DataFrameEngineUtils.drop_temp_tables(self.inputs) 
+        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        return output
 
 class Step():
     def __init__(self, config):
@@ -138,7 +161,8 @@ class Step():
         print("Executing Step...")
         if self.type == "join":
             joinstep = JoinStep(self.config,self.inputs)
-            joinstep.execute()
+            output = joinstep.execute()
+            self.inputs.append(output)
         else:
             print("Step type: "+self.type+" not supported")
 
