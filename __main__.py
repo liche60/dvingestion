@@ -195,7 +195,7 @@ class Stage():
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         self.steps = config.get("steps")
         print()
-        logger.warning("["+self.process.name+"]"+"Stage: "+self.name+" initialized!")
+        logger.info("["+self.process.name+"]"+"Stage: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing Steps...")
@@ -211,7 +211,7 @@ class Process():
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        logger.warning("Process: "+self.name+" initialized!")
+        logger.info("Process: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing stages...")
