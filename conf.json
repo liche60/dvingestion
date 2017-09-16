@@ -65,8 +65,8 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_stage1",
-                    "destination_table":"cdav_stage1",
+                    "source_table":"EXPERTO_NOMBRES",
+                    "destination_table":"CDAV_NOMBRES_CANJE",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"}
                     ],
