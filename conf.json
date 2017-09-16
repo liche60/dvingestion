@@ -6,15 +6,15 @@
             "stage_name": "stage1",
             "inputs": [
                 {
-                    "source": "experto_fina",
-                    "destination": "experto_fina",
+                    "source": "EXPERTO_NOMBRES",
+                    "destination": "experto_stage1",
                     "filters":[
                       
                     ]
                 },
                 {
-                    "source": "cdav_final",
-                    "destination": "cdav_final",
+                    "source": "CDAV_NOMBRES_CANJE",
+                    "destination": "cdav_stage1",
                     "filters":[
                         
                     ]
@@ -22,44 +22,29 @@
             ],
             "steps":[
                 {
-                    "inputs": [
-                        {
-                            "source": "experto_fina",
-                            "destination": "experto_fina2",
-                            "filters":[
-                               
-                            ]
-                        },
-                        {
-                            "source": "cdav_final",
-                            "destination": "cdav_final2",
-                            "filters":[
-                                
-                            ]
-                        }
-                    ],
+                    "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_fina2",
-                    "destination_table":"cdav_final2",
+                    "source_table":"experto_stage1",
+                    "destination_table":"cdav_stage1",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
-                        {"source": "valorok","destination":"valor"}
+                        {"source": "fechacomprobanteok","destination":"fec_proc"},
+                        {"source": "valorok","destination":"cdav_valor"}
                     ],
                     "outputs":[
                         {
                             "source": "join_match",
                             "persist": "FALSE",
                             "filters":[
-                              
+                                
                             ]
                         },
                         {
                             "source": "join_nomatch",
                             "persist": "FALSE",
                             "filters":[
-                               
+                                
                             ]
                         }
                     ]
@@ -68,22 +53,24 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_fina",
-                    "destination_table":"cdav_final",
+                    "source_table":"experto_stage1",
+                    "destination_table":"cdav_stage1",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "valorok","destination":"valor"}
-                    ]
+                        {"source": "valorok","destination":"cdav_valor"}
+                    ],
+                    "outputs":[]
                 },
                 {   
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_fina",
-                    "destination_table":"cdav_final",
+                    "source_table":"experto_stage1",
+                    "destination_table":"cdav_stage1",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"}
-                    ]
+                    ],
+                    "outputs":[]
                 }
             ]
         }
