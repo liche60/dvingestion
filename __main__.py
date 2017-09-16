@@ -125,7 +125,7 @@ class JoinStep():
         dataframe = DataFrameEngineUtils.execute_query(join_query)
         count = str(dataframe.count())
         print("Records returned: "+count)
-        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        DataFrameEngineUtils.drop_temp_tables(self.inputs) 
 
 class Step():
     def __init__(self, config):
