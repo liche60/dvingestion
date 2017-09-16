@@ -49,14 +49,14 @@
                     ],
                     "outputs":[
                         {
-                            "mem_table_name": "join_match",
+                            "source": "join_match",
                             "persist": "FALSE",
                             "filters":[
                               
                             ]
                         },
                         {
-                            "mem_table_name": "join_nomatch",
+                            "source": "join_nomatch",
                             "persist": "FALSE",
                             "filters":[
                                
@@ -65,6 +65,7 @@
                     ]
                 },
                 {
+                    "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
                     "source_table":"experto_fina",
@@ -74,7 +75,8 @@
                         {"source": "valorok","destination":"valor"}
                     ]
                 },
-                {
+                {   
+                    "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
                     "source_table":"experto_fina",
