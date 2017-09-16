@@ -7,6 +7,8 @@ from os.path import expanduser, join, abspath
 #import time
 import json
 import logging
+import string
+import random
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -21,6 +23,7 @@ sc =SparkContext()
 sc.setLogLevel("OFF")
 #sql = SQLContext(sc)
 hive = HiveContext(sc)
+
 
 class DataFrameEngineUtils():
 
@@ -48,6 +51,18 @@ class DataFrameEngineUtils():
             name = input_item.get("name")
             print("Droping temp table name: "+name)
             hive.dropTempTable(name)
+    
+    @staticmethod
+    def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
+    @staticmethod
+    def persist_dataframe(name,dataframe):
+        hive.sql("drop table if exists "+name)
+        id = DataFrameEngineUtils.id_generator()
+        dataframe.registerTempTable(name+"_"+id)
+        hive.sql("create table "+name+" as select * from "+name+"_"+id)
+        hive.dropTempTable(table+"_"+id)
 
     @staticmethod
     def execute_query(query):
@@ -96,10 +111,7 @@ class InputEngineUtils():
             dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
             persist = output_item.get("persist")
             if persist == "TRUE":
-                hive.sql("drop table if exists "+table)
-                dataframe.registerTempTable(table+"_temporary")
-                hive.sql("create table "+table+" as select * from "+table+"_temporary")
-                hive.dropTempTable(table+"_temporary")
+                DataFrameEngineUtils.persist_dataframe(table,dataframe)
             else:
                 output ={
                     "name": table, 
