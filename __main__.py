@@ -98,8 +98,8 @@ class InputEngineUtils():
             if persist == "TRUE":
                 hive.sql("drop table if exists "+table)
                 dataframe.createOrReplaceTempView(table+"_temporary")
-                hive.sql("create table "+table+" as select * from "+table+"_temporary"))
-                hive.dropTempTable(table+"_temporary"))
+                hive.sql("create table "+table+" as select * from "+table+"_temporary")
+                hive.dropTempTable(table+"_temporary")
             else:
                 output ={
                     "name": table, 
