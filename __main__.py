@@ -58,11 +58,14 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,dataframe):
+        print("table: "+name+" will be persisted in hive")
         hive.sql("drop table if exists "+name)
         id = DataFrameEngineUtils.id_generator()
         dataframe.registerTempTable(name+"_"+id)
+        print("Temporary table: "+name+"_"+id+" created")
         hive.sql("create table "+name+" as select * from "+name+"_"+id)
         hive.dropTempTable(table+"_"+id)
+        print("Temporary table: "+name+"_"+id+" droped")
 
     @staticmethod
     def execute_query(query):
