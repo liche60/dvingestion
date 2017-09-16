@@ -1,23 +1,20 @@
 {  
     "process_name": "flujo1",
+    "hive_database": "pruebas_cuadre",
     "stages": [
         {
             "stage_name": "stage1",
             "inputs": [
                 {
-                    "type": "hive",
-                    "hive_db": "pruebas_cuadre",
-                    "hive_table": "experto_fina",
-                    "in_mem_table_name": "experto_fina",
+                    "source": "experto_fina",
+                    "destination": "experto_fina",
                     "filters":[
                       
                     ]
                 },
                 {
-                    "type": "hive",
-                    "hive_db": "pruebas_cuadre",
-                    "hive_table": "cdav_final",
-                    "in_mem_table_name": "cdav_final",
+                    "source": "cdav_final",
+                    "destination": "cdav_final",
                     "filters":[
                         
                     ]
@@ -26,12 +23,25 @@
             "steps":[
                 {
                     "inputs": [
-                        
+                        {
+                            "source": "experto_fina",
+                            "destination": "experto_fina2",
+                            "filters":[
+                               
+                            ]
+                        },
+                        {
+                            "source": "cdav_final",
+                            "destination": "cdav_final2",
+                            "filters":[
+                                
+                            ]
+                        }
                     ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"experto_fina",
-                    "destination_table":"cdav_final",
+                    "source_table":"experto_fina2",
+                    "destination_table":"cdav_final2",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},

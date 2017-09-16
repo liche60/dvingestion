@@ -19,7 +19,7 @@ from pyspark.sql.types import *
 """
 sc =SparkContext()
 sc.setLogLevel("OFF")
-sql = SQLContext(sc)
+#sql = SQLContext(sc)
 hive = HiveContext(sc)
 
 class DataFrameEngineUtils():
@@ -40,74 +40,40 @@ class DataFrameEngineUtils():
             data = input_item.get("data")
             print("Registering temp table name: "+name)
             print(data)
-            sql.registerDataFrameAsTable(data,name)
+            data.registerTempTable(name)
 
     @staticmethod
     def drop_temp_tables(inputs):
         for input_item in inputs:
             name = input_item.get("name")
             print("Droping temp table name: "+name)
-            sql.dropTempTable(name)
+            hive.dropTempTable(name)
 
     @staticmethod
-    def execute_hive_query(db,query):
+    def execute_query(query):
         print("Executing query on hive database: "+db+" query: "+query)
-        hive.sql("use "+db)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
         print("Query returned "+count+" records!")
         return dataframe
-    
-    @staticmethod
-    def execute_mem_query(query):
-        print("On memory tables: ")
-        sql.tables().show()
-        print("Executing query on memory: "+query)
-        dataframe = sql.sql(query)
-        return dataframe
 
     @staticmethod
-    def get_mem_table_columns(table):
+    def get_table_columns(table):
         print("Returning columns for table: "+table)
-        return sql.table(table).columns
-    
-    @staticmethod
-    def get_mem_table(table):
-        print("Returning mem table: "+table)
-        sql.tables().show()
-        return sql.table(table)
+        return hive.table(table).columns
 
 class InputEngineUtils():
     
-    @staticmethod
-    def get_hive_input(input_item):
-        hive_db = input_item.get("hive_db")
-        hive_table = input_item.get("hive_table")
-        print("Getting table from hive: "+hive_table)
-        filters = input_item.get("filters")
-        query = "select * from "+hive_table
-        dataframe = DataFrameEngineUtils.execute_hive_query(hive_db,query)
-        dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
-        return dataframe
-
-    @staticmethod
-    def get_mem_input(input_item):
-        mem_table_name = input_item.get("mem_table_name")
-        print("Getting table from memory: "+mem_table_name)
-        dataframe = DataFrameEngineUtils.get_mem_table(mem_table_name)
-        filters = input_item.get("filters")
-        dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
-        return dataframe
 
     @staticmethod
     def get_input(input_item):
-        in_type = input_item.get("type")
-        if in_type == "hive":
-            return InputEngineUtils.get_hive_input(input_item)
-        elif in_type == "mem":
-            return InputEngineUtils.get_mem_input(input_item)
-        else:
-            print("input type: "+in_type+" not supported")
+        source = input_item.get("source")
+        print("Getting table from hive: "+source)
+        filters = input_item.get("filters")
+        query = "select * from "+source
+        dataframe = DataFrameEngineUtils.execute_query(query)
+        dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
+        return dataframe
 
     @staticmethod
     def get_inputs(inputs):
@@ -115,9 +81,9 @@ class InputEngineUtils():
         inputs_result = []
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
-            in_mem_table_name = input_item.get("in_mem_table_name")
-            print("Creating input dataframe, name: "+in_mem_table_name)
-            inputs_result.append({"name": in_mem_table_name, "data": input_df})
+            destination = input_item.get("destination")
+            print("Creating input dataframe, name: "+destination)
+            inputs_result.append({"name": destination, "data": input_df})
         return inputs_result
 
 
@@ -133,7 +99,7 @@ class JoinStep():
     def columns_query_builder(self,table):
         first_val = True
         query_cols = ""
-        for col in DataFrameEngineUtils.get_mem_table_columns(table):
+        for col in DataFrameEngineUtils.get_table_columns(table):
             if first_val:
                 query_cols = table+".`"+col+"` `"+table+"_"+col+"`"
                 first_val = False
@@ -143,8 +109,7 @@ class JoinStep():
 
     def join_query_builder(self):
         query_cols = self.columns_query_builder(self.source_table) + "," + self.columns_query_builder(self.destination_table)
-        #join_query = "select "+query_cols+" from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
-        join_query = "select * from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
+        join_query = "select "+query_cols+" from "+self.source_table+" "+self.type+" "+self.destination_table+" ON "
         first_val = True
         for col in self.ids:
             if first_val:
@@ -157,7 +122,7 @@ class JoinStep():
     def execute(self):
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         join_query = self.join_query_builder()
-        dataframe = DataFrameEngineUtils.execute_mem_query(join_query)
+        dataframe = DataFrameEngineUtils.execute_query(join_query)
         count = str(dataframe.count())
         print("Records returned: "+count)
         drop_temp_tables(self.inputs)
@@ -196,6 +161,8 @@ class Process():
     def __init__(self, config):
         self.name = config.get("process_name")
         self.stages = config.get("stages")
+        self.hive_database = config.get("hive_database")
+        DataFrameEngineUtils.execute_query("use "+self.hive_database)
         print("Process: "+self.name+" initialized!")
     
     def execute(self):
