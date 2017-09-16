@@ -113,14 +113,14 @@ class InputEngineUtils():
         for output_item in outputs:
             table = output_item.get("table")
             filters = output_item.get("filters")
-            dataframe = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
+            dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
             persist = output_item.get("persist")
             if persist == "TRUE":
-                DataFrameEngineUtils.persist_dataframe(table,dataframe)
+                DataFrameEngineUtils.persist_dataframe(table,dataframe_tmp)
             else:
                 output ={
                     "name": table, 
-                    "data": dataframe
+                    "data": dataframe_tmp
                 }
                 print("Creating output dataframe, name: "+table)
                 output_result.append(output)
@@ -134,7 +134,6 @@ class JoinStep():
         self.destination_table = self.step.config.get("destination_table")
         self.type = self.step.config.get("join_type")
         self.ids = self.step.config.get("join")
-        self.outputs = self.step.config.get("outputs")
         print("Join type: "+self.type+" initialized!")
 
     def columns_query_builder(self,table):
@@ -161,14 +160,9 @@ class JoinStep():
         return join_query
 
     def execute(self):
-        DataFrameEngineUtils.register_inputs_as_tables(self.step.inputs)
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
-        outputs_list = InputEngineUtils.get_outputs(self.outputs,dataframe)
-        count = str(dataframe.count())
-        print("Records returned: "+count)
-        DataFrameEngineUtils.drop_temp_tables(self.step.inputs)
-        return outputs_list
+        return dataframe
 
 class Step():
     def __init__(self, stage, config):
@@ -176,14 +170,18 @@ class Step():
         self.type = config.get("type")
         self.config = config
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
+        self.outputs = self.config.get("outputs")
         print("Step type: "+self.type+" initialized!")
 
     def execute(self):
         print("Executing Step...")
         if self.type == "join":
+            DataFrameEngineUtils.register_inputs_as_tables(self.step.inputs)
             joinstep = JoinStep(self)
-            output = joinstep.execute()
-            self.inputs.append(output)
+            outputdf = joinstep.execute()
+            outputs_list = InputEngineUtils.get_outputs(self.outputs,outputdf)
+            self.inputs.append(outputs_list)
+            DataFrameEngineUtils.drop_temp_tables(self.step.inputs)
         else:
             print("Step type: "+self.type+" not supported")
 
