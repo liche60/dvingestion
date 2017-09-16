@@ -20,12 +20,12 @@ from pyspark.sql.types import *
 """
 
 """
+FORMAT = '%(asctime)-15s  %(message)s'
 
 sc =SparkContext()
-hive = HiveContext(sc)
 sc.setLogLevel("OFF")
+hive = HiveContext(sc)
 
-logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filename='dvengine.log',level=logging.DEBUG)
 
 class DataFrameEngineUtils():
 
@@ -128,13 +128,13 @@ class InputEngineUtils():
 
 
 class JoinStep():
-    def __init__(self, config,inputs):
-        self.inputs = inputs
-        self.source_table = config.get("source_table")
-        self.destination_table = config.get("destination_table")
-        self.type = config.get("join_type")
-        self.ids = config.get("join")
-        self.outputs = config.get("outputs")
+    def __init__(self, step):
+        self.step = step
+        self.source_table = self.step.config.get("source_table")
+        self.destination_table = self.step.config.get("destination_table")
+        self.type = self.step.config.get("join_type")
+        self.ids = self.step.config.get("join")
+        self.outputs = self.step.config.get("outputs")
         print("Join type: "+self.type+" initialized!")
 
     def columns_query_builder(self,table):
@@ -161,17 +161,18 @@ class JoinStep():
         return join_query
 
     def execute(self):
-        DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+        DataFrameEngineUtils.register_inputs_as_tables(self.step.inputs)
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
         outputs_list = InputEngineUtils.get_outputs(self.outputs,dataframe)
         count = str(dataframe.count())
         print("Records returned: "+count)
-        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        DataFrameEngineUtils.drop_temp_tables(self.step.inputs)
         return outputs_list
 
 class Step():
-    def __init__(self, config):
+    def __init__(self, stage, config):
+        self.stage = stage
         self.type = config.get("type")
         self.config = config
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
@@ -180,7 +181,7 @@ class Step():
     def execute(self):
         print("Executing Step...")
         if self.type == "join":
-            joinstep = JoinStep(self.config,self.inputs)
+            joinstep = JoinStep(self)
             output = joinstep.execute()
             self.inputs.append(output)
         else:
@@ -192,13 +193,13 @@ class Stage():
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         self.steps = config.get("steps")
-        logging.info("["+self.process.name+"] "+"Stage: "+self.name+" initialized!")
+        print("Stage: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing Steps...")
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         for step_config in self.steps:
-            step = Step(step_config)
+            step = Step(self,step_config)
             step.execute()
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
@@ -208,7 +209,7 @@ class Process():
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        logging.info("Process: "+self.name+" initialized!")
+        print("Process: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing stages...")
