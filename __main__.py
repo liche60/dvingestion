@@ -180,7 +180,7 @@ class Step():
             joinstep = JoinStep(self)
             outputdf = joinstep.execute()
             outputs_list = InputEngineUtils.get_outputs(self.outputs,outputdf)
-            self.inputs.append(outputs_list)
+            #self.inputs.append(outputs_list)
             DataFrameEngineUtils.drop_temp_tables(self.inputs)
         else:
             print("Step type: "+self.type+" not supported")
