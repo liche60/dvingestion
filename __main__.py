@@ -9,6 +9,7 @@ import json
 import logging
 import string
 import random
+import logging
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -19,9 +20,12 @@ from pyspark.sql.types import *
 """
 
 """
+FORMAT = '%(asctime)-15s  %(message)s'
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger('DVEngine')
+
 sc =SparkContext()
 sc.setLogLevel("OFF")
-#sql = SQLContext(sc)
 hive = HiveContext(sc)
 
 
@@ -185,11 +189,13 @@ class Step():
             print("Step type: "+self.type+" not supported")
 
 class Stage():
-    def __init__(self, config):
+    def __init__(self, process, config):
+        self.process = process
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         self.steps = config.get("steps")
-        print("Stage: "+self.name+" initialized!")
+        print()
+        logger.warning("["+self.process.name+"]"+"Stage: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing Steps...")
@@ -205,12 +211,12 @@ class Process():
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        print("Process: "+self.name+" initialized!")
+        logger.warning("Process: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing stages...")
         for stage_config in self.stages:
-            stage = Stage(stage_config)
+            stage = Stage(self,stage_config)
             stage.execute()
         
 if __name__ == "__main__":
