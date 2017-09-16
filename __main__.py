@@ -20,14 +20,13 @@ from pyspark.sql.types import *
 """
 
 """
-FORMAT = '%(asctime)-15s  %(message)s'
-logging.basicConfig(format=FORMAT)
-logger = logging.getLogger('DVEngine')
 
 sc =SparkContext()
-sc.setLogLevel("OFF")
 hive = HiveContext(sc)
 
+log4jLogger = sc._jvm.org.apache.log4j
+LOGGER = log4jLogger.LogManager.getLogger(__name__)
+LOGGER.info("pyspark script logger initialized")
 
 class DataFrameEngineUtils():
 
@@ -194,8 +193,7 @@ class Stage():
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
         self.steps = config.get("steps")
-        print()
-        logger.info("["+self.process.name+"]"+"Stage: "+self.name+" initialized!")
+        LOGGER.info("["+self.process.name+"] "+"Stage: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing Steps...")
@@ -211,7 +209,7 @@ class Process():
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        logger.info("Process: "+self.name+" initialized!")
+        LOGGER.info("Process: "+self.name+" initialized!")
     
     def execute(self):
         print("Executing stages...")
