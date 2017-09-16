@@ -51,7 +51,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def execute_query(query):
-        print("Executing query: "+query)
+        print("Executing queryx: "+query)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
         print("Query returned "+count+" records!")
@@ -125,7 +125,7 @@ class JoinStep():
         dataframe = DataFrameEngineUtils.execute_query(join_query)
         count = str(dataframe.count())
         print("Records returned: "+count)
-        drop_temp_tables(self.inputs)
+        DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Step():
     def __init__(self, config):
@@ -155,7 +155,7 @@ class Stage():
         for step_config in self.steps:
             step = Step(step_config)
             step.execute()
-        drop_temp_tables(self.inputs)
+        DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
