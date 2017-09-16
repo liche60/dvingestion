@@ -176,12 +176,12 @@ class Step():
     def execute(self):
         print("Executing Step...")
         if self.type == "join":
-            DataFrameEngineUtils.register_inputs_as_tables(self.step.inputs)
+            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
             joinstep = JoinStep(self)
             outputdf = joinstep.execute()
             outputs_list = InputEngineUtils.get_outputs(self.outputs,outputdf)
             self.inputs.append(outputs_list)
-            DataFrameEngineUtils.drop_temp_tables(self.step.inputs)
+            DataFrameEngineUtils.drop_temp_tables(self.inputs)
         else:
             print("Step type: "+self.type+" not supported")
 
