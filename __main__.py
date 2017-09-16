@@ -23,7 +23,7 @@ from pyspark.sql.types import *
 
 sc =SparkContext()
 hive = HiveContext(sc)
-
+sc.setLogLevel("OFF")
 log4jLogger = sc._jvm.org.apache.log4j
 LOGGER = log4jLogger.LogManager.getLogger(__name__)
 LOGGER.info("pyspark script logger initialized")
