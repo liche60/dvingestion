@@ -98,8 +98,8 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO_NOMBRES",
-                    "destination_table":"CDAV_NOMBRES_CANJE",
+                    "source_table":"EXPERTO",
+                    "destination_table":"CDAV",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "valorok","destination":"cdav_valor"}
@@ -110,8 +110,8 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO_NOMBRES",
-                    "destination_table":"CDAV_NOMBRES_CANJE",
+                    "source_table":"EXPERTO",
+                    "destination_table":"CDAV",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"}
                     ],
