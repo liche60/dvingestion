@@ -7,14 +7,14 @@
             "inputs": [
                 {
                     "source": "EXPERTO_NOMBRES",
-                    "destination": "EXPERTO",
+                    "destination": "EXPERTOS1",
                     "filters":[
                         {"expression" : "fechacomprobanteok = '2017-08-16'"}
                     ]
                 },
                 {
                     "source": "CDAV_NOMBRES_CANJE",
-                    "destination": "CDAV",
+                    "destination": "CDAVS1",
                     "filters":[
                         {"expression" : "fec_proc_ok = '2017-08-16'"}
                     ]
@@ -25,8 +25,8 @@
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO",
-                    "destination_table":"CDAV",
+                    "source_table":"EXPERTOS1",
+                    "destination_table":"CDAVS1",
                     "join":[
                         {"source": "nrocuenta","destination":"tnum_tarje"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
@@ -38,7 +38,7 @@
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is null or cdav_tnum_tarje is null"}
+                                {"expression" : "expertos1_nrocuenta is null or cdavs1_tnum_tarje is null"}
                             ]
                         },
                         {
@@ -46,7 +46,7 @@
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is not null and cdav_tnum_tarje is not null"}
+                                {"expression" : "expertos1_nrocuenta is not null and cdavs1_tnum_tarje is not null"}
                             ]
                         }
                     ]
@@ -54,16 +54,16 @@
                 {
                     "inputs": [
                         {
-                            "source": "EXPERTO",
-                            "destination": "EXPERTO",
+                            "source": "EXPERTOS1",
+                            "destination": "EXPERTOS2",
                             "filters":[
                                 {"expression" : "tarjeta_2 is not null"},
                                 {"expression" : "tarjeta_2 <> ''"}
                             ]
                         },
                         {
-                            "source": "CDAV",
-                            "destination": "CDAV",
+                            "source": "CDAVS1",
+                            "destination": "CDAVS2",
                             "filters":[
                                 {"expression" : "tarjeta_2 is not null"},
                                 {"expression" : "tarjeta_2 <> ''"}
@@ -72,8 +72,8 @@
                     ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO",
-                    "destination_table":"CDAV",
+                    "source_table":"EXPERTOS2",
+                    "destination_table":"CDAVS2",
                     "join":[
                         {"source": "tarjeta_2","destination":"tarjeta_2"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
@@ -83,17 +83,19 @@
                         {
                             "table": "STAGE1_NOMATCH_STEP2",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is null or cdav_tnum_tarje is null"},
-                                {"expression" : "experto_nrocuenta <> cdav_tnum_tarje"}
+                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
+                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"}
                             ]
                         },
                         {
                             "table": "STAGE1_MATCH_STEP2",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is not null and cdav_tnum_tarje is not null"},
-                                {"expression" : "experto_nrocuenta <> cdav_tnum_tarje"}
+                                {"expression" : "expertos2_nrocuenta is not null and cdavs2_tnum_tarje is not null"},
+                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"}
                             ]
                         }
                     ]
