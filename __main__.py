@@ -74,7 +74,7 @@ class DataFrameEngineUtils():
             try:
                 hive.table(name)
                 print("Table: "+name+" already exists, appending data")
-                hive.sql("insert into "+name+" as select * from "+name+"_"+id)
+                hive.sql("insert into table "+name+" select * from "+name+"_"+id)
             except:
                 print("Table: "+name+" don't exist, creating table with data")
                 hive.sql("create table "+name+" as select * from "+name+"_"+id)
