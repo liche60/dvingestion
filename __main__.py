@@ -62,6 +62,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
+        print(hive.tables().collect())
         print("table: "+name+" will be persisted in hive")
         id = DataFrameEngineUtils.id_generator()
         dataframe.registerTempTable(name+"_"+id)
