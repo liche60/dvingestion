@@ -50,7 +50,22 @@
                     ]
                 },
                 {
-                    "inputs": [],
+                    "inputs": [
+                        {
+                            "source": "EXPERTO_NOMBRES",
+                            "destination": "EXPERTO_NOMBRES",
+                            "filters":[
+                                {"expression" : "tarjeta_2 is not null"}
+                            ]
+                        },
+                        {
+                            "source": "CDAV_NOMBRES_CANJE",
+                            "destination": "CDAV_NOMBRES_CANJE",
+                            "filters":[
+                                {"expression" : "tarjeta_2 is not null"}
+                            ]
+                        }
+                    ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
                     "source_table":"EXPERTO_NOMBRES",
