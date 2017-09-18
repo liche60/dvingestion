@@ -53,7 +53,7 @@ class DataFrameEngineUtils():
             print("Droping temp table name: "+name)
             try:
                 hive.dropTempTable(name)
-            except NoSuchTableException:
+            except:
                 print("the table: "+name+" doesn't exists, probably it was overwritten by some input")
     
     @staticmethod
