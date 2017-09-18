@@ -51,7 +51,10 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             print("Droping temp table name: "+name)
-            hive.dropTempTable(name)
+            try:
+                hive.dropTempTable(name)
+            except NoSuchTableException:
+                print("the table: "+name+" doesn't exists, probably it was overwritten by some input")
     
     @staticmethod
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
