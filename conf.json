@@ -95,29 +95,100 @@
                             ]
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "stage_name": "stage2",
+            "inputs": [
+                {
+                    "source": "STAGE1_NOMATCH_STEP1",
+                    "destination": "EXPERTO_NM",
+                    "filters":[
+                        {"expression" : "experto_nrocuenta is not null"}
+                    ]
                 },
+                {
+                    "source": "STAGE1_NOMATCH_STEP1",
+                    "destination": "CDAV_NM",
+                    "filters":[
+                        {"expression" : "cdav_tnum_tarje is not null"}
+                    ]
+                }
+            ],
+            "steps":[
                 {
                     "inputs": [],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO",
-                    "destination_table":"CDAV",
+                    "source_table":"EXPERTO_NM",
+                    "destination_table":"CDAV_NM",
                     "join":[
-                        {"source": "nrocuenta","destination":"tnum_tarje"},
-                        {"source": "valorok","destination":"cdav_valor"}
+                        {"source": "experto_nrocuenta","destination":"cdav_tnum_tarje"},
+                        {"source": "experto_valorok","destination":"cdav_cdav_valor"}
                     ],
-                    "outputs":[]
+                    "outputs":[
+                        {
+                            "table": "STAGE2_NOMATCH_STEP1",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nm_experto_nrocuenta is null or cdav_nm_cdav_tnum_tarje is null"}
+                            ]
+                        },
+                        {
+                            "table": "STAGE2_MATCH_STEP1",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nm_experto_nrocuenta is not null and cdav_nm_cdav_tnum_tarje is not null"}
+                            ]
+                        }
+                    ]
                 },
-                {   
-                    "inputs": [],
+                {
+                    "inputs": [
+                        {
+                            "source": "EXPERTO_NM",
+                            "destination": "EXPERTO_NM",
+                            "filters":[
+                                {"expression" : "experto_tarjeta_2 is not null"},
+                                {"expression" : "experto_tarjeta_2 <> ''"}
+                            ]
+                        },
+                        {
+                            "source": "CDAV_NM",
+                            "destination": "CDAV_NM",
+                            "filters":[
+                                {"expression" : "cdav_tarjeta_2 is not null"},
+                                {"expression" : "cdav_tarjeta_2 <> ''"}
+                            ]
+                        }
+                    ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO",
-                    "destination_table":"CDAV",
+                    "source_table":"EXPERTO_NM",
+                    "destination_table":"CDAV_NM",
                     "join":[
-                        {"source": "nrocuenta","destination":"tnum_tarje"}
+                        {"source": "experto_tarjeta_2","destination":"cdav_tarjeta_2"},
+                        {"source": "experto_valorok","destination":"cdav_cdav_valor"}
                     ],
-                    "outputs":[]
+                    "outputs":[
+                        {
+                            "table": "STAGE2_NOMATCH_STEP2",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nm_experto_nrocuenta is null or cdav_nm_cdav_tnum_tarje is null"},
+                                {"expression" : "experto_nm_experto_nrocuenta <> cdav_nm_cdav_tnum_tarje"}
+                            ]
+                        },
+                        {
+                            "table": "STAGE2_MATCH_STEP2",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nm_experto_nrocuenta is not null and cdav_nm_cdav_tnum_tarje is not null"},
+                                {"expression" : "experto_nm_experto_nrocuenta <> cdav_nm_cdav_tnum_tarje"}
+                            ]
+                        }
+                    ]
                 }
             ]
         }
