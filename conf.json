@@ -55,14 +55,16 @@
                             "source": "EXPERTO_NOMBRES",
                             "destination": "EXPERTO_NOMBRES_TR",
                             "filters":[
-                                {"expression" : "tarjeta_2 is not null"}
+                                {"expression" : "tarjeta_2 is not null"},
+                                {"expression" : "tarjeta_2 is not ''"}
                             ]
                         },
                         {
                             "source": "CDAV_NOMBRES_CANJE",
                             "destination": "CDAV_NOMBRES_CANJE_TR",
                             "filters":[
-                                {"expression" : "tarjeta_2 is not null"}
+                                {"expression" : "tarjeta_2 is not null"},
+                                {"expression" : "tarjeta_2 is not ''"}
                             ]
                         }
                     ],
