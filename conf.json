@@ -82,14 +82,16 @@
                             "table": "STAGE1_NOMATCH_STEP2",
                             "persist": "TRUE",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is null or cdav_tnum_tarje is null"}
+                                {"expression" : "experto_nrocuenta is null or cdav_tnum_tarje is null"},
+                                {"expression" : "experto_nrocuenta <> cdav_tnum_tarje"}
                             ]
                         },
                         {
                             "table": "STAGE1_MATCH_STEP2",
                             "persist": "TRUE",
                             "filters":[
-                                {"expression" : "experto_nrocuenta is not null and cdav_tnum_tarje is not null"}
+                                {"expression" : "experto_nrocuenta is not null and cdav_tnum_tarje is not null"},
+                                {"expression" : "experto_nrocuenta <> cdav_tnum_tarje"}
                             ]
                         }
                     ]
