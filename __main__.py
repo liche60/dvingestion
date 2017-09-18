@@ -70,11 +70,11 @@ class DataFrameEngineUtils():
             hive.sql("drop table if exists "+name)
             hive.sql("create table "+name+" as select * from "+name+"_"+id)
         elif method == "APPEND":
-            texist = len(hive.sql("SHOW TABLES LIKE '" + name + "'").collect())
-            if texist == 1:
+            try:
+                hive.table(name)
                 print("Table: "+name+" already exists, appending data")
                 hive.sql("insert into "+name+" as select * from "+name+"_"+id)
-            else:
+            except:
                 print("Table: "+name+" don't exist, creating table with data")
                 hive.sql("create table "+name+" as select * from "+name+"_"+id)
         else:
