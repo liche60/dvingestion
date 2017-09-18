@@ -20,7 +20,6 @@ from pyspark.sql.types import *
 """
 
 """
-FORMAT = '%(asctime)-15s  %(message)s'
 
 sc =SparkContext()
 sc.setLogLevel("OFF")
@@ -107,7 +106,7 @@ class InputEngineUtils():
         return inputs_result
     
     @staticmethod
-    def get_outputs(outputs,dataframe):
+    def process_outputs(outputs,dataframe):
         print("building outputs "+json.dumps(outputs))
         output_result = []
         for output_item in outputs:
@@ -117,13 +116,13 @@ class InputEngineUtils():
             persist = output_item.get("persist")
             if persist == "TRUE":
                 DataFrameEngineUtils.persist_dataframe(table,dataframe_tmp)
-            else:
-                output ={
-                    "name": table, 
-                    "data": dataframe_tmp
-                }
-                print("Creating output dataframe, name: "+table)
-                output_result.append(output)
+            
+            output ={
+                "name": table, 
+                "data": dataframe_tmp
+            }
+            print("Creating output dataframe, name: "+table)
+            output_result.append(output)
         return output_result
 
 
@@ -179,7 +178,7 @@ class Step():
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
             joinstep = JoinStep(self)
             outputdf = joinstep.execute()
-            outputs_list = InputEngineUtils.get_outputs(self.outputs,outputdf)
+            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
             DataFrameEngineUtils.drop_temp_tables(self.inputs)
             self.inputs.append(outputs_list)
         else:

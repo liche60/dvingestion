@@ -34,14 +34,42 @@
                     ],
                     "outputs":[
                         {
-                            "table": "STAGE1_NOMATCH",
+                            "table": "STAGE1_NOMATCH_STEP1",
                             "persist": "TRUE",
                             "filters":[
                                 {"expression" : "experto_nombres_nrocuenta is null or cdav_nombres_canje_tnum_tarje is null"}
                             ]
                         },
                         {
-                            "table": "STAGE1_MATCH",
+                            "table": "STAGE1_MATCH_STEP1",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nombres_nrocuenta is not null and cdav_nombres_canje_tnum_tarje is not null"}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "type":"join",
+                    "join_type":"FULL OUTER JOIN",
+                    "source_table":"EXPERTO_NOMBRES",
+                    "destination_table":"CDAV_NOMBRES_CANJE",
+                    "join":[
+                        {"source": "tarjeta_2","destination":"tarjeta_2"},
+                        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
+                        {"source": "valorok","destination":"cdav_valor"}
+                    ],
+                    "outputs":[
+                        {
+                            "table": "STAGE1_NOMATCH_STEP2",
+                            "persist": "TRUE",
+                            "filters":[
+                                {"expression" : "experto_nombres_nrocuenta is null or cdav_nombres_canje_tnum_tarje is null"}
+                            ]
+                        },
+                        {
+                            "table": "STAGE1_MATCH_STEP2",
                             "persist": "TRUE",
                             "filters":[
                                 {"expression" : "experto_nombres_nrocuenta is not null and cdav_nombres_canje_tnum_tarje is not null"}
