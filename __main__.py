@@ -61,13 +61,24 @@ class DataFrameEngineUtils():
         return ''.join(random.choice(chars) for _ in range(size))
 
     @staticmethod
-    def persist_dataframe(name,dataframe):
+    def persist_dataframe(name,method,dataframe):
         print("table: "+name+" will be persisted in hive")
-        hive.sql("drop table if exists "+name)
         id = DataFrameEngineUtils.id_generator()
         dataframe.registerTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" created")
-        hive.sql("create table "+name+" as select * from "+name+"_"+id)
+        if method == "REPLACE":
+            hive.sql("drop table if exists "+name)
+            hive.sql("create table "+name+" as select * from "+name+"_"+id)
+        elif method == "APPEND":
+            texist = len(hive.sql("SHOW TABLES LIKE '" + name + "'").collect())
+            if texist == 1:
+                print("Table: "+name+" already exists, appending data")
+                hive.sql("insert into "+name+" as select * from "+name+"_"+id)
+            else:
+                print("Table: "+name+" don't exist, creating table with data")
+                hive.sql("create table "+name+" as select * from "+name+"_"+id)
+        else:
+            print("persist method not supported")
         hive.dropTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" droped")
 
@@ -118,7 +129,8 @@ class InputEngineUtils():
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
             persist = output_item.get("persist")
             if persist == "TRUE":
-                DataFrameEngineUtils.persist_dataframe(table,dataframe_tmp)
+                persist_method = output_item.get("persist_method")
+                DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
             
             output ={
                 "name": table, 

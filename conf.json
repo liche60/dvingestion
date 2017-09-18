@@ -9,14 +9,14 @@
                     "source": "EXPERTO_NOMBRES",
                     "destination": "EXPERTO",
                     "filters":[
-                      
+                        {"expression" : "fechacomprobanteok = '2017-08-16'"}
                     ]
                 },
                 {
                     "source": "CDAV_NOMBRES_CANJE",
                     "destination": "CDAV",
                     "filters":[
-                        
+                        {"expression" : "fec_proc_ok = '2017-08-16'"}
                     ]
                 }
             ],
@@ -36,6 +36,7 @@
                         {
                             "table": "STAGE1_NOMATCH_STEP1",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
                                 {"expression" : "experto_nrocuenta is null or cdav_tnum_tarje is null"}
                             ]
@@ -43,6 +44,7 @@
                         {
                             "table": "STAGE1_MATCH_STEP1",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
                                 {"expression" : "experto_nrocuenta is not null and cdav_tnum_tarje is not null"}
                             ]
@@ -175,6 +177,7 @@
                         {
                             "table": "STAGE2_NOMATCH_STEP2",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
                                 {"expression" : "experto_nm_experto_nrocuenta is null or cdav_nm_cdav_tnum_tarje is null"},
                                 {"expression" : "experto_nm_experto_nrocuenta <> cdav_nm_cdav_tnum_tarje"}
@@ -183,6 +186,7 @@
                         {
                             "table": "STAGE2_MATCH_STEP2",
                             "persist": "TRUE",
+                            "persist_method": "APPEND",
                             "filters":[
                                 {"expression" : "experto_nm_experto_nrocuenta is not null and cdav_nm_cdav_tnum_tarje is not null"},
                                 {"expression" : "experto_nm_experto_nrocuenta <> cdav_nm_cdav_tnum_tarje"}
