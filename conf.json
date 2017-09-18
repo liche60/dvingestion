@@ -53,14 +53,14 @@
                     "inputs": [
                         {
                             "source": "EXPERTO_NOMBRES",
-                            "destination": "EXPERTO_NOMBRES",
+                            "destination": "EXPERTO_NOMBRES_TR",
                             "filters":[
                                 {"expression" : "tarjeta_2 is not null"}
                             ]
                         },
                         {
                             "source": "CDAV_NOMBRES_CANJE",
-                            "destination": "CDAV_NOMBRES_CANJE",
+                            "destination": "CDAV_NOMBRES_CANJE_TR",
                             "filters":[
                                 {"expression" : "tarjeta_2 is not null"}
                             ]
@@ -68,8 +68,8 @@
                     ],
                     "type":"join",
                     "join_type":"FULL OUTER JOIN",
-                    "source_table":"EXPERTO_NOMBRES",
-                    "destination_table":"CDAV_NOMBRES_CANJE",
+                    "source_table":"EXPERTO_NOMBRES_TR",
+                    "destination_table":"CDAV_NOMBRES_CANJE_TR",
                     "join":[
                         {"source": "tarjeta_2","destination":"tarjeta_2"},
                         {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
