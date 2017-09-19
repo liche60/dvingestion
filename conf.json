@@ -55,7 +55,7 @@
                         },
                         {
                             "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
-                            "table": "TMP_NM_MEM_MEMCDAV",
+                            "table": "TMP_NM_MEM_CDAV",
                             "persist": "FALSE",
                             "filters":[
                                 {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"},

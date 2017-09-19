@@ -224,6 +224,7 @@ class Step():
 
     def execute(self):
         print("Executing Step...")
+        outputs_list = []
         DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         step = False
         if self.type == "join":
