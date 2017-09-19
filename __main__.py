@@ -66,16 +66,16 @@ class DataFrameEngineUtils():
         dataframe.registerTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" created")
         if method == "REPLACE":
-            hive.sql("drop table if exists "+name)
-            hive.sql("create table "+name+" as select * from "+name+"_"+id)
+            DataFrameEngineUtils.execute_query("drop table if exists "+name)
+            DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
         elif method == "APPEND":
             try:
                 hive.table(name)
                 print("Table: "+name+" already exists, appending data")
-                hive.sql("insert into table "+name+" select * from "+name+"_"+id)
+                DataFrameEngineUtils.execute_query("insert into table "+name+" select * from "+name+"_"+id)
             except:
                 print("Table: "+name+" don't exist, creating table with data")
-                hive.sql("create table "+name+" as select * from "+name+"_"+id)
+                DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
         else:
             print("persist method not supported")
         hive.dropTempTable(name+"_"+id)
@@ -83,7 +83,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def execute_query(query):
-        print("Executing queryx: "+query)
+        print("Executing query: "+query)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
         print("Query returned "+count+" records!")
