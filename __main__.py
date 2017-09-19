@@ -154,9 +154,9 @@ class MergeStep():
         for column in self.destination_columns:
             column_name = columns.get(column)
             if first:
-                query_cols = table+"."+column_name+" "+column
+                query_cols = table+".`"+column_name+"` `"+column+"`"
             else:
-                query_cols = query_cols + ","+table+"."+column_name+" "+column
+                query_cols = query_cols + ","+table+".`"+column_name+"` `"+column+"`"
         query = "select "+query_cols+" from "+table
         return query
 
@@ -235,8 +235,8 @@ class Step():
         else:
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
-            self.inputs.append(outputs_list)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        self.inputs.append(outputs_list)
         
 
 class Stage():
