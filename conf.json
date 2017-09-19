@@ -77,7 +77,6 @@
                     "description":"Merge de la tabla experto en memoria con los que no hicieron match",
                     "inputs": [],
                     "type":"merge",
-                    "destination_table":"NM_STAGE1_EXPERTO",
                     "destination_columns":[ "tarjeta","fecha","valor","treexpedida","tamparadora" ],
                     "source_tables":[
                         {

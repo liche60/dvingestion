@@ -143,7 +143,6 @@ class InputEngineUtils():
 class MergeStep():
     def __init__(self, step):
         self.step = step
-        self.destination_table = self.step.config.get("destination_table")
         self.destination_columns = self.step.config.get("destination_columns")
         self.source_tables = self.step.config.get("source_tables")
 
@@ -162,7 +161,7 @@ class MergeStep():
 
     def execute(self):
         first = True
-        for table_item in source_tables:
+        for table_item in self.source_tables:
             table = table_item.get("table")
             columns = table_item.get("columns")
             query = self.build_table_query(table,columns)
