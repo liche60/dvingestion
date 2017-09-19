@@ -108,7 +108,7 @@ class InputEngineUtils():
 
     @staticmethod
     def get_inputs(inputs):
-        print("building inputs "+json.dumps(inputs))
+        print("building inputs ")
         inputs_result = []
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
@@ -119,7 +119,7 @@ class InputEngineUtils():
     
     @staticmethod
     def process_outputs(outputs,dataframe):
-        print("building outputs "+json.dumps(outputs))
+        print("building outputs ")
         output_result = []
         for output_item in outputs:
             table = output_item.get("table")
