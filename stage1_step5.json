@@ -1,6 +1,14 @@
 {
     "description":"Merge de la tabla experto en memoria con los que no hicieron match",
-    "inputs": [],
+    "inputs": [
+            {
+            "source": "NM_STAGE1_EXPERTO",
+            "destination": "NM_STAGE1_EXPERTO_TRNULL",
+            "filters":[
+                {"expression" : "treexpedida is null or treexpedida <> ''"}
+            ]
+        }
+    ],
     "type":"merge",
     "destination_columns":[ "tarjeta","fecha","valor","treexpedida","tamparadora" ],
     "source_tables":[
@@ -12,6 +20,16 @@
                 "valor":"EXPERTO_valor",
                 "treexpedida":"EXPERTO_treexpedida",
                 "tamparadora":"EXPERTO_tamparadora"
+            }
+        },
+        {
+            "table": "NM_STAGE1_EXPERTO_TRNULL",
+            "columns": {
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"
             }
         }
     ],
