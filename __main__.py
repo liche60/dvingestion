@@ -215,7 +215,7 @@ class JoinStep():
 
 class Step():
     def __init__(self, stage, config):
-        if "import_step" in config
+        if "import_step" in config:
             import_step = config.get("import_step")
             with open(import_step) as f_in:
                 config = json.load(f_in)
@@ -246,7 +246,7 @@ class Step():
 
 class Stage():
     def __init__(self, process, config):
-        if "import_stage" in config
+        if "import_stage" in config:
             import_stage = config.get("import_stage")
             with open(import_stage) as f_in:
                 config = json.load(f_in)
