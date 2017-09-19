@@ -31,9 +31,13 @@ class DataFrameEngineUtils():
     def get_filtered_dataframe(dataframe,filters):
         print("filtering dataframe ")
         for filter_item in filters:
+            count = str(dataframe.count())
+            print("rows before filter: "+count)
             exp = filter_item.get("expression")
             print("\tfilter expression: "+exp)
             dataframe = dataframe.filter(exp)
+            count = str(dataframe.count())
+            print("rows after filter: "+count)
         return dataframe
 
     @staticmethod
