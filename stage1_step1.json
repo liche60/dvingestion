@@ -1,0 +1,66 @@
+{
+    "description": "Cuadre de Experto y Cdav por tajeta, fecha y valor",
+    "inputs": [
+            {
+            "source": "EXPERTO_NOMBRES",
+            "destination": "EXPERTO",
+            "filters":[
+                {"expression" : "fechacomprobanteok = '2017-08-16'"}
+            ]
+        },
+        {
+            "source": "CDAV_NOMBRES_CANJE",
+            "destination": "CDAV",
+            "filters":[
+                {"expression" : "fec_proc_ok = '2017-08-16'"}
+            ]
+        }
+    ],
+    "type":"join",
+    "join_type":"FULL OUTER JOIN",
+    "source_table":"EXPERTO",
+    "destination_table":"CDAV",
+    "join":[
+        {"source": "nrocuenta","destination":"tnum_tarje"},
+        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
+        {"source": "valorok","destination":"cdav_valor"}
+    ],
+    "outputs":[
+        {
+            "description":"Salida general de los que no hacen match, esta salida queda persistida en Hive",
+            "table": "NM_STAGE1_STEP1",
+            "persist": "TRUE",
+            "persist_method": "APPEND",
+            "filters":[
+                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"}
+            ]
+        },
+        {
+            "description":"Salida de los que no hacen match, pero solo para experto, esta salida no queda persistida en Memoria",
+            "table": "TMP_NM_MEM_EXPERTO",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"},
+                {"expression" : "EXPERTO_nrocuenta is not null"}
+            ]
+        },
+        {
+            "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
+            "table": "TMP_NM_MEM_CDAV",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"},
+                {"expression" : "CDAV_tnum_tarje is not null"}
+            ]
+        },
+        {
+            "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
+            "table": "M_STAGE1_STEP1",
+            "persist": "TRUE",
+            "persist_method": "APPEND",
+            "filters":[
+                {"expression" : "EXPERTO_nrocuenta is not null and CDAV_tnum_tarje is not null"}
+            ]
+        }
+    ]
+}

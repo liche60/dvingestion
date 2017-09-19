@@ -1,0 +1,16 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de expertos y cdav",
+    "stage_name": "Stage1",
+    "inputs": [],
+    "steps":[
+        {
+            "import_step":"stage1_step1.json"
+        },
+        {
+            "import_step":"stage1_step2.json"
+        },
+        {
+            "import_step":"stage1_step3.json"
+        }
+    ]
+}

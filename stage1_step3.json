@@ -1,0 +1,27 @@
+{
+    "description":"Merge de la tabla cdav en memoria con los que no hicieron match",
+    "inputs": [],
+    "type":"merge",
+    "destination_columns":[ "tarjeta","fecha","valor","treexpedida","tamparadora" ],
+    "source_tables":[
+        {
+            "table": "TMP_NM_MEM_CDAV",
+            "columns": {
+                "tarjeta":"CDAV_tnum_tarje",
+                "fecha":"CDAV_fec_proc_ok",
+                "valor":"CDAV_cdav_valor",
+                "treexpedida":"CDAV_tarjeta_2",
+                "tamparadora":"CDAV_tarjamparadora"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en cdav, esta salida queda persistida en Hive",
+            "table": "NM_STAGE1_CDAV",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
+            "filters":[]
+        }
+    ]
+}
