@@ -233,8 +233,9 @@ class Step():
             step = MergeStep(self)
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
+        for output in outputs_list:
+            self.stage.inputs.append(output)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
-        self.stage.inputs.append(outputs_list)
         
 
 class Stage():
@@ -252,7 +253,7 @@ class Stage():
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
             step.execute()
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
