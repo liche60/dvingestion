@@ -132,7 +132,6 @@ class InputEngineUtils():
             if persist == "TRUE":
                 persist_method = output_item.get("persist_method")
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
-            
             output ={
                 "name": table, 
                 "data": dataframe_tmp
@@ -140,6 +139,41 @@ class InputEngineUtils():
             print("Creating output dataframe, name: "+table)
             output_result.append(output)
         return output_result
+
+
+class MergeStep():
+    def __init__(self, step):
+        self.step = step
+        self.destination_table = self.step.config.get("destination_table")
+        self.destination_columns = self.step.config.get("destination_columns")
+        self.source_tables = self.step.config.get("source_tables")
+
+    def build_table_query(self,table,columns):
+        first = True
+        query_cols = ""
+        for column in self.destination_columns:
+            column_name = columns.get(column)
+            if first:
+                query_cols = table+"."+column_name+" "+column
+            else:
+                query_cols = query_cols + ","+table+"."+column_name+" "+column
+        query = "select "+query_cols+" from "+table
+        return query
+
+
+    def execute(self):
+        first = True
+        for table_item in source_tables:
+            table = table_item.get("table")
+            columns = table_item.get("columns")
+            query = self.build_table_query(table,columns)
+            if first:
+                dataframe = DataFrameEngineUtils.execute_query(query)
+            else:
+                dftmp = DataFrameEngineUtils.execute_query(query)
+                dataframe = dataframe.unionAll(dftmp)
+        return dataframe
+
 
 
 class JoinStep():
@@ -190,15 +224,20 @@ class Step():
 
     def execute(self):
         print("Executing Step...")
+        DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+        step = False
         if self.type == "join":
-            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            joinstep = JoinStep(self)
-            outputdf = joinstep.execute()
-            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
-            DataFrameEngineUtils.drop_temp_tables(self.inputs)
-            self.inputs.append(outputs_list)
-        else:
+            step = JoinStep(self)
+        if self.type == "merge":
+            step = MergeStep(self)
+        if not step
             print("Step type: "+self.type+" not supported")
+        else:
+            outputdf = step.execute()
+            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
+            self.inputs.append(outputs_list)
+        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+        
 
 class Stage():
     def __init__(self, process, config):

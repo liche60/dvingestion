@@ -34,7 +34,7 @@
                     ],
                     "outputs":[
                         {
-                            "table": "STAGE1_NOMATCH_STEP1",
+                            "table": "S1ST1NM",
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
@@ -42,7 +42,25 @@
                             ]
                         },
                         {
-                            "table": "STAGE1_MATCH_STEP1",
+                            "table": "S1NMEXPERTO",
+                            "persist": "TRUE",
+                            "persist_method": "REPLACE",
+                            "filters":[
+                                {"expression" : "expertos1_nrocuenta is null or cdavs1_tnum_tarje is null"},
+                                {"expression" : "expertos1_nrocuenta is not null"}
+                            ]
+                        },
+                        {
+                            "table": "S1NMCDAV",
+                            "persist": "TRUE",
+                            "persist_method": "REPLACE",
+                            "filters":[
+                                {"expression" : "expertos1_nrocuenta is null or cdavs1_tnum_tarje is null"},
+                                {"expression" : "cdavs1_tnum_tarje is not null"}
+                            ]
+                        },
+                        {
+                            "table": "S1ST1M",
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
@@ -54,39 +72,19 @@
                 {
                     "inputs": [
                         {
-                            "source": "EXPERTOS1",
+                            "source": "S1NMEXPERTO",
                             "destination": "EXPERTOS2",
                             "filters":[
-                                {"expression" : "tarjeta_2 is not null"},
-                                {"expression" : "tarjeta_2 <> ''"}
+                                {"expression" : "S1NMEXPERTO_tarjeta_2 is not null"},
+                                {"expression" : "S1NMEXPERTO_tarjeta_2 <> ''"}
                             ]
                         },
                         {
-                            "table": "STAGE1_NOMATCH_EXPERTO",
-                            "persist": "TRUE",
-                            "persist_method": "APPEND",
-                            "filters":[
-                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"},
-                                {"expression" : "expertos2_nrocuenta is not null"}
-                            ]
-                        },
-                        {
-                            "table": "STAGE1_NOMATCH_CDAV",
-                            "persist": "TRUE",
-                            "persist_method": "APPEND",
-                            "filters":[
-                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"},
-                                {"expression" : "cdavs2_nrocuenta is not null"}
-                            ]
-                        },
-                        {
-                            "source": "CDAVS1",
+                            "source": "S1NMCDAV",
                             "destination": "CDAVS2",
                             "filters":[
-                                {"expression" : "tarjeta_2 is not null"},
-                                {"expression" : "tarjeta_2 <> ''"}
+                                {"expression" : "S1NMCDAV_tarjeta_2 is not null"},
+                                {"expression" : "S1NMCDAV_tarjeta_2 <> ''"}
                             ]
                         }
                     ],
@@ -95,9 +93,9 @@
                     "source_table":"EXPERTOS2",
                     "destination_table":"CDAVS2",
                     "join":[
-                        {"source": "tarjeta_2","destination":"tarjeta_2"},
-                        {"source": "fechacomprobanteok","destination":"fec_proc_ok"},
-                        {"source": "valorok","destination":"cdav_valor"}
+                        {"source": "S1NMEXPERTO_tarjeta_2","destination":"S1NMCDAV_tarjeta_2"},
+                        {"source": "S1NMEXPERTO_fechacomprobanteok","destination":"S1NMCDAV_fec_proc_ok"},
+                        {"source": "S1NMEXPERTO_valorok","destination":"S1NMCDAV_cdav_valor"}
                     ],
                     "outputs":[
                         {
@@ -105,28 +103,28 @@
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"}
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta is null or cdavs2_S1NMCDAV_tnum_tarje is null"},
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta <> cdavs2_S1NMCDAV_tnum_tarje"}
                             ]
                         },
                         {
                             "table": "STAGE1_NOMATCH_EXPERTO",
                             "persist": "TRUE",
-                            "persist_method": "APPEND",
+                            "persist_method": "REPLACE",
                             "filters":[
-                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"},
-                                {"expression" : "expertos2_nrocuenta is not null"}
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta is null or cdavs2_S1NMCDAV_tnum_tarje is null"},
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta <> cdavs2_S1NMCDAV_tnum_tarje"},
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta is not null"}
                             ]
                         },
                         {
                             "table": "STAGE1_NOMATCH_CDAV",
                             "persist": "TRUE",
-                            "persist_method": "APPEND",
+                            "persist_method": "REPLACE",
                             "filters":[
-                                {"expression" : "expertos2_nrocuenta is null or cdavs2_tnum_tarje is null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"},
-                                {"expression" : "cdavs2_nrocuenta is not null"}
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta is null or cdavs2_S1NMCDAV_tnum_tarje is null"},
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta <> cdavs2_S1NMCDAV_tnum_tarje"},
+                                {"expression" : "cdavs2_S1NMCDAV_nrocuenta is not null"}
                             ]
                         },
                         {
@@ -134,11 +132,28 @@
                             "persist": "TRUE",
                             "persist_method": "APPEND",
                             "filters":[
-                                {"expression" : "expertos2_nrocuenta is not null and cdavs2_tnum_tarje is not null"},
-                                {"expression" : "expertos2_nrocuenta <> cdavs2_tnum_tarje"}
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta is not null and cdavs2_S1NMCDAV_tnum_tarje is not null"},
+                                {"expression" : "expertos2_S1NMEXPERTO_nrocuenta <> cdavs2_S1NMCDAV_tnum_tarje"}
                             ]
                         }
                     ]
+                },
+                {
+                    "inputs": [],
+                    "type": "merge",
+                    "destionation_table": "",
+                    "destination_columns":[
+                        ""
+                    ] ,
+                    "source_tables": [
+                        {
+                            "table":"",
+                            "columns":{
+                                "":""
+                            }
+                        }
+                    ],
+                    "outputs":[]
                 }
             ]
         },
