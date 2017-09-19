@@ -230,8 +230,6 @@ class Step():
             step = JoinStep(self)
         if self.type == "merge":
             step = MergeStep(self)
-        if not step
-            print("Step type: "+self.type+" not supported")
         else:
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
