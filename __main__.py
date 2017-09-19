@@ -153,6 +153,7 @@ class MergeStep():
             column_name = columns.get(column)
             if first:
                 query_cols = table+".`"+column_name+"` `"+column+"`"
+                first = False
             else:
                 query_cols = query_cols + ","+table+".`"+column_name+"` `"+column+"`"
         query = "select "+query_cols+" from "+table
@@ -167,6 +168,7 @@ class MergeStep():
             query = self.build_table_query(table,columns)
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
+                first = False
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
