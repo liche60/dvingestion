@@ -5,7 +5,7 @@
             "source": "NM_STAGE1_EXPERTO",
             "destination": "NM_STAGE1_EXPERTO_TRNULL",
             "filters":[
-                {"expression" : "treexpedida is null or treexpedida <> ''"}
+                {"expression" : "treexpedida is null or treexpedida = ''"}
             ]
         }
     ],
