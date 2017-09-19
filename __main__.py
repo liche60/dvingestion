@@ -62,7 +62,6 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
-        print(hive.tables().collect())
         print("table: "+name+" will be persisted in hive")
         id = DataFrameEngineUtils.id_generator()
         dataframe.registerTempTable(name+"_"+id)
@@ -229,9 +228,10 @@ class Step():
         step = False
         if self.type == "join":
             step = JoinStep(self)
+            outputdf = step.execute()
+            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
         if self.type == "merge":
             step = MergeStep(self)
-        else:
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
