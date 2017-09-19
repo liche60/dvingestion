@@ -11,6 +11,15 @@
         },
         {
             "import_step":"stage1_step3.json"
+        },
+        {
+            "import_step":"stage1_step4.json"
+        },
+        {
+            "import_step":"stage1_step5.json"
+        },
+        {
+            "import_step":"stage1_step6.json"
         }
     ]
 }

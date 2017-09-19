@@ -1,0 +1,27 @@
+{
+    "description":"Merge de la tabla experto en memoria con los que no hicieron match",
+    "inputs": [],
+    "type":"merge",
+    "destination_columns":[ "tarjeta","fecha","valor","treexpedida","tamparadora" ],
+    "source_tables":[
+        {
+            "table": "TMP_NM_MEM_EXPERTO",
+            "columns": {
+                "tarjeta":"EXPERTO_tarjeta",
+                "fecha":"EXPERTO_fecha",
+                "valor":"EXPERTO_valor",
+                "treexpedida":"EXPERTO_treexpedida",
+                "tamparadora":"EXPERTO_tamparadora"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en experto, esta salida queda persistida en Hive",
+            "table": "NM_STAGE1_EXPERTO",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
+            "filters":[]
+        }
+    ]
+}

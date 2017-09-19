@@ -9,7 +9,6 @@ import json
 import logging
 import string
 import random
-import logging
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
