@@ -234,7 +234,7 @@ class Step():
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
-        self.inputs.append(outputs_list)
+        self.stage.inputs.append(outputs_list)
         
 
 class Stage():
@@ -247,11 +247,12 @@ class Stage():
     
     def execute(self):
         print("Executing Steps...")
-        DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
         for step_config in self.steps:
             step = Step(self,step_config)
+            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
             step.execute()
-        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+            DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
