@@ -104,10 +104,10 @@ class InputEngineUtils():
         template_vars = {}
         if "import" in json_file:
             import_stage = json_file.get("import")
-            with open(import_stage) as f_in:
-                json_file = json.load(f_in)
-            if "template_vars" in json_file:
-                template_vars = json_file.get("template_vars")
+        if "template_vars" in json_file:
+            template_vars = json_file.get("template_vars")
+        with open(import_stage) as f_in:
+            json_file = json.load(f_in)
         json_file = InputEngineUtils.process_template_vars(json_file,template_vars)
         return {"config":json_file,"template_vars":template_vars}
 
