@@ -36,7 +36,7 @@
     "outputs":[
         {
             "description":"Salida de los que no hacen match en experto, esta salida queda persistida en Hive",
-            "table": "${export_nomatch_experto}",
+            "table": "NM_STAGE1_EXPERTO",
             "persist": "TRUE",
             "persist_method": "REPLACE",
             "filters":[]
