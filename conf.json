@@ -18,7 +18,7 @@
                 "columna_cdav_fecha":"fec_proc_ok",
                 "columna_cdav_valor":"cdav_valor"
             },
-            "import_stage": "tpl_cuadre_stage1.json"
+            "import": "tpl_cuadre_stage1.json"
         }
     ]
 }
