@@ -23,7 +23,7 @@
     "join":[
         {"source": "${columna_experto_tarjeta}","destination":"${columna_cdav_tarjeta}"},
         {"source": "${columna_experto_fecha}","destination":"${columna_cdav_fecha}"},
-        {"source": "${columna_experto_valor}","destination":"${columna_experto_valor}"}
+        {"source": "${columna_experto_valor}","destination":"${columna_cdav_valor}"}
     ],
     "outputs":[
         {
