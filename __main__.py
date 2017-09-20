@@ -240,6 +240,7 @@ class Step():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
+        print(json.dumps(self.config))
         self.stage = stage
         self.type = config.get("type")
         self.config = config
@@ -270,6 +271,7 @@ class Stage():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
+        print(json.dumps(self.config))
         self.process = process
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
