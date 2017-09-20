@@ -242,9 +242,8 @@ class Step():
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
         print(json.dumps(self.config))
         self.stage = stage
-        self.type = config.get("type")
-        self.config = config
-        self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
+        self.type = self.config.get("type")
+        self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.outputs = self.config.get("outputs")
         print("Step type: "+self.type+" initialized!")
 
@@ -273,9 +272,9 @@ class Stage():
         self.template_vars = import_map.get("template_vars")
         print(json.dumps(self.config))
         self.process = process
-        self.name = config.get("stage_name")
-        self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))
-        self.steps = config.get("steps")
+        self.name = self.config.get("stage_name")
+        self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
+        self.steps = self.config.get("steps")
         print("Stage: "+self.name+" initialized!")
     
     def execute(self):
