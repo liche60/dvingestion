@@ -109,7 +109,7 @@ class InputEngineUtils():
             if "template_vars" in json_file:
                 template_vars = json_file.get("template_vars")
         json_file = InputEngineUtils.process_template_vars(json_file,template_vars)
-        conf_map = {"conf":json_file,"template_vars":template_vars}
+        conf_map = {"config":json_file,"template_vars":template_vars}
 
     @staticmethod
     def process_template_vars(json_data,template_vars):
