@@ -1,18 +1,18 @@
 {
-    "description": "Plantilla de cuadre de Experto y Cdav por tajeta reexpedida, fecha y valor",
+    "description": "Plantilla de cuadre de Experto y Cdav por tajeta, fecha y valor",
     "inputs": [
             {
             "source": "${tabla_experto}",
             "destination": "EXPERTO",
             "filters":[
-                {"expression" : "${columna_experto_fecha} = '2017-08-16'"}
+                {"expression" : "${columna_experto_fecha} = '${fecha_proceso}'"}
             ]
         },
         {
             "source": "${tabla_cdav}",
             "destination": "CDAV",
             "filters":[
-                {"expression" : "${columna_cdav_fecha} = '2017-08-16'"}
+                {"expression" : "${columna_cdav_fecha} = '${fecha_proceso}'"}
             ]
         }
     ],
@@ -27,12 +27,11 @@
     ],
     "outputs":[
         {
-            "description":"Salida general de los que no hacen match, esta salida queda persistida en Hive",
-            "table": "NM_STAGE1_STEP1",
-            "persist": "TRUE",
-            "persist_method": "APPEND",
+            "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
+            "table": "TMP_M_MEM",
+            "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"}
+                {"expression" : "EXPERTO_${columna_experto_tarjeta} is not null and CDAV_${columna_cdav_tarjeta} is not null"}
             ]
         },
         {
@@ -40,8 +39,8 @@
             "table": "TMP_NM_MEM_EXPERTO",
             "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"},
-                {"expression" : "EXPERTO_nrocuenta is not null"}
+                {"expression" : "EXPERTO_${columna_experto_tarjeta} is null or CDAV_${columna_cdav_tarjeta} is null"},
+                {"expression" : "EXPERTO_${columna_experto_tarjeta} is not null"}
             ]
         },
         {
@@ -49,17 +48,8 @@
             "table": "TMP_NM_MEM_CDAV",
             "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_nrocuenta is null or CDAV_tnum_tarje is null"},
-                {"expression" : "CDAV_tnum_tarje is not null"}
-            ]
-        },
-        {
-            "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
-            "table": "M_STAGE1_STEP1",
-            "persist": "TRUE",
-            "persist_method": "APPEND",
-            "filters":[
-                {"expression" : "EXPERTO_nrocuenta is not null and CDAV_tnum_tarje is not null"}
+                {"expression" : "EXPERTO_${columna_experto_tarjeta} is null or CDAV_${columna_cdav_tarjeta} is null"},
+                {"expression" : "CDAV_${columna_cdav_tarjeta} is not null"}
             ]
         }
     ]

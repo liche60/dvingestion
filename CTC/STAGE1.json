@@ -1,0 +1,13 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de expertos y cdav",
+    "stage_name": "STAGE1",
+    "inputs": [],
+    "steps":[
+        {
+            "import":"CTC/STAGE1/JOIN_EC_ORIGEN_TARJETA.json"
+        },
+        {
+            "import":"CTC/STAGE1/MERGE_MATCH_ORIGEN_TARJETA.json"
+        }
+    ]
+}
