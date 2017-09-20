@@ -13,10 +13,16 @@
             "import":"tpl_cuadre_export_cdav.json"
         },
         {
-            "import":"tpl_cuadre_join_experto_cdav_reexpedida.json"
+            "import":"tpl_cuadre_join_experto_cdav_tarjeta_reexpedida.json"
         },
         {
-            "import":"tpl_cuadre_join_experto_cdav_tarjeta_reexpedida.json"
+            "import":"tpl_cuadre_export_experto_tarjeta_reexpedida.json"
+        },
+        {
+            "import":"tpl_cuadre_export_cdav_tarjeta_reexpedida.json"
+        },
+        {
+            "import":"tpl_cuadre_join_cdav_experto_tarjeta_reexpedida.json"
         },
         {
             "import":"tpl_cuadre_export_experto_tarjeta_reexpedida.json"
