@@ -113,11 +113,14 @@ class InputEngineUtils():
 
     @staticmethod
     def process_template_vars(json_data,template_vars):
+        print("Processing template variables")
         data = json.dumps(json_data)
         for var,val in template_vars:
             var = "${"+var+"}"
+            print("\tVariable: "+var+" Value: "+val)
             data = data.replace(var,val)
         json_data = json.loads(data)
+        print("Result: "+json.dumps(json_data))
         return json_data
 
     @staticmethod
@@ -240,7 +243,6 @@ class Step():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
-        print(json.dumps(self.config))
         self.stage = stage
         self.type = self.config.get("type")
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
