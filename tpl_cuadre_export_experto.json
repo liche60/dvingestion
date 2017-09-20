@@ -7,11 +7,11 @@
         {
             "table": "TMP_NM_MEM_EXPERTO",
             "columns": {
-                "tarjeta":"EXPERTO_nrocuenta",
-                "fecha":"EXPERTO_fechacomprobanteok",
-                "valor":"EXPERTO_valorok",
-                "treexpedida":"EXPERTO_tarjeta_2",
-                "tamparadora":"EXPERTO_tarjamparadora"
+                "tarjeta":"EXPERTO_${columna_experto_tarjeta}",
+                "fecha":"EXPERTO_${columna_experto_fecha}",
+                "valor":"EXPERTO_${columna_experto_valor}",
+                "treexpedida":"EXPERTO_${columna_experto_tarjeta_reexpedida}",
+                "tamparadora":"EXPERTO_${columna_experto_tarjeta_amparadora}"
             }
         }
     ],
@@ -25,5 +25,3 @@
         }
     ]
 }
-
-

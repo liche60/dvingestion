@@ -1,0 +1,28 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de expertos y cdav",
+    "stage_name": "Stage1",
+    "inputs": [],
+    "steps":[
+        {
+            "import_step":"tpl_cuadre_join_experto_cdav_tarjeta.json"
+        },
+        {
+            "import_step":"tpl_cuadre_export_experto.json"
+        },
+        {
+            "import_step":"tpl_cuadre_export_cdav.json"
+        },
+        {
+            "import_step":"tpl_cuadre_join_experto_cdav_reexpedida.json"
+        },
+        {
+            "import_step":"tpl_cuadre_join_experto_cdav_tarjeta_reexpedida.json"
+        },
+        {
+            "import_step":"tpl_cuadre_export_experto_tarjeta_reexpedida.json"
+        },
+        {
+            "import_step":"tpl_cuadre_export_cdav_tarjeta_reexpedida.json"
+        }
+    ]
+}

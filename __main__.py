@@ -98,7 +98,27 @@ class DataFrameEngineUtils():
         return hive.table(table).columns
 
 class InputEngineUtils():
-    
+
+    @staticmethod
+    def import_loader(json_file):
+        template_vars = {}
+        if "import" in json_file:
+            import_stage = json_file.get("import")
+            with open(import_stage) as f_in:
+                json_file = json.load(f_in)
+            if "template_vars" in json_file:
+                template_vars = json_file.get("template_vars")
+        json_file = InputEngineUtils.process_template_vars(json_file,template_vars)
+        conf_map = {"conf":json_file,"template_vars":template_vars}
+
+    @staticmethod
+    def process_template_vars(json_data,template_vars):
+        data = json.dumps(json_data)
+        for var,val in template_vars:
+            var = "${"+var+"}"
+            data = data.replace(var,val)
+        json_data = json.loads(data)
+        return json_data
 
     @staticmethod
     def get_input(input_item):
@@ -217,10 +237,9 @@ class JoinStep():
 
 class Step():
     def __init__(self, stage, config):
-        if "import_step" in config:
-            import_step = config.get("import_step")
-            with open(import_step) as f_in:
-                config = json.load(f_in)
+        import_map = InputEngineUtils.import_loader(config)
+        self.config = import_map.get("config")
+        self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
         self.stage = stage
         self.type = config.get("type")
         self.config = config
@@ -248,10 +267,9 @@ class Step():
 
 class Stage():
     def __init__(self, process, config):
-        if "import_stage" in config:
-            import_stage = config.get("import_stage")
-            with open(import_stage) as f_in:
-                config = json.load(f_in)
+        import_map = InputEngineUtils.import_loader(config)
+        self.config = import_map.get("config")
+        self.template_vars = import_map.get("template_vars")
         self.process = process
         self.name = config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(config.get("inputs"))

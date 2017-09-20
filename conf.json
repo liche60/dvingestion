@@ -2,6 +2,24 @@
     "process_name": "flujo1",
     "hive_database": "pruebas_cuadre",
     "stages": [
-        {"import_stage": "stage1.json"}
+        {
+            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "template_vars":{
+                "tabla_experto":"EXPERTO_NOMBRES",
+                "columna_experto_tarjeta":"nrocuenta",
+                "columna_experto_tarjeta_reexpedida":"tarjeta_2",
+                "columna_experto_tarjeta_amparadora":"tarjamparadora",
+                "columna_experto_fecha":"fechacomprobanteok",
+                "columna_experto_valor":"valorok",
+                "tabla_cdav":"CDAV_NOMBRES_CANJE",
+                "columna_cdav_tarjeta":"tnum_tarje",
+                "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
+                "columna_cdav_tarjeta_amparadora":"tarjamparadora",
+                "columna_cdav_fecha":"fec_proc_ok",
+                "columna_cdav_valor":"cdav_valor",
+                "export_nomatch_experto":"${test}"
+            },
+            "import_stage": "tpl_cuadre_stage1.json"
+        }
     ]
 }
