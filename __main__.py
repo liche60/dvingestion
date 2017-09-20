@@ -113,7 +113,7 @@ class InputEngineUtils():
 
     @staticmethod
     def process_template_vars(json_data,template_vars):
-        print("Processing template variables")
+        print("Processing template variables: "+ json.dumps(template_vars))
         data = json.dumps(json_data)
         for var,val in template_vars:
             var = "${"+var+"}"
