@@ -16,8 +16,7 @@
                 "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
                 "columna_cdav_tarjeta_amparadora":"tarjamparadora",
                 "columna_cdav_fecha":"fec_proc_ok",
-                "columna_cdav_valor":"cdav_valor",
-                "export_nomatch_experto":"${test}"
+                "columna_cdav_valor":"cdav_valor"
             },
             "import_stage": "tpl_cuadre_stage1.json"
         }
