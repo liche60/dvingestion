@@ -1,0 +1,59 @@
+{
+    "description": "Cuadre de Cdav, Experto por tajeta reexpedida, fecha y valor",
+    "inputs": [
+            {
+            "source": "NM_EXPERTO",
+            "destination": "EXPERTO",
+            "filters":[
+                {"expression" : "treexpedida is not null"},
+                {"expression" : "treexpedida <> ''"}
+            ]
+        },
+        {
+            "source": "NM_CDAV",
+            "destination": "CDAV",
+            "filters":[
+                {"expression" : "treexpedida is not null"},
+                {"expression" : "treexpedida <> ''"}
+            ]
+        }
+    ],
+    "type":"join",
+    "join_type":"FULL OUTER JOIN",
+    "source_table":"EXPERTO",
+    "destination_table":"CDAV",
+    "join":[
+        {"source": "tarjeta","destination":"treexpedida"},
+        {"source": "fecha","destination":"fecha"},
+        {"source": "valor","destination":"valor"}
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match, pero solo para experto, esta salida no queda persistida en Memoria",
+            "table": "TMP_NM_MEM_EXPERTO",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "EXPERTO_tarjeta is null or CDAV_tarjeta is null"},
+                {"expression" : "EXPERTO_tarjeta is not null"}
+            ]
+        },
+        {
+            "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
+            "table": "TMP_NM_MEM_CDAV",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "EXPERTO_tarjeta is null or CDAV_tarjeta is null"},
+                {"expression" : "CDAV_tarjeta is not null"}
+            ]
+        },
+        {
+            "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
+            "table": "TMP_M_MEM",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "EXPERTO_tarjeta is not null and CDAV_tarjeta is not null"}
+            ]
+        }
+    ]
+}
+

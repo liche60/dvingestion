@@ -4,16 +4,28 @@
     "inputs": [],
     "steps":[
         {
-            "import":"CTC/STAGE1/JOIN_EC_ORIGEN_TARJETA.json"
+            "import":"CTC/STAGE1_ORIGEN/JOIN_EC_ORIGEN_TARJETA.json"
         },
         {
-            "import":"CTC/STAGE1/MERGE_MATCH_ORIGEN_TARJETA.json"
+            "import":"CTC/STAGE1_ORIGEN/MERGE_MATCH_ORIGEN_TARJETA.json"
         },
         {
-            "import":"CTC/STAGE1/MERGE_NM_EXPERTO_ORIGEN_TARJETA.json"
+            "import":"CTC/STAGE1_ORIGEN/MERGE_NM_EXPERTO_ORIGEN_TARJETA.json"
         },
         {
-            "import":"CTC/STAGE1/MERGE_NM_CDAV_ORIGEN_TARJETA.json"
+            "import":"CTC/STAGE1_ORIGEN/MERGE_NM_CDAV_ORIGEN_TARJETA.json"
+        },
+        {
+            "import":"CTC/STAGE1_TR/JOIN_CE_NM_TR.json"
+        },
+        {
+            "import":"CTC/STAGE1_TR/MERGE_MATCH_TR.json"
+        },
+        {
+            "import":"CTC/STAGE1_TR/JOIN_EC_NM_TR.json"
+        },
+        {
+            "import":"CTC/STAGE1_TR/MERGE_MATCH_TR.json"
         }
     ]
 }
