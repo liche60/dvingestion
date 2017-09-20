@@ -7,7 +7,7 @@
         {
             "table": "TMP_NM_MEM_CDAV",
             "columns": {
-                "id_experto":"CDAV_${columna_cdav_id}",
+                "idconsecutivo":"CDAV_${columna_cdav_id}",
                 "tarjeta":"CDAV_${columna_cdav_tarjeta}",
                 "fecha":"CDAV_${columna_cdav_fecha}",
                 "valor":"CDAV_${columna_cdav_valor}",
