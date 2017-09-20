@@ -11,6 +11,9 @@
         },
         {
             "import":"CTC/STAGE1/MERGE_NM_EXPERTO_ORIGEN_TARJETA.json"
+        },
+        {
+            "import":"CTC/STAGE1/MERGE_NM_CDAV_ORIGEN_TARJETA.json"
         }
     ]
 }
