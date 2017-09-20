@@ -173,8 +173,6 @@ class MergeStep():
         self.source_tables = self.step.config.get("source_tables")
 
     def build_table_query(self,table,columns):
-        print(columns)
-        print(self.destination_columns)
         first = True
         query_cols = ""
         for column in self.destination_columns:
