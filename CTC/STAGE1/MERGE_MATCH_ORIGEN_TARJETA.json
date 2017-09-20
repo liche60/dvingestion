@@ -18,7 +18,7 @@
             "description":"Salida de los que hicieron match entre cdav y experto desde el origen",
             "table": "EC_MATCH",
             "persist": "TRUE",
-            "persist_method": "APPEND",
+            "persist_method": "REPLACE",
             "filters":[]
         }
     ]
