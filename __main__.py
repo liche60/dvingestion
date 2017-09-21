@@ -254,7 +254,7 @@ class Step():
     def __init__(self, stage, config):
         if "description" in config:
             self.description = config.get("description")
-            print(description)
+            print(self.description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
@@ -294,7 +294,7 @@ class Stage():
     def __init__(self, process, config):
         if "description" in config:
             self.description = config.get("description")
-            print(description)
+            print(self.description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
@@ -334,7 +334,7 @@ class Process():
         self.process_vars = {}
         if "description" in config:
             self.description = config.get("description")
-            print(description)
+            print(self.description)
         if "process_vars" in config:
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
