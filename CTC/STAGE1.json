@@ -43,6 +43,26 @@
 
 
         {
+            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"treexpedida is null or treexpedida = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"treexpedida is null or treexpedida = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
             "template_vars":{"tarjeta":"treexpedida","origen":"EXPERTO","destino":"CDAV","filtro":"treexpedida is not null and treexpedida <> ''"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
@@ -52,7 +72,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"EXPERTO","filtro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"MEM_EXPERTO","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
@@ -60,7 +80,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"CDAV","filtro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"MEM_CDAV","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
 
