@@ -46,7 +46,7 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
-            data.createOrReplaceTempView(name)
+            data.registerTempTable(name)
 
     @staticmethod
     def drop_temp_tables(inputs):
@@ -68,7 +68,7 @@ class DataFrameEngineUtils():
         id = DataFrameEngineUtils.id_generator()
         print("Temporary table: "+name+"_"+id+" created")
         if method == "REPLACE":
-            dataframe.createOrReplaceTempView(name+"_"+id)
+            dataframe.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
         elif method == "APPEND":
@@ -77,7 +77,7 @@ class DataFrameEngineUtils():
                 print("Table: "+name+" already exists, appending data")
                 tmpdf = DataFrameEngineUtils.execute_query("select * from "+name)
                 dataframe = tmpdf.unionAll(dataframe)
-                dataframe.createOrReplaceTempView(name+"_"+id)
+                dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             except Exception as inst:
@@ -149,7 +149,7 @@ class InputEngineUtils():
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
             print("Creating input dataframe, name: "+destination)
-            input_df.createOrReplaceTempView(destination)
+            input_df.registerTempTable(destination)
 
         return inputs_result
     
@@ -170,7 +170,7 @@ class InputEngineUtils():
                 "data": dataframe_tmp
             }
             
-            dataframe_tmp.createOrReplaceTempView(table)
+            dataframe_tmp.registerTempTable(table)
 
             print("Creating output dataframe, name: "+table)
             #output_result.append(output)
