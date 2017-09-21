@@ -3,12 +3,12 @@
     "inputs": [
             {
             "source": "NM_${origen}",
-            "destination": "EXPERTO",
+            "destination": "${origen}",
             "filters":[]
         },
         {
             "source": "NM_${destino}",
-            "destination": "CDAV",
+            "destination": "${destino}",
             "filters":[
                 {"expression" : "${filtro}"}
             ]
