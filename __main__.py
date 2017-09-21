@@ -112,7 +112,7 @@ class DataFrameEngineUtils():
                 table = hive.table(name)
                 count = str(table.count())
                 LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
-                dataframe = table.unionAll(dataframe)
+                dataframe = dataframe.unionAll(table)
                 dataframe = dataframe.cache()
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros existentes")
                 dataframe.registerTempTable(name+"_"+id)
