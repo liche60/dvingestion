@@ -93,26 +93,24 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         dataframe = dataframe.cache()
-        LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
+        LOGGER.debug("persist: La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
+            LOGGER.debug("** persist.REPLACE: Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
             dataframe.registerTempTable(name+"_"+id)
-            hive.table(name+"_"+id).show()
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
-            LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
-            hive.table(name+"_"+id).show()
+            LOGGER.debug("** persist.REPLACE: La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-            
             hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
+            LOGGER.debug("** persist.REPLACE: La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = hive.table(name)
             count = str(newtable.count())
-            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
+            LOGGER.debug("** persist.REPLACE: La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
             try:
                 table = hive.table(name)
+                table = table.cache()
                 count = str(table.count())
                 LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
                 dataframe = table.unionAll(dataframe)
