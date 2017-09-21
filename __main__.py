@@ -76,7 +76,7 @@ class DataFrameEngineUtils():
                 hive.table(name)
                 print("Table: "+name+" already exists, appending data")
                 tmpdf = DataFrameEngineUtils.execute_query("select * from "+name)
-                dataframe = dftmp.unionAll(dataframe)
+                dataframe = tmpdf.unionAll(dataframe)
                 dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
