@@ -303,10 +303,18 @@ class Stage():
         for step_config in self.steps:
             step = Step(self,step_config)
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            hive.tables().filter("isTemporary = True").show()
+            tdf = hive.tables().filter("isTemporary = True")
+            for t in tdf:
+                print("temporary tables:")
+                count = str(t.count())
+                print("\t table: "+t["tableName"]+" size: "+count)
             step.execute()
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            hive.tables().filter("isTemporary = True").show()
+            tdf = hive.tables().filter("isTemporary = True").show()
+            for t in tdf:
+                print("temporary tables:")
+                count = str(t.count())
+                print("\t table: "+t["tableName"]+" size: "+count)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
