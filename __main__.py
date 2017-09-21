@@ -107,7 +107,7 @@ class DataFrameEngineUtils():
             try:
                 table = hive.table(name)
                 count = str(table.count())
-                LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertarán los registros nuevos!")
+                LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
                 dataframe = table.unionAll(dataframe)
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+"")
                 dataframe.registerTempTable(name+"_"+id)
@@ -117,7 +117,7 @@ class DataFrameEngineUtils():
                 LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             except Exception as inst:
                 LOGGER.error(inst)
-                LOGGER.debug("Ocurrió un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratará de recrear la tabla")
+                LOGGER.debug("Ocurrio un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratara de recrear la tabla")
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+"")
                 dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
@@ -131,7 +131,7 @@ class DataFrameEngineUtils():
         LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
-        LOGGER.debug("\t\t *** El Query retornó "+count+" registros!")
+        LOGGER.debug("\t\t *** El Query retorno "+count+" registros!")
         return dataframe
 
     @staticmethod
@@ -339,7 +339,7 @@ class Stage():
             for step_config in self.steps:
                 step = Step(self,step_config)
                 tdf = hive.tables().filter("isTemporary = True").collect()
-                LOGGER.debug("Tablas en memoria para la ejecución del step")
+                LOGGER.debug("Tablas en memoria para la ejecucion del step")
                 for t in tdf:
                     count = str(hive.table(t["tableName"]).count())
                     LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
