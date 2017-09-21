@@ -321,8 +321,8 @@ class Stage():
 class Process():
     def __init__(self, config):
         self.process_vars = {}
-        if "template_vars" in json_file:
-            self.process_vars = json_file.get("process_vars")
+        if "template_vars" in config:
+            self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
         self.stages = config.get("stages")
