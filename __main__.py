@@ -33,7 +33,7 @@ STEP_NAME = ""
 class Logger:
     def __init__(self, process_name):
         self.process_name = process_name
-        self.log = setup_custom_logger(self.process_name)
+        self.log = self.setup_custom_logger(self.process_name)
 
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
