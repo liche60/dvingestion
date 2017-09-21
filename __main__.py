@@ -25,15 +25,15 @@ sc =SparkContext()
 sc.setLogLevel("OFF")
 hive = HiveContext(sc)
 dataframes = []
-LOGGER = ""
 
 STAGE_NAME = ""
 STEP_NAME = ""
 
 class Logger:
+
     def __init__(self, process_name):
         self.process_name = process_name
-        self.log = self.setup_custom_logger(self.process_name)
+        self.log = self.setup_custom_logger()
 
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -297,6 +297,7 @@ class Step():
         LOGGER.info("Step iniciado!")
 
     def execute(self):
+        global STEP_NAME
         LOGGER.info("Ejecutando step...")
         step = False
         if self.type == "join":
@@ -308,16 +309,15 @@ class Step():
             outputdf = step.execute()
             InputEngineUtils.process_outputs(self.outputs,outputdf)
         LOGGER.info("Step finalizado")
-        global STEP_NAME
         STEP_NAME = ""
         
 
 class Stage():
     def __init__(self, process, config):
-        self.name = config.get("stage_name")
         global STAGE_NAME
-        STAGE_NAME = self.name
         global STEP_NAME
+        self.name = config.get("stage_name")
+        STAGE_NAME = self.name
         STEP_NAME = ""
         LOGGER.info("Iniciando Stage...")
         if "description" in config:
@@ -351,6 +351,7 @@ class Stage():
 
 class Process():
     def __init__(self, config):
+        global LOGGER
         self.process_vars = {}
         if "description" in config:
             self.description = config.get("description")
@@ -359,7 +360,6 @@ class Process():
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
-        global LOGGER
         LOGGER = Logger(self.name)
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
