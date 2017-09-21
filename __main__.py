@@ -252,6 +252,9 @@ class JoinStep():
 
 class Step():
     def __init__(self, stage, config):
+        if "description" in config:
+            self.description = config.get("description")
+            print(description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
@@ -289,6 +292,9 @@ class Step():
 
 class Stage():
     def __init__(self, process, config):
+        if "description" in config:
+            self.description = config.get("description")
+            print(description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
@@ -296,32 +302,39 @@ class Stage():
         self.config = InputEngineUtils.process_template_vars(self.config,process.process_vars)
         self.process = process
         self.name = self.config.get("stage_name")
+        self.enable = False
+        if self.config.get("enable") == "true":
+            self.enable = True
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.steps = self.config.get("steps")
         print("Stage: "+self.name+" initialized!")
     
     def execute(self):
+        if self.enable:
         print("Executing Steps...")
-        for step_config in self.steps:
-            step = Step(self,step_config)
-            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            for t in tdf:
-                print("temporary tables:")
-                count = str(hive.table(t["tableName"]).count())
-                print("\t table: "+t["tableName"]+" size: "+count)
-            step.execute()
-            DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            for t in tdf:
-                print("temporary tables:")
-                count = str(hive.table(t["tableName"]).count())
-                print("\t table: "+t["tableName"]+" size: "+count)
-        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+            for step_config in self.steps:
+                step = Step(self,step_config)
+                DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+                tdf = hive.tables().filter("isTemporary = True").collect()
+                for t in tdf:
+                    print("temporary tables:")
+                    count = str(hive.table(t["tableName"]).count())
+                    print("\t table: "+t["tableName"]+" size: "+count)
+                step.execute()
+                DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+                tdf = hive.tables().filter("isTemporary = True").collect()
+                for t in tdf:
+                    print("temporary tables:")
+                    count = str(hive.table(t["tableName"]).count())
+                    print("\t table: "+t["tableName"]+" size: "+count)
+            DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
         self.process_vars = {}
+        if "description" in config:
+            self.description = config.get("description")
+            print(description)
         if "process_vars" in config:
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)

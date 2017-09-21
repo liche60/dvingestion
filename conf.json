@@ -20,14 +20,24 @@
             },
     "stages": [
         {
-            "description":"Stage TFV Inicial",
+            "enable":"true",
+            "description":"*********************  Stage TFV Inicial",
             "template_vars":{},
             "import": "CTC/TFV_INICIAL.json"
         },
         {
-            "description":"Stage TFV por tarjeta reexpedida",
+            "enable":"false",
+            "description":"*********************  Stage TFV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
+            },
+            "import": "CTC/TFV.json"
+        },
+        {
+            "enable":"false",
+            "description":"*********************  Stage TFV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
             },
             "import": "CTC/TFV.json"
         }
