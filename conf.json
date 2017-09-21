@@ -1,10 +1,7 @@
 {
     "process_name": "CTC",
     "hive_database": "pruebas_cuadre",
-    "stages": [
-        {
-            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
-            "template_vars":{
+    "process_vars":{
                 "fecha_proceso":"2017-09-20",
                 "tabla_experto":"EXPERTO_CTC_IN",
                 "columna_experto_id":"idconsecutivo",
@@ -21,6 +18,10 @@
                 "columna_cdav_fecha":"fec_proc_ok",
                 "columna_cdav_valor":"valor"
             },
+    "stages": [
+        {
+            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "template_vars":{},
             "import": "CTC/TFV_INICIAL.json"
         }
     ]

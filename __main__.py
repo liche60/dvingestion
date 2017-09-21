@@ -255,6 +255,7 @@ class Step():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
+        self.config = InputEngineUtils.process_template_vars(self.config,stage.process.process_vars)
         self.stage = stage
         self.type = self.config.get("type")
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
@@ -291,7 +292,7 @@ class Stage():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
-        print(json.dumps(self.config))
+        self.config = InputEngineUtils.process_template_vars(self.config,proces.template_vars)
         self.process = process
         self.name = self.config.get("stage_name")
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
@@ -319,6 +320,10 @@ class Stage():
 
 class Process():
     def __init__(self, config):
+        self.process_vars = {}
+        if "template_vars" in json_file:
+            self.process_vars = json_file.get("process_vars")
+            config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
