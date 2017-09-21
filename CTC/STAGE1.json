@@ -6,7 +6,7 @@
 
 
         {
-            "template_vars":{"source": "${tabla_experto}","table":"EXPERTO","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source": "${tabla_experto}","table":"EXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_experto_id}",
                 "tarjeta":"${columna_experto_tarjeta}",
                 "fecha":"${columna_experto_fecha}",
