@@ -2,10 +2,10 @@
     "description":"Merge de la tabla cdav en memoria con los que no hicieron match",
     "inputs": [
         {
-            "source": "NM_STAGE1_CDAV",
-            "destination": "NM_STAGE1_CDAV_TRNULL",
+            "source": "NM_${tabla}",
+            "destination": "NM_${tabla}_NT",
             "filters":[
-                {"expression" : "treexpedida is null or treexpedida = ''"}
+                {"expression" : "${filtro}"}
             ]
         }
     ],
@@ -13,17 +13,17 @@
     "destination_columns":[ "tarjeta","fecha","valor","treexpedida","tamparadora" ],
     "source_tables":[
         {
-            "table": "TMP_NM_MEM_CDAV",
+            "table": "NM_${tabla}",
             "columns": {
-                "tarjeta":"CDAV_tarjeta",
-                "fecha":"CDAV_fecha",
-                "valor":"CDAV_valor",
-                "treexpedida":"CDAV_treexpedida",
-                "tamparadora":"CDAV_tamparadora"
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"
             }
         },
         {
-            "table": "NM_STAGE1_CDAV_TRNULL",
+            "table": "NM_${tabla}_NT",
             "columns": {
                 "tarjeta":"tarjeta",
                 "fecha":"fecha",
@@ -36,7 +36,7 @@
     "outputs":[
         {
             "description":"Salida de los que no hacen match en cdav, esta salida queda persistida en Hive",
-            "table": "NM_STAGE1_CDAV",
+            "table": "NM_${tabla}",
             "persist": "TRUE",
             "persist_method": "REPLACE",
             "filters":[]

@@ -1,0 +1,35 @@
+{
+    "description":"Merge de la tabla experto en memoria con los que no hicieron match",
+    "inputs": [
+        {
+            "source": "${tabla_experto}",
+            "destination": "EXPERTO",
+            "filters":[
+                {"expression" : "${columna_experto_fecha} = '${fecha_proceso}'"}
+            ]
+        }
+    ],
+    "type":"merge",
+    "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor","treexpedida","tamparadora" ],
+    "source_tables":[
+        {
+            "table": "EXPERTO",
+            "columns": {
+                "idconsecutivo":"${columna_experto_id}",
+                "tarjeta":"${columna_experto_tarjeta}",
+                "fecha":"${columna_experto_fecha}",
+                "valor":"${columna_experto_valor}",
+                "treexpedida":"${columna_experto_tarjeta_reexpedida}",
+                "tamparadora":"${columna_experto_tarjeta_amparadora}"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en experto, esta salida queda persistida en Hive",
+            "table": "NM_EXPERTO",
+            "persist": "FALSE",
+            "filters":[]
+        }
+    ]
+}

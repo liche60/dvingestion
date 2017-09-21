@@ -1,0 +1,28 @@
+{
+    "description":"Merge de la tabla CDAV o EXPERTO en memoria con los que no hicieron match",
+    "inputs": [],
+    "type":"merge",
+    "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor","treexpedida","tamparadora" ],
+    "source_tables":[
+        {
+            "table": "TMP_NM_MEM_${tabla}",
+            "columns": {
+                "idconsecutivo":"${tabla}_idconsecutivo",
+                "tarjeta":"${tabla}_tarjeta",
+                "fecha":"${tabla}fecha",
+                "valor":"${tabla}_valor",
+                "treexpedida":"${tabla}_treexpedida",
+                "tamparadora":"${tabla}_tamparadora"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en CDAV o EXPERTO, esta salida queda persistida en Hive",
+            "table": "NM_${tabla}",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
+            "filters":[]
+        }
+    ]
+}

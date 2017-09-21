@@ -3,29 +3,140 @@
     "stage_name": "STAGE1",
     "inputs": [],
     "steps":[
+
+
+        {"import":"CTC/STAGE1_ORIGEN/INGEST_CDAV.json"},
+        {"import":"CTC/STAGE1_ORIGEN/INGEST_EXPERTO.json"},
+
+
         {
-            "import":"CTC/STAGE1_ORIGEN/JOIN_EC_ORIGEN_TARJETA.json"
+            "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":""},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "import":"CTC/STAGE1_ORIGEN/MERGE_MATCH_ORIGEN_TARJETA.json"
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"treexpedida","origen":"EXPERTO","destino":"CDAV","filtro":"treexpedida is not null and treexpedida <> ''"},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "import":"CTC/STAGE1_ORIGEN/MERGE_NM_EXPERTO_ORIGEN_TARJETA.json"
+            "template_vars":{"tabla":"EXPERTO","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
-            "import":"CTC/STAGE1_ORIGEN/MERGE_NM_CDAV_ORIGEN_TARJETA.json"
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "import":"CTC/STAGE1_TR/JOIN_CE_NM_TR.json"
+            "template_vars":{"tabla":"CDAV","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"treexpedida","origen":"CDAV","destino":"EXPERTO","filtro":"treexpedida is not null and treexpedida <> ''"},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "import":"CTC/STAGE1_TR/MERGE_MATCH_TR.json"
+            "template_vars":{"tabla":"EXPERTO","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
-            "import":"CTC/STAGE1_TR/JOIN_EC_NM_TR.json"
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "import":"CTC/STAGE1_TR/MERGE_MATCH_TR.json"
+            "template_vars":{"tabla":"CDAV","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"treexpedida","origen":"EXPERTO","destino":"CDAV","filtro":"treexpedida is not null and treexpedida <> ''"},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"EXPERTO","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV","fitro":"treexpedida is null or treexpedida = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"tamparadora","origen":"CDAV","destino":"EXPERTO","filtro":"tamparadora is not null and tamparadora <> ''"},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"EXPERTO","fitro":"tamparadora is null or tamparadora = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV","fitro":"tamparadora is null or tamparadora = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"tamparadora","origen":"EXPERTO","destino":"CDAV","filtro":"tamparadora is not null and treexptamparadoraedida <> ''"},
+            "import":"CTC/STAGE1_TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/STAGE1_TEMPLATES/APPEND_TO_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"EXPERTO","fitro":"tamparadora is null or tamparadora = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/STAGE1_TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV","fitro":"tamparadora is null or tamparadora = ''"},
+            "import":"CTC/STAGE1_TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
+
     ]
 }
