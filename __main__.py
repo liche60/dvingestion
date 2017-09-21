@@ -110,10 +110,10 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             try:
                 table = hive.table(name)
-                table = table.cache()
                 count = str(table.count())
                 LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
                 dataframe = table.unionAll(dataframe)
+                dataframe = dataframe.cache()
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros existentes")
                 dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
