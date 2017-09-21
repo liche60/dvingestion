@@ -2,14 +2,12 @@
     "description": "Cuadre de Cdav, Experto o Experto, Cdav por tajeta reexpedida o amparada, fecha y valor",
     "inputs": [
             {
-            "source": "NM_EXPERTO",
+            "source": "NM_${origen}",
             "destination": "EXPERTO",
-            "filters":[
-                {"expression" : "${filtro}"}
-            ]
+            "filters":[]
         },
         {
-            "source": "NM_CDAV",
+            "source": "NM_${destino}",
             "destination": "CDAV",
             "filters":[
                 {"expression" : "${filtro}"}
