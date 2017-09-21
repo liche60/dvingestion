@@ -6,6 +6,7 @@
 
 
         {
+            "step_name":"LOAD_EXPERTO_FILTRADO_FECHA",
             "template_vars":{"source": "${tabla_experto}","tabla":"EXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_experto_id}",
                 "tarjeta":"${columna_experto_tarjeta}",
@@ -16,6 +17,7 @@
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
+            "step_name":"LOAD_CDAV_FILTRADO_FECHA",
             "template_vars":{"source": "${tabla_cdav}","tabla":"CDAV","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_cdav_id}",
                 "tarjeta":"${columna_cdav_tarjeta}",
@@ -26,15 +28,20 @@
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
+            "step_name":"JOIN_TFV_EXPERTO_CEDAV",
             "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":"1 = 1"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {"import":"CTC/TEMPLATES/NEW_MATCH.json"},
         {
+            "step_name":"CREAR_NM_EXPERTO_NUEVO",
+            "description":"Se creara un nuevo experto con los que no hacen match",
             "template_vars":{"tabla":"EXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
+            "step_name":"CREAR_NM_CDAV_NUEVO",
+            "description":"Se creara un nuevo cdav con los que no hacen match",
             "template_vars":{"tabla":"CDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         }
