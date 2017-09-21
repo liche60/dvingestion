@@ -275,9 +275,11 @@ class Step():
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
         for output in outputs_list:
             oname = output.get("name")
+            print("\Adding new input to stage: "+oname+" checking if it exists")
             for inp in self.stage.inputs:
                 iname = inp.get("name")
                 if oname == iname:
+                    print("\t\tDataFrame exists, replacing...")
                     self.stage.inputs.remove(inp)
             self.stage.inputs.append(output)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
