@@ -92,6 +92,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
+        dataframe = dataframe.cache()
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
@@ -99,12 +100,11 @@ class DataFrameEngineUtils():
             LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
             dataframe.registerTempTable(name+"_"+id)
             hive.table(name+"_"+id).show()
-            hive.cacheTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             hive.table(name+"_"+id).show()
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-            hive.uncacheTable(name+"_"+id)
+            
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = hive.table(name)
@@ -118,10 +118,8 @@ class DataFrameEngineUtils():
                 dataframe = table.unionAll(dataframe)
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros existentes")
                 dataframe.registerTempTable(name+"_"+id)
-                hive.cacheTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                hive.uncacheTable(name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
                 newtable = hive.table(name)
                 count = str(newtable.count())
@@ -132,9 +130,7 @@ class DataFrameEngineUtils():
                 LOGGER.debug("Ocurrio un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratara de recrear la tabla")
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
                 dataframe.registerTempTable(name+"_"+id)
-                hive.cacheTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                hive.uncacheTable(name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
                 LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
         else:
