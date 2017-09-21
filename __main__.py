@@ -45,8 +45,11 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
-            print("Registering temp table name: "+name)
-            data.registerTempTable(name)
+            try:
+                hive.dropTempTable(name)
+                data.registerTempTable(name)
+            except:
+                data.registerTempTable(name)
 
     @staticmethod
     def drop_temp_tables(inputs):
@@ -271,6 +274,11 @@ class Step():
             outputdf = step.execute()
             outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
         for output in outputs_list:
+            oname = output.get("name")
+            for inp in self.stage.inputs:
+                iname = inp.get("name")
+                if oname == iname:
+                    self.stage.inputs.remove(inp)
             self.stage.inputs.append(output)
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
         
