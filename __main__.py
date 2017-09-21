@@ -102,7 +102,7 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             LOGGER.debug("La tabla "+name+" fue creada o reemplazada en HIVE")
             hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
+            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
         elif method == "APPEND":
             try:
                 table = hive.table(name)
@@ -114,7 +114,7 @@ class DataFrameEngineUtils():
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
-                LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
+                LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             except Exception as inst:
                 LOGGER.error(inst)
                 LOGGER.debug("Ocurrió un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratará de recrear la tabla")
@@ -122,7 +122,7 @@ class DataFrameEngineUtils():
                 dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
-                LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
+                LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
         else:
             LOGGER.error("persist method not supported")
 
