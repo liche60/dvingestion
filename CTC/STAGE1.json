@@ -62,27 +62,6 @@
                 "tamparadora":"tamparadora"},
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
-        {
-            "template_vars":{"tarjeta":"treexpedida","origen":"EXPERTO","destino":"CDAV","filtro":"treexpedida is not null and treexpedida <> ''"},
-            "import":"CTC/TEMPLATES/JOIN_TFV.json"
-        },
-        {"import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
-        {
-            "template_vars":{"tabla":"EXPERTO"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
-        },
-        {
-            "template_vars":{"tabla":"MEM_EXPERTO","filtro":"treexpedida is null or treexpedida = ''"},
-            "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
-        },
-        {
-            "template_vars":{"tabla":"CDAV"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
-        },
-        {
-            "template_vars":{"tabla":"MEM_CDAV","filtro":"treexpedida is null or treexpedida = ''"},
-            "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
-        },
 
 
         {
@@ -132,6 +111,28 @@
 
 
         {
+            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"tamparadora is null or tamparadora = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"tamparadora is null or tamparadora = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+
+
+        {
             "template_vars":{"tarjeta":"tamparadora","origen":"CDAV","destino":"EXPERTO","filtro":"tamparadora is not null and tamparadora <> ''"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
@@ -155,7 +156,7 @@
 
 
         {
-            "template_vars":{"tarjeta":"tamparadora","origen":"EXPERTO","destino":"CDAV","filtro":"tamparadora is not null and treexptamparadoraedida <> ''"},
+            "template_vars":{"tarjeta":"tamparadora","origen":"EXPERTO","destino":"CDAV","filtro":"tamparadora is not null and tamparadora <> ''"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {"import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
