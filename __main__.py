@@ -193,7 +193,6 @@ class InputEngineUtils():
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
             else:
                 dataframe_tmp.registerTempTable(table)
-        return output_result
 
 
 class MergeStep():
