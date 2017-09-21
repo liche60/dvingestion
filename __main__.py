@@ -19,44 +19,73 @@ from pyspark.sql.types import *
 """
 
 """
+import logging
 
 sc =SparkContext()
 sc.setLogLevel("OFF")
 hive = HiveContext(sc)
+dataframes = []
+LOGGER = ""
 
+STAGE_NAME = ""
+STEP_NAME = ""
+
+class Logger:
+    def __init__(self, process_name):
+        self.process_name = process_name
+        self.log = setup_custom_logger(self.process_name)
+
+    def setup_custom_logger(self):
+        formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
+                                    datefmt='%Y-%m-%d %H:%M:%S')
+        handler = logging.FileHandler('log.txt', mode='w')
+        handler.setFormatter(formatter)
+        screen_handler = logging.StreamHandler(stream=sys.stdout)
+        screen_handler.setFormatter(formatter)
+        logger = logging.getLogger(self.process_name)
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(handler)
+        logger.addHandler(screen_handler)
+        return logger
+
+    def info(self,message):
+        prefix = "["+self.process_name+"]"
+        if STAGE_NAME != "":
+            prefix = prefix + "["+STAGE_NAME+"]"
+            if STEP_NAME != "":
+                prefix = prefix + "["+STEP_NAME+"]"
+        self.log.info(prefix+" "+message)
+
+    def debug(self,message):
+        prefix = "["+self.process_name+"]"
+        if STAGE_NAME != "":
+            prefix = prefix + "["+STAGE_NAME+"]"
+            if STEP_NAME != "":
+                prefix = prefix + "["+STEP_NAME+"]"
+        self.log.debug(prefix+" "+message)
+    
+    def error(self,message):
+        prefix = "["+self.process_name+"]"
+        if STAGE_NAME != "":
+            prefix = prefix + "["+STAGE_NAME+"]"
+            if STEP_NAME != "":
+                prefix = prefix + "["+STEP_NAME+"]"
+        self.log.error(prefix+" "+message)
 
 class DataFrameEngineUtils():
 
     @staticmethod
     def get_filtered_dataframe(dataframe,filters):
-        print("filtering dataframe ")
+        LOGGER.debug(" *** Filtrando dataframe...")
         for filter_item in filters:
             count = str(dataframe.count())
-            dataframe.show()
-            print("rows before filter: "+count)
+            LOGGER.debug(" *** Registros antes del filtro: "+count)
             exp = filter_item.get("expression")
-            print("\tfilter expression: "+exp)
+            LOGGER.debug("\t\t *** Filtro: "+exp)
             dataframe = dataframe.filter(exp)
             count = str(dataframe.count())
-            print("rows after filter: "+count)
+            LOGGER.debug(" *** Registros despues del filtro: "+count)
         return dataframe
-
-    @staticmethod
-    def register_inputs_as_tables(inputs):
-        for input_item in inputs:
-            name = input_item.get("name")
-            data = input_item.get("data")
-            data.registerTempTable(name)
-
-    @staticmethod
-    def drop_temp_tables(inputs):
-        for input_item in inputs:
-            name = input_item.get("name")
-            print("Droping temp table name: "+name)
-            #try:
-            #    hive.dropTempTable(name)
-            #except:
-            #    print("the table: "+name+" doesn't exists, probably it was overwritten by some input")
     
     @staticmethod
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -64,44 +93,49 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
-        print("table: "+name+" will be persisted in hive")
+        LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
         id = DataFrameEngineUtils.id_generator()
-        print("Temporary table: "+name+"_"+id+" created")
         if method == "REPLACE":
+            LOGGER.debug("Creando tabla temporal: "+name+"_"+id+"")
             dataframe.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
+            LOGGER.debug("La tabla "+name+" fue creada o reemplazada en HIVE")
+            hive.dropTempTable(name+"_"+id)
+            LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
         elif method == "APPEND":
             try:
-                hive.table(name)
-                print("Table: "+name+" already exists, appending data")
-                tmpdf = DataFrameEngineUtils.execute_query("select * from "+name)
-                dataframe = tmpdf.unionAll(dataframe)
+                table = hive.table(name)
+                count = str(table.count())
+                LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertarán los registros nuevos!")
+                dataframe = table.unionAll(dataframe)
+                LOGGER.debug("Creando tabla temporal: "+name+"_"+id+"")
                 dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
+                hive.dropTempTable(name+"_"+id)
+                LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
             except Exception as inst:
-                print(type(inst))
-                print(inst.args)
-                print(inst)
-                print("Table: "+name+" don't exist, creating table with data")
+                LOGGER.error(inst)
+                LOGGER.debug("Ocurrió un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratará de recrear la tabla")
+                LOGGER.debug("Creando tabla temporal: "+name+"_"+id+"")
+                dataframe.registerTempTable(name+"_"+id)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
+                hive.dropTempTable(name+"_"+id)
+                LOGGER.debug("La tabla temporal "+name+"_"+id+" fué eliminada")
         else:
-            print("persist method not supported")
-        hive.dropTempTable(name+"_"+id)
-        print("Temporary table: "+name+"_"+id+" droped")
+            LOGGER.error("persist method not supported")
 
     @staticmethod
     def execute_query(query):
-        print("Executing query: "+query)
+        LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
         count = str(dataframe.count())
-        print("Query returned "+count+" records!")
+        LOGGER.debug("\t\t *** El Query retornó "+count+" registros!")
         return dataframe
 
     @staticmethod
     def get_table_columns(table):
-        print("Returning columns for table: "+table)
         return hive.table(table).columns
 
 class InputEngineUtils():
@@ -125,7 +159,6 @@ class InputEngineUtils():
         for var in template_vars:
             val = template_vars.get(var)
             var = "${"+var+"}"
-            print("\tVariable: "+var+" Value: "+val)
             data = data.replace(var,val)
         json_data = json.loads(data)
         #print("Result: "+json.dumps(json_data))
@@ -134,7 +167,6 @@ class InputEngineUtils():
     @staticmethod
     def get_input(input_item):
         source = input_item.get("source")
-        print("Getting table from hive: "+source)
         filters = input_item.get("filters")
         query = "select * from "+source
         dataframe = DataFrameEngineUtils.execute_query(query)
@@ -143,20 +175,15 @@ class InputEngineUtils():
 
     @staticmethod
     def get_inputs(inputs):
-        print("building inputs ")
         inputs_result = []
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
-            print("Creating input dataframe, name: "+destination)
             input_df.registerTempTable(destination)
-
         return inputs_result
     
     @staticmethod
     def process_outputs(outputs,dataframe):
-        print("building outputs ")
-        output_result = []
         for output_item in outputs:
             table = output_item.get("table")
             filters = output_item.get("filters")
@@ -165,23 +192,18 @@ class InputEngineUtils():
             if persist == "TRUE":
                 persist_method = output_item.get("persist_method")
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
-            output ={
-                "name": table, 
-                "data": dataframe_tmp
-            }
-            
-            dataframe_tmp.registerTempTable(table)
-
-            print("Creating output dataframe, name: "+table)
-            #output_result.append(output)
+            else:
+                dataframe_tmp.registerTempTable(table)
         return output_result
 
 
 class MergeStep():
     def __init__(self, step):
+        LOGGER.info("Iniciando Merge...")
         self.step = step
         self.destination_columns = self.step.config.get("destination_columns")
         self.source_tables = self.step.config.get("source_tables")
+        LOGGER.info("Merge Iniciado!")
 
     def build_table_query(self,table,columns):
         first = True
@@ -198,6 +220,7 @@ class MergeStep():
 
 
     def execute(self):
+        LOGGER.info("Ejecutando Merge...")
         first = True
         for table_item in self.source_tables:
             table = table_item.get("table")
@@ -209,18 +232,20 @@ class MergeStep():
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
+        LOGGER.info("Merge ejecutado!")
         return dataframe
 
 
 
 class JoinStep():
     def __init__(self, step):
+        LOGGER.info("Iniciando Join...")
         self.step = step
         self.source_table = self.step.config.get("source_table")
         self.destination_table = self.step.config.get("destination_table")
         self.type = self.step.config.get("join_type")
         self.ids = self.step.config.get("join")
-        print("Join type: "+self.type+" initialized!")
+        LOGGER.info("Join iniciado!")
 
     def columns_query_builder(self,table):
         first_val = True
@@ -246,15 +271,20 @@ class JoinStep():
         return join_query
 
     def execute(self):
+        LOGGER.info("Ejecutando Join...")        
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
+        LOGGER.info("Join ejecutado!")        
         return dataframe
 
 class Step():
     def __init__(self, stage, config):
+        self.name = config.get("step_name")
+        global STEP_NAME = self.name
+        LOGGER.info("Iniciando Step...")
         if "description" in config:
             self.description = config.get("description")
-            print(self.description)
+            LOGGER.info(self.description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.config = InputEngineUtils.process_template_vars(self.config,stage.template_vars)
@@ -263,90 +293,76 @@ class Step():
         self.type = self.config.get("type")
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.outputs = self.config.get("outputs")
-        print("Step type: "+self.type+" initialized!")
+        LOGGER.info("Step iniciado!")
 
     def execute(self):
-        print("Executing Step...")
-        outputs_list = []
-        DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+        LOGGER.info("Ejecutando step...")
         step = False
         if self.type == "join":
             step = JoinStep(self)
             outputdf = step.execute()
-            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
+            InputEngineUtils.process_outputs(self.outputs,outputdf)
         if self.type == "merge":
             step = MergeStep(self)
             outputdf = step.execute()
-            outputs_list = InputEngineUtils.process_outputs(self.outputs,outputdf)
-        for output in outputs_list:
-            oname = output.get("name")
-            print("\Adding new input to stage: "+oname+" checking if it exists")
-            for inp in self.stage.inputs:
-                iname = inp.get("name")
-                if oname == iname:
-                    print("\t\tDataFrame exists, replacing...")
-                    self.stage.inputs.remove(inp)
-            self.stage.inputs.append(output)
-        DataFrameEngineUtils.drop_temp_tables(self.inputs)
+            InputEngineUtils.process_outputs(self.outputs,outputdf)
+        LOGGER.info("Step finalizado")
+        global STEP_NAME = ""
         
 
 class Stage():
     def __init__(self, process, config):
+        self.name = config.get("stage_name")
+        global STAGE_NAME = self.name
+        global STEP_NAME = ""
+        LOGGER.info("Iniciando Stage...")
         if "description" in config:
             self.description = config.get("description")
-            print(self.description)
+            LOGGER.info(self.description)
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
         self.config = InputEngineUtils.process_template_vars(self.config,self.template_vars)
         self.config = InputEngineUtils.process_template_vars(self.config,process.process_vars)
         self.process = process
-        self.name = self.config.get("stage_name")
         self.enable = False
         if "enable" in config:
             if config.get("enable") == "true":
                 self.enable = True
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.steps = self.config.get("steps")
-        print("Stage: "+self.name+" initialized!")
+        LOGGER.info("Stage initializada!")
     
     def execute(self):
         if self.enable:
-            print("Executing Steps...")
+            LOGGER.info("Ejecutando Steps..."
             for step_config in self.steps:
                 step = Step(self,step_config)
-                DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
                 tdf = hive.tables().filter("isTemporary = True").collect()
+                LOGGER.debug("Tablas en memoria para la ejecución del step")
                 for t in tdf:
-                    print("temporary tables:")
                     count = str(hive.table(t["tableName"]).count())
-                    print("\t table: "+t["tableName"]+" size: "+count)
+                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
                 step.execute()
-                DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
-                tdf = hive.tables().filter("isTemporary = True").collect()
-                for t in tdf:
-                    print("temporary tables:")
-                    count = str(hive.table(t["tableName"]).count())
-                    print("\t table: "+t["tableName"]+" size: "+count)
-            DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
     def __init__(self, config):
         self.process_vars = {}
         if "description" in config:
             self.description = config.get("description")
-            print(self.description)
+            LOGGER.info(self.description)
         if "process_vars" in config:
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
+        global LOGGER = Logger(self.name)
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
-        print("Process: "+self.name+" initialized!")
+        LOGGER.info("Iniciando proceso...")
     
     def execute(self):
-        print("Executing stages...")
+        LOGGER.info("Ejecutando Stages...")
         for stage_config in self.stages:
             stage = Stage(self,stage_config)
             stage.execute()
