@@ -5,7 +5,7 @@
     "steps":[
 
         {
-            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"${tarjeta} is null or ${tarjeta} = ''",
+            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
                 "idconsecutivo":"idconsecutivo",
                 "tarjeta":"tarjeta",
                 "fecha":"fecha",
@@ -15,7 +15,7 @@
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
-            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"${tarjeta} is null or ${tarjeta} = ''",
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
                 "idconsecutivo":"idconsecutivo",
                 "tarjeta":"tarjeta",
                 "fecha":"fecha",
@@ -27,7 +27,7 @@
 
 
         {
-            "template_vars":{"tarjeta":"${tarjeta}","origen":"CDAV","destino":"EXPERTO","filtro":"${tarjeta} is not null and ${tarjeta} <> ''"},
+            "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"CDAV","destino":"EXPERTO","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {"import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
@@ -36,7 +36,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"EXPERTO","filtro":"${tarjeta} is null or ${tarjeta} = ''"},
+            "template_vars":{"tabla":"EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
@@ -44,13 +44,13 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"CDAV","filtro":"${tarjeta} is null or ${tarjeta} = ''"},
+            "template_vars":{"tabla":"CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
 
 
         {
-            "template_vars":{"tarjeta":"${tarjeta}","origen":"EXPERTO","destino":"CDAV","filtro":"${tarjeta} is not null and ${tarjeta} <> ''"},
+            "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"EXPERTO","destino":"CDAV","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {"import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
@@ -59,7 +59,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"EXPERTO","filtro":"${tarjeta} is null or ${tarjeta} = ''"},
+            "template_vars":{"tabla":"EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
@@ -67,7 +67,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"CDAV","filtro":"${tarjeta} is null or ${tarjeta} = ''"},
+            "template_vars":{"tabla":"CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
 

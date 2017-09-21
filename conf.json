@@ -20,9 +20,16 @@
             },
     "stages": [
         {
-            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "description":"Stage TFV Inicial",
             "template_vars":{},
             "import": "CTC/TFV_INICIAL.json"
+        },
+        {
+            "description":"Stage TFV por tarjeta reexpedida",
+            "template_vars":{
+                "tfv_tarjeta":"treexpedida"
+            },
+            "import": "CTC/TFV.json"
         }
     ]
 }
