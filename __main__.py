@@ -57,10 +57,10 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             print("Droping temp table name: "+name)
-            try:
-                hive.dropTempTable(name)
-            except:
-                print("the table: "+name+" doesn't exists, probably it was overwritten by some input")
+            #try:
+            #    hive.dropTempTable(name)
+            #except:
+            #    print("the table: "+name+" doesn't exists, probably it was overwritten by some input")
     
     @staticmethod
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -153,7 +153,13 @@ class InputEngineUtils():
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
             print("Creating input dataframe, name: "+destination)
-            inputs_result.append({"name": destination, "data": input_df})
+            #inputs_result.append({"name": destination, "data": input_df})
+            try:
+                input_df.dropTempTable(destination)
+                input_df.registerTempTable(destination)
+            except:
+                input_df.registerTempTable(destination)
+
         return inputs_result
     
     @staticmethod
@@ -172,8 +178,15 @@ class InputEngineUtils():
                 "name": table, 
                 "data": dataframe_tmp
             }
+            
+            try:
+                dataframe_tmp.dropTempTable(table)
+                dataframe_tmp.registerTempTable(table)
+            except:
+                dataframe_tmp.registerTempTable(table)
+
             print("Creating output dataframe, name: "+table)
-            output_result.append(output)
+            #output_result.append(output)
         return output_result
 
 
