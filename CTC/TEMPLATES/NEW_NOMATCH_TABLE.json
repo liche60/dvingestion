@@ -9,7 +9,7 @@
             "columns": {
                 "idconsecutivo":"${tabla}_idconsecutivo",
                 "tarjeta":"${tabla}_tarjeta",
-                "fecha":"${tabla}fecha",
+                "fecha":"${tabla}_fecha",
                 "valor":"${tabla}_valor",
                 "treexpedida":"${tabla}_treexpedida",
                 "tamparadora":"${tabla}_tamparadora"
