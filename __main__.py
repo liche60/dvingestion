@@ -66,16 +66,20 @@ class DataFrameEngineUtils():
     def persist_dataframe(name,method,dataframe):
         print("table: "+name+" will be persisted in hive")
         id = DataFrameEngineUtils.id_generator()
-        dataframe.registerTempTable(name+"_"+id)
         print("Temporary table: "+name+"_"+id+" created")
         if method == "REPLACE":
+            dataframe.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
         elif method == "APPEND":
             try:
                 hive.table(name)
                 print("Table: "+name+" already exists, appending data")
-                DataFrameEngineUtils.execute_query("insert into table "+name+" select * from "+name+"_"+id)
+                tmpdf = DataFrameEngineUtils.execute_query("select * from "+name)
+                dataframe = dftmp.unionAll(dataframe)
+                dataframe.registerTempTable(name+"_"+id)
+                DataFrameEngineUtils.execute_query("drop table if exists "+name)
+                DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             except Exception as inst:
                 print(type(inst))
                 print(inst.args)
