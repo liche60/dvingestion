@@ -25,8 +25,6 @@ import logging
 sc =SparkContext()
 sc.setLogLevel("OFF")
 hive = HiveContext(sc)
-dataframes = []
-
 STAGE_NAME = ""
 STEP_NAME = ""
 
@@ -50,6 +48,8 @@ class Logger:
         return logger
 
     def info(self,message):
+        global STAGE_NAME
+        global STEP_NAME
         prefix = "["+self.process_name+"]"
         if STAGE_NAME != "":
             prefix = prefix + "["+STAGE_NAME+"]"
@@ -58,6 +58,8 @@ class Logger:
         self.log.info(prefix+" "+message)
 
     def debug(self,message):
+        global STAGE_NAME
+        global STEP_NAME
         prefix = "["+self.process_name+"]"
         if STAGE_NAME != "":
             prefix = prefix + "["+STAGE_NAME+"]"
