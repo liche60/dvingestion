@@ -9,7 +9,7 @@
             "columns": {
                 "fecha":"CDAV_fecha",
                 "id_experto":"EXPERTO_idconsecutivo",
-                "id_cdav":"CDAV_idconsecutivo}"
+                "id_cdav":"CDAV_idconsecutivo"
             }
         }
     ],
