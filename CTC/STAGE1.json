@@ -31,7 +31,7 @@
             "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":"1 = 1"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
-        {"import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
+        {"import":"CTC/TEMPLATES/NEW_MATCH.json"},
         {
             "template_vars":{"tabla":"EXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
