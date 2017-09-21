@@ -32,7 +32,9 @@
             "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":"1 = 1"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
-        {"import":"CTC/TEMPLATES/NEW_MATCH.json"},
+        {
+            "step_name":"MATCH_INICIAL",
+            "import":"CTC/TEMPLATES/NEW_MATCH.json"},
         {
             "step_name":"CREAR_NM_EXPERTO_NUEVO",
             "description":"Se creara un nuevo experto con los que no hacen match",
