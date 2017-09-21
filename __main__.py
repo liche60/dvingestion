@@ -292,7 +292,7 @@ class Stage():
         import_map = InputEngineUtils.import_loader(config)
         self.config = import_map.get("config")
         self.template_vars = import_map.get("template_vars")
-        self.config = InputEngineUtils.process_template_vars(self.config,process.template_vars)
+        self.config = InputEngineUtils.process_template_vars(self.config,self.template_vars)
         self.config = InputEngineUtils.process_template_vars(self.config,process.process_vars)
         self.process = process
         self.name = self.config.get("stage_name")
