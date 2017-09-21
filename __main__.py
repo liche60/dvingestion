@@ -280,7 +280,8 @@ class JoinStep():
 class Step():
     def __init__(self, stage, config):
         self.name = config.get("step_name")
-        global STEP_NAME = self.name
+        global STEP_NAME
+        STEP_NAME = self.name
         LOGGER.info("Iniciando Step...")
         if "description" in config:
             self.description = config.get("description")
@@ -307,14 +308,17 @@ class Step():
             outputdf = step.execute()
             InputEngineUtils.process_outputs(self.outputs,outputdf)
         LOGGER.info("Step finalizado")
-        global STEP_NAME = ""
+        global STEP_NAME
+        STEP_NAME = ""
         
 
 class Stage():
     def __init__(self, process, config):
         self.name = config.get("stage_name")
-        global STAGE_NAME = self.name
-        global STEP_NAME = ""
+        global STAGE_NAME
+        STAGE_NAME = self.name
+        global STEP_NAME
+        STEP_NAME = ""
         LOGGER.info("Iniciando Stage...")
         if "description" in config:
             self.description = config.get("description")
@@ -355,7 +359,8 @@ class Process():
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
-        global LOGGER = Logger(self.name)
+        global LOGGER
+        LOGGER = Logger(self.name)
         self.stages = config.get("stages")
         self.hive_database = config.get("hive_database")
         DataFrameEngineUtils.execute_query("use "+self.hive_database)
