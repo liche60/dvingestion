@@ -52,7 +52,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"EXPERTO","fitro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"EXPERTO","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
@@ -60,7 +60,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"CDAV","fitro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"CDAV","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
 
@@ -75,7 +75,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"EXPERTO","fitro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"EXPERTO","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
         {
@@ -83,7 +83,7 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "template_vars":{"tabla":"CDAV","fitro":"treexpedida is null or treexpedida = ''"},
+            "template_vars":{"tabla":"CDAV","filtro":"treexpedida is null or treexpedida = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         },
 
