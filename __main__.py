@@ -46,11 +46,7 @@ class DataFrameEngineUtils():
         for input_item in inputs:
             name = input_item.get("name")
             data = input_item.get("data")
-            try:
-                hive.dropTempTable(name)
-                data.registerTempTable(name)
-            except:
-                data.registerTempTable(name)
+            data.createOrReplaceTempView(name)
 
     @staticmethod
     def drop_temp_tables(inputs):
@@ -72,7 +68,7 @@ class DataFrameEngineUtils():
         id = DataFrameEngineUtils.id_generator()
         print("Temporary table: "+name+"_"+id+" created")
         if method == "REPLACE":
-            dataframe.registerTempTable(name+"_"+id)
+            dataframe.createOrReplaceTempView(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
         elif method == "APPEND":
@@ -81,7 +77,7 @@ class DataFrameEngineUtils():
                 print("Table: "+name+" already exists, appending data")
                 tmpdf = DataFrameEngineUtils.execute_query("select * from "+name)
                 dataframe = tmpdf.unionAll(dataframe)
-                dataframe.registerTempTable(name+"_"+id)
+                dataframe.createOrReplaceTempView(name+"_"+id)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             except Exception as inst:
@@ -153,12 +149,7 @@ class InputEngineUtils():
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
             print("Creating input dataframe, name: "+destination)
-            #inputs_result.append({"name": destination, "data": input_df})
-            try:
-                input_df.dropTempTable(destination)
-                input_df.registerTempTable(destination)
-            except:
-                input_df.registerTempTable(destination)
+            input_df.createOrReplaceTempView(destination)
 
         return inputs_result
     
@@ -179,11 +170,7 @@ class InputEngineUtils():
                 "data": dataframe_tmp
             }
             
-            try:
-                dataframe_tmp.dropTempTable(table)
-                dataframe_tmp.registerTempTable(table)
-            except:
-                dataframe_tmp.registerTempTable(table)
+            dataframe_tmp.createOrReplaceTempView(table)
 
             print("Creating output dataframe, name: "+table)
             #output_result.append(output)
@@ -316,8 +303,10 @@ class Stage():
         for step_config in self.steps:
             step = Step(self,step_config)
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+            hive.tables().filter("isTemporary = True").show()
             step.execute()
             DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
+            hive.tables().filter("isTemporary = True").show()
         DataFrameEngineUtils.drop_temp_tables(self.inputs)
 
 class Process():
