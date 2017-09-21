@@ -311,7 +311,7 @@ class Stage():
     
     def execute(self):
         if self.enable:
-        print("Executing Steps...")
+            print("Executing Steps...")
             for step_config in self.steps:
                 step = Step(self,step_config)
                 DataFrameEngineUtils.register_inputs_as_tables(self.inputs)
