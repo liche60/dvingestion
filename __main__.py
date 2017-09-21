@@ -100,10 +100,11 @@ class DataFrameEngineUtils():
             dataframe.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-            LOGGER.debug("La tabla "+name+" fue creada o reemplazada en HIVE")
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-
+            newtable = hive.table(name)
+            count = str(newtable.count())
+            LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
             try:
                 table = hive.table(name)
