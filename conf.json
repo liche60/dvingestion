@@ -21,7 +21,7 @@
                 "columna_cdav_fecha":"fec_proc_ok",
                 "columna_cdav_valor":"valor"
             },
-            "import": "CTC/STAGE1.json"
+            "import": "CTC/TFV_INICIAL.json"
         }
     ]
 }

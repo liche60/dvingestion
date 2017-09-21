@@ -1,0 +1,72 @@
+{
+    "process_name": "CTC",
+    "hive_database": "pruebas_cuadre",
+    "stages": [
+        {
+            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "template_vars":{
+                "fecha_proceso":"2017-09-20",
+                "tabla_experto":"EXPERTO_CTC_IN",
+                "columna_experto_id":"idconsecutivo",
+                "columna_experto_tarjeta":"nrocuenta",
+                "columna_experto_tarjeta_reexpedida":"tarjeta_2",
+                "columna_experto_tarjeta_amparadora":"tarjamparadora",
+                "columna_experto_fecha":"fechacomprobanteok",
+                "columna_experto_valor":"valorok",
+                "tabla_cdav":"CDAV_CTC_IN",
+                "columna_cdav_id":"idconsecutivo",
+                "columna_cdav_tarjeta":"tnum_tarje",
+                "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
+                "columna_cdav_tarjeta_amparadora":"tarjamparadora",
+                "columna_cdav_fecha":"fec_proc_ok",
+                "columna_cdav_valor":"valor"
+            },
+            "import": "CTC/TFV_INICIAL.json"
+        },
+        {
+            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "template_vars":{
+                "fecha_proceso":"2017-09-20",
+                "tabla_experto":"EXPERTO_CTC_IN",
+                "columna_experto_id":"idconsecutivo",
+                "columna_experto_tarjeta":"nrocuenta",
+                "columna_experto_tarjeta_reexpedida":"tarjeta_2",
+                "columna_experto_tarjeta_amparadora":"tarjamparadora",
+                "columna_experto_fecha":"fechacomprobanteok",
+                "columna_experto_valor":"valorok",
+                "tabla_cdav":"CDAV_CTC_IN",
+                "columna_cdav_id":"idconsecutivo",
+                "columna_cdav_tarjeta":"tnum_tarje",
+                "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
+                "columna_cdav_tarjeta_amparadora":"tarjamparadora",
+                "columna_cdav_fecha":"fec_proc_ok",
+                "columna_cdav_valor":"valor",
+                "tfv_tabla":""
+            },
+            "import": "CTC/TFV.json"
+        },
+        {
+            "description":"Este Stage corre la plantilla de cuadre de experto y cdav por tarjeta, luego tarjeta reexpedida y finalmente tarjeta amparadora",
+            "template_vars":{
+                "fecha_proceso":"2017-09-20",
+                "tabla_experto":"EXPERTO_CTC_IN",
+                "columna_experto_id":"idconsecutivo",
+                "columna_experto_tarjeta":"nrocuenta",
+                "columna_experto_tarjeta_reexpedida":"tarjeta_2",
+                "columna_experto_tarjeta_amparadora":"tarjamparadora",
+                "columna_experto_fecha":"fechacomprobanteok",
+                "columna_experto_valor":"valorok",
+                "tabla_cdav":"CDAV_CTC_IN",
+                "columna_cdav_id":"idconsecutivo",
+                "columna_cdav_tarjeta":"tnum_tarje",
+                "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
+                "columna_cdav_tarjeta_amparadora":"tarjamparadora",
+                "columna_cdav_fecha":"fec_proc_ok",
+                "columna_cdav_valor":"valor",
+                "tfv_tabla":""
+            },
+            "import": "CTC/TFV.json"
+        }
+
+    ]
+}

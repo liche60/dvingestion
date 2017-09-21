@@ -1,0 +1,45 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de expertos y cdav",
+    "stage_name": "TFV_INICIAL",
+    "inputs": [],
+    "steps":[
+
+
+        {
+            "template_vars":{"source": "${tabla_experto}","tabla":"EXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
+                "idconsecutivo":"${columna_experto_id}",
+                "tarjeta":"${columna_experto_tarjeta}",
+                "fecha":"${columna_experto_fecha}",
+                "valor":"${columna_experto_valor}",
+                "treexpedida":"${columna_experto_tarjeta_reexpedida}",
+                "tamparadora":"${columna_experto_tarjeta_amparadora}"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
+            "template_vars":{"source": "${tabla_cdav}","tabla":"CDAV","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
+                "idconsecutivo":"${columna_cdav_id}",
+                "tarjeta":"${columna_cdav_tarjeta}",
+                "fecha":"${columna_cdav_fecha}",
+                "valor":"${columna_cdav_valor}",
+                "treexpedida":"${columna_cdav_tarjeta_reexpedida}",
+                "tamparadora":"${columna_cdav_tarjeta_amparadora}"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+
+
+        {
+            "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":"1 = 1"},
+            "import":"CTC/TEMPLATES/JOIN_TFV.json"
+        },
+        {"import":"CTC/TEMPLATES/NEW_MATCH.json"},
+        {
+            "template_vars":{"tabla":"EXPERTO"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        }
+
+    ]
+}
