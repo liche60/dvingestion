@@ -303,8 +303,9 @@ class Stage():
         self.process = process
         self.name = self.config.get("stage_name")
         self.enable = False
-        if self.config.get("enable") == "true":
-            self.enable = True
+        if "enable" in config:
+            if config.get("enable") == "true":
+                self.enable = True
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.steps = self.config.get("steps")
         print("Stage: "+self.name+" initialized!")
