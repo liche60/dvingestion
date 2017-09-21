@@ -32,6 +32,7 @@ class DataFrameEngineUtils():
         print("filtering dataframe ")
         for filter_item in filters:
             count = str(dataframe.count())
+            dataframe.show()
             print("rows before filter: "+count)
             exp = filter_item.get("expression")
             print("\tfilter expression: "+exp)
