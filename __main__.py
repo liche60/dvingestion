@@ -322,7 +322,7 @@ class Stage():
 class Process():
     def __init__(self, config):
         self.process_vars = {}
-        if "template_vars" in config:
+        if "process_vars" in config:
             self.process_vars = config.get("process_vars")
             config = InputEngineUtils.process_template_vars(config,self.process_vars)
         self.name = config.get("process_name")
