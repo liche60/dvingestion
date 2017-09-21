@@ -339,7 +339,7 @@ class Stage():
     
     def execute(self):
         if self.enable:
-            LOGGER.info("Ejecutando Steps..."
+            LOGGER.info("Ejecutando Steps...")
             for step_config in self.steps:
                 step = Step(self,step_config)
                 tdf = hive.tables().filter("isTemporary = True").collect()
