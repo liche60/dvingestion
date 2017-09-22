@@ -88,7 +88,7 @@
             "step_name":"APPEND_TO_MATCH",
             "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV","table_hive_match":"EC_MATCH","persist_method":"APPEND",
             "input_mem_match_table":"MEM_EC_MATCH"},
-            "import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"
+            "import":"CTC/TEMPLATES/MATCH.json"
         }
     ]
 }
