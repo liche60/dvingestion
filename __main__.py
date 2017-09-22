@@ -9,7 +9,7 @@ import json
 import logging
 import string
 import random
-import sys,time
+import sys,timex
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -121,15 +121,12 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
             newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
-            LOGGER.debug("Esperando 30 segundos")
-            time.sleep(30) 
             DataFrameEngineUtils.execute_query("drop table "+name)
-            LOGGER.debug("Esperando 30 segundos")
-            time.sleep(30) 
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             hive.dropTempTable(name+"_"+id)
+            hive.dropTempTable(name)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             newtable.show()
