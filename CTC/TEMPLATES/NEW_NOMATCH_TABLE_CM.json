@@ -1,0 +1,26 @@
+{
+    "description":"Merge de la tabla CDAV o MOV en memoria con los que no hicieron match",
+    "inputs": [],
+    "type":"merge",
+    "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor" ],
+    "source_tables":[
+        {
+            "table": "${input_nm_mem_tabla}",
+            "columns": {
+                "idconsecutivo":"${tabla}_idconsecutivo",
+                "tarjeta":"${tabla}_tarjeta",
+                "fecha":"${tabla}_fecha",
+                "valor":"${tabla}_valor"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en CDAV o MOV, esta salida queda persistida en Hive",
+            "table": "${output_nomatch_table}",
+            "persist": "${persist}",
+            "persist_method": "${persist_method}",
+            "filters":[]
+        }
+    ]
+}

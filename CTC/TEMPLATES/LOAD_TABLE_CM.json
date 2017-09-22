@@ -1,0 +1,33 @@
+{
+    "description":"Merge de la tabla experto en memoria con los que no hicieron match",
+    "inputs": [
+        {
+            "source": "${source}",
+            "destination": "${tabla}",
+            "filters":[
+                {"expression" : "${filtro}"}
+            ]
+        }
+    ],
+    "type":"merge",
+    "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor" ],
+    "source_tables":[
+        {
+            "table": "${tabla}",
+            "columns": {
+                "idconsecutivo":"${idconsecutivo}",
+                "tarjeta":"${tarjeta}",
+                "fecha":"${fecha}",
+                "valor":"${valor}"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match en experto, esta salida queda persistida en Hive",
+            "table": "${output_mem_nomatch}",
+            "persist": "FALSE",
+            "filters":[]
+        }
+    ]
+}

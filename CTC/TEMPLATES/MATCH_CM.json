@@ -1,0 +1,25 @@
+{
+    "description":"Merge de los que hicieron match con cdav y experto desde el origen",
+    "inputs": [],
+    "type":"merge",
+    "destination_columns":[ "fecha","id_cdav","id_mov" ],
+    "source_tables":[
+        {
+            "table": "${input_mem_match_table}",
+            "columns": {
+                "fecha":"${destino}_fecha",
+                "id_cdav":"${origen}_idconsecutivo",
+                "id_mov":"${destino}_idconsecutivo"
+            }
+        }
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que hicieron match entre cdav y experto desde el origen",
+            "table": "${table_hive_match}",
+            "persist": "TRUE",
+            "persist_method": "${persist_method}",
+            "filters":[]
+        }
+    ]
+}
