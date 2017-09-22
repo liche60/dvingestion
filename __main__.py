@@ -362,7 +362,14 @@ class Stage():
                 for t in tdf:
                     count = str(hive.table(t["tableName"]).count())
                     LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+                    t.show()
                 step.execute()
+                tdf = hive.tables().filter("isTemporary = True").collect()
+                LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+                for t in tdf:
+                    count = str(hive.table(t["tableName"]).count())
+                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+                    t.show()
 
 class Process():
     def __init__(self, config):
