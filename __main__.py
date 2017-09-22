@@ -87,6 +87,10 @@ class Logger:
                     count = str(tmp.count())
                     self.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
+    def show_dataframe_console(self,dataframe):
+        if self.debug:
+            dataframe.show()
+
 class DataFrameEngineUtils():
 
     @staticmethod
@@ -117,7 +121,9 @@ class DataFrameEngineUtils():
         if not fisica:
             LOGGER.debug("Registrando en memoria la tabla: "+name+"!")
             dataframe.cache()            
-            dataframe.show()
+
+            LOGGER.show_dataframe_console(dataframe)
+            
             dataframe.registerTempTable(name)
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
@@ -162,7 +168,7 @@ class DataFrameEngineUtils():
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            newtable.show()
+            LOGGER.show_dataframe_console(newtable)
             count = str(newtable.count())
             LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
             
@@ -178,7 +184,7 @@ class DataFrameEngineUtils():
                 newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
                 newdata = DataFrameEngineUtils.execute_query("select * from "+name)
-                newdata.show()
+                LOGGER.show_dataframe_console(newdata)
                     #DataFrameEngineUtils.persist_dataframe(name,"REPLACE",newdata)
                 #except:
                 #    LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
@@ -317,8 +323,7 @@ class MergeStep():
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
-            dataframe.show()
-
+            LOGGER.show_dataframe_console(dataframe)
         LOGGER.info("Merge ejecutado!")
         return dataframe
 
@@ -361,7 +366,7 @@ class JoinStep():
         LOGGER.info("Ejecutando Join...")        
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
-        dataframe.show()
+        LOGGER.show_dataframe_console(dataframe)
         LOGGER.info("Join ejecutado!")        
         return dataframe
 
