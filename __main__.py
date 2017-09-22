@@ -213,15 +213,40 @@ class InputEngineUtils():
     @staticmethod
     def process_outputs(outputs,dataframe):
         for output_item in outputs:
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
             table = output_item.get("table")
             filters = output_item.get("filters")
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
+
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
             persist = output_item.get("persist")
             if persist == "TRUE":
                 persist_method = output_item.get("persist_method")
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
+                tdf = hive.tables().filter("isTemporary = True").collect()
+                LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+                for t in tdf:
+                    tmp = hive.table(t["tableName"])
+                    count = str(tmp.count())
+                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
             else:
                 DataFrameEngineUtils.persist_memory_dataframe(table,dataframe_tmp)
+                tdf = hive.tables().filter("isTemporary = True").collect()
+                LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+                for t in tdf:
+                    tmp = hive.table(t["tableName"])
+                    count = str(tmp.count())
+                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
 
 class MergeStep():
@@ -253,12 +278,6 @@ class MergeStep():
             table = table_item.get("table")
             columns = table_item.get("columns")
             query = self.build_table_query(table,columns)
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
-            for t in tdf:
-                tmp = hive.table(t["tableName"])
-                count = str(tmp.count())
-                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
                 first = False
@@ -266,13 +285,7 @@ class MergeStep():
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
             dataframe.show()
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
-            for t in tdf:
-                tmp = hive.table(t["tableName"])
-                count = str(tmp.count())
-                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
-                
+
         LOGGER.info("Merge ejecutado!")
         return dataframe
 
