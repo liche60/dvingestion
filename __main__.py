@@ -101,8 +101,8 @@ class DataFrameEngineUtils():
         if not fisica:
             LOGGER.error("Registrando en memoria la tabla: "+name+"!")
             dataframe.cache()            
-            dataframe.registerTempTable(name)
             dataframe.show()
+            dataframe.registerTempTable(name)
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
             exit()
