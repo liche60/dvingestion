@@ -34,7 +34,8 @@ class Logger:
     def __init__(self, process_name):
         self.process_name = process_name
         self.log = self.setup_custom_logger()
-        self.table_state = True
+        self.table_state = False
+        self.debug = False
         self.table_state_step = 0
         self.table_state_step_m = 0
 
@@ -60,12 +61,13 @@ class Logger:
         self.log.info(prefix+" "+message)
 
     def debug(self,message):
-        prefix = "["+self.process_name+"]"
-        if STAGE_NAME != "":
-            prefix = prefix + "["+STAGE_NAME+"]"
-            if STEP_NAME != "":
-                prefix = prefix + "["+STEP_NAME+"]"
-        self.log.debug(prefix+" "+message)
+        if self.debug:
+            prefix = "["+self.process_name+"]"
+            if STAGE_NAME != "":
+                prefix = prefix + "["+STAGE_NAME+"]"
+                if STEP_NAME != "":
+                    prefix = prefix + "["+STEP_NAME+"]"
+            self.log.debug(prefix+" "+message)
     
     def error(self,message):
         prefix = "["+self.process_name+"]"
