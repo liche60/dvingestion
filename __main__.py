@@ -165,7 +165,7 @@ class DataFrameEngineUtils():
                 LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            hive.clearCache()
+            #hive.clearCache()
             
             tdf = hive.tables().filter("isTemporary = True").collect()
             LOGGER.debug("persist replace 5.1, tablas en memoria")
