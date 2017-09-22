@@ -43,7 +43,7 @@
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
-            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_MEMCDAV","output_hive_nm_tabla":"NM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
+            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_CDAV","output_hive_nm_tabla":"NM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]
