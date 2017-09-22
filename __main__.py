@@ -160,6 +160,7 @@ class DataFrameEngineUtils():
     def execute_query(query):
         LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
+        dataframe.cache()
         count = str(dataframe.count())
         LOGGER.debug("\t\t *** El Query retorno "+count+" registros!")
         return dataframe
