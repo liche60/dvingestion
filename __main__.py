@@ -114,8 +114,8 @@ class DataFrameEngineUtils():
         id = DataFrameEngineUtils.id_generator()
         id_p = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            DataFrameEngineUtils.execute_query("drop table if exists "+name)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
