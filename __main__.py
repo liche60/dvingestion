@@ -110,7 +110,7 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             try:
                 table = DataFrameEngineUtils.execute_query("select * from "+name)
-                table.cache()
+                table = table.cache()
                 print("1===========")
                 table.show()
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
