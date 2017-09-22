@@ -20,7 +20,7 @@
         {
             "description":"Salida de los que no hacen match en CDAV o EXPERTO, esta salida queda persistida en Hive",
             "table": "${output_hive_nomatch_table}",
-            "persist": "TRUE",
+            "persist": "${persist}",
             "persist_method": "REPLACE",
             "filters":[]
         }

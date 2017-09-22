@@ -1,13 +1,6 @@
 {
     "description":"Merge de la tabla cdav en memoria con los que no hicieron match",
     "inputs": [
-        {
-            "source": "${tabla_origen}",
-            "destination": "${tabla_destino}",
-            "filters":[
-                {"expression" : "${filtro}"}
-            ]
-        }
     ],
     "type":"merge",
     "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor","treexpedida","tamparadora" ],
