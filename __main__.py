@@ -191,8 +191,9 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             if countdf > 0:
                 try:
-                    LOGGER.debug(countdf+" registros seran insertada en la tabla en Hive: "+name)
+                    LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
                     currentData = DataFrameEngineUtils.execute_query("select * from "+name)
+                    countdf = currentData.count()
                     newdata = currentData.unionAll(dataframe)
                     newdata.show()
                     DataFrameEngineUtils.persist_dataframe(name,"REPLACE",newdata)
