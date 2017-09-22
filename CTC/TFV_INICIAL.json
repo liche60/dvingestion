@@ -34,7 +34,7 @@
         {
             "step_name":"JOIN_TFV_EXPERTO_CEDAV",
             "template_vars":{"tarjeta":"tarjeta","origen":"MEMEXPERTO","destino":"MEMCDAV","filtro":"1 = 1",
-            "output_nm_mem_table_experto":"NM_MEMEXPERTO","output_nm_mem_table_cdav":"NM_MEMCDAV","output_mem_table_match":"MEM_EC_MATCH",
+            "output_nm_mem_table_origen":"NM_MEMEXPERTO","output_nm_mem_table_destino":"NM_MEMCDAV","output_mem_table_match":"MEM_EC_MATCH",
             "input_origen":"ORIG_MEMEXPERTO","input_destino":"ORIG_MEMCDAV"
             },
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
