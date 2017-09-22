@@ -114,9 +114,11 @@ class DataFrameEngineUtils():
         if method == "REPLACE":
             LOGGER.debug("Creando la tabla "+name+" con "+countdf+" registros")
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
