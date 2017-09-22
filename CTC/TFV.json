@@ -24,17 +24,18 @@
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
-            "step_name":"APPEND_TO_MATCH",
-            "import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"},
+            "step_name":"NEW_NOMATCH_CDAV",
+            "template_vars":{"tabla":"CDAV"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
             "template_vars":{"tabla":"EXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"CDAV"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+            "step_name":"APPEND_TO_MATCH",
+            "import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
