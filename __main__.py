@@ -121,7 +121,7 @@ class DataFrameEngineUtils():
                 LOGGER.debug("Creando tabla temporal: "+name+"_"+id2+" con "+count+" registros que seran unidos con los "+countdf+" registros de la tabla anterior")
                 table.registerTempTable(name+"_"+id2)
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
-                DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id+" union slect * from "+name+"_"+id2")
+                DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id+" union slect * from "+name+"_"+id2)
                 hive.dropTempTable(name+"_"+id)
                 hive.dropTempTable(name+"_"+id2)
                 newtable = hive.table(name)
