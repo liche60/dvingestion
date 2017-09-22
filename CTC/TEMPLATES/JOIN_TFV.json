@@ -4,14 +4,14 @@
             {
             "source": "NM_${origen}",
             "destination": "${origen}",
-            "filters":[]
+            "filters":[
+                {"expression" : "${filtro}"}
+            ]
         },
         {
             "source": "NM_${destino}",
             "destination": "${destino}",
-            "filters":[
-                {"expression" : "${filtro}"}
-            ]
+            "filters":[]
         }
     ],
     "type":"join",
