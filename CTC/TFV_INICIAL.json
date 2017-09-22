@@ -34,17 +34,18 @@
         },
         {
             "step_name":"MATCH_INICIAL",
+            "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV"},
             "import":"CTC/TEMPLATES/NEW_MATCH.json"},
         {
             "step_name":"CREAR_NM_EXPERTO_NUEVO",
             "description":"Se creara un nuevo experto con los que no hacen match",
-            "template_vars":{"tabla":"EXPERTO"},
+            "template_vars":{"tabla":"MEMEXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"CREAR_NM_CDAV_NUEVO",
             "description":"Se creara un nuevo cdav con los que no hacen match",
-            "template_vars":{"tabla":"CDAV"},
+            "template_vars":{"tabla":"MEMCDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         }
 

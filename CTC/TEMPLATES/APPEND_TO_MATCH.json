@@ -7,9 +7,9 @@
         {
             "table": "TMP_M_MEM",
             "columns": {
-                "fecha":"CDAV_fecha",
-                "id_experto":"EXPERTO_idconsecutivo",
-                "id_cdav":"CDAV_idconsecutivo"
+                "fecha":"${destino}_fecha",
+                "id_experto":"${origen}_idconsecutivo",
+                "id_cdav":"${destino}_idconsecutivo"
             }
         }
     ],
