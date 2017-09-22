@@ -135,6 +135,7 @@ class DataFrameEngineUtils():
                     LOGGER.debug("Renomabrando tabla en Hive: "+name+" por "+name+"_"+id_p)
                     DataFrameEngineUtils.execute_query("ALTER TABLE "+name+" RENAME TO "+name+"_"+id_p)
                     currentData = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
+                    currentData.cache()
                     newdata = currentData.unionAll(dataframe)
                     newdata.show()
                 except:
