@@ -5,7 +5,7 @@
     "steps":[
         { 
             "step_name":"LOAD_MOV_FILTRADO_FECHA",
-            "template_vars":{"source": "${tabla_cdav}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source": "${tabla_mov}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_mov_id}",
                 "tarjeta":"${columna_mov_tarjeta}",
                 "fecha":"${columna_mov_fecha}",
