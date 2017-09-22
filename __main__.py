@@ -100,7 +100,7 @@ class DataFrameEngineUtils():
                 fisica = True
                 continue
         if not fisica:
-            LOGGER.error("Registrando en memoria la tabla: "+name+"!")
+            LOGGER.debug("Registrando en memoria la tabla: "+name+"!")
             dataframe.cache()            
             dataframe.show()
             dataframe.registerTempTable(name)
@@ -253,6 +253,12 @@ class MergeStep():
             table = table_item.get("table")
             columns = table_item.get("columns")
             query = self.build_table_query(table,columns)
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
                 first = False
@@ -260,6 +266,13 @@ class MergeStep():
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
             dataframe.show()
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+                
         LOGGER.info("Merge ejecutado!")
         return dataframe
 
