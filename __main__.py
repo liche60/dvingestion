@@ -9,7 +9,7 @@ import json
 import logging
 import string
 import random
-import sys
+import sys,os
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -120,7 +120,9 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
             newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
+            os.system('read -s -n 1 -p "Press any key to continue..."')
             DataFrameEngineUtils.execute_query("drop table "+name)
+            os.system('read -s -n 1 -p "Press any key to continue..."')
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
