@@ -11,8 +11,9 @@
                 "fecha":"fecha",
                 "valor":"valor",
                 "treexpedida":"treexpedida",
-                "tamparadora":"tamparadora"},
-                "output_mem_nomatch":"SN_NM_MEMCDAV",
+                "tamparadora":"tamparadora",
+                "output_mem_nomatch":"SN_NM_MEMCDAV"
+            },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
 

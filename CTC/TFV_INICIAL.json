@@ -13,8 +13,9 @@
                 "fecha":"${columna_experto_fecha}",
                 "valor":"${columna_experto_valor}",
                 "treexpedida":"${columna_experto_tarjeta_reexpedida}",
-                "tamparadora":"${columna_experto_tarjeta_amparadora}"},
-                "output_mem_nomatch":"ORIG_MEMEXPERTO",
+                "tamparadora":"${columna_experto_tarjeta_amparadora}",
+                "output_mem_nomatch":"ORIG_MEMEXPERTO"
+            },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
@@ -25,8 +26,9 @@
                 "fecha":"${columna_cdav_fecha}",
                 "valor":"${columna_cdav_valor}",
                 "treexpedida":"${columna_cdav_tarjeta_reexpedida}",
-                "tamparadora":"${columna_cdav_tarjeta_amparadora}"},
-                "output_mem_nomatch":"ORIG_MEMCDAV",
+                "tamparadora":"${columna_cdav_tarjeta_amparadora}",
+                "output_mem_nomatch":"ORIG_MEMCDAV"
+            },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
