@@ -9,7 +9,7 @@ import json
 import logging
 import string
 import random
-import sys
+import sys,timex
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -124,15 +124,13 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("drop table "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
-            hive.uncacheTable(name+"_"+id)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
+            hive.clearCache()
             hive.dropTempTable(name+"_"+id)
-            #hive.uncacheTable(name)
-            #hive.dropTempTable(name)
-            newtable2 = DataFrameEngineUtils.execute_query("select * from "+name)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            newtable2 = DataFrameEngineUtils.execute_query("select * from "+name)
-            newtable2.show()
-            count = str(newtable2.count())
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
+            newtable.show()
+            count = str(newtable.count())
             LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
             if countdf > 0:
@@ -160,12 +158,8 @@ class DataFrameEngineUtils():
     def execute_query(query):
         LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
-        try:
-            dataframe.cache()
-        except:
-            LOGGER.error("\t\t *** El Query no se pudo cachar!")
-        count = dataframe.count()
-        LOGGER.debug("\t\t *** El Query retorno "+str(count)+" registros!")
+        count = str(dataframe.count())
+        LOGGER.debug("\t\t *** El Query retorno "+count+" registros!")
         return dataframe
 
     @staticmethod
