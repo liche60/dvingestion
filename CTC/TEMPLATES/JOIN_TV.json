@@ -1,0 +1,53 @@
+{
+    "description": "Cuadre de Cdav, Experto o Experto, Cdav por tajeta reexpedida o amparada, fecha y valor",
+    "inputs": [
+            {
+            "source": "${input_origen}",
+            "destination": "${origen}",
+            "filters":[
+                {"expression" : "${filtro}"}
+            ]
+        },
+        {
+            "source": "${input_destino}",
+            "destination": "${destino}",
+            "filters":[]
+        }
+    ],
+    "type":"join",
+    "join_type":"FULL OUTER JOIN",
+    "source_table":"${origen}",
+    "destination_table":"${destino}",
+    "join":[
+        {"source": "${tarjeta}","destination":"tarjeta"},
+        {"source": "valor","destination":"valor"}
+    ],
+    "outputs":[
+        {
+            "description":"Salida de los que no hacen match, pero solo para experto, esta salida no queda persistida en Memoria",
+            "table": "${output_nm_mem_table_origen}",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
+                {"expression" : "${origen}_tarjeta is not null"}
+            ]
+        },
+        {
+            "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
+            "table": "${output_nm_mem_table_destino}",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
+                {"expression" : "${destino}_tarjeta is not null"}
+            ]
+        },
+        {
+            "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
+            "table": "${output_mem_table_match}",
+            "persist": "FALSE",
+            "filters":[
+                {"expression" : "${origen}_tarjeta is not null and ${destino}_tarjeta is not null"}
+            ]
+        }
+    ]
+}

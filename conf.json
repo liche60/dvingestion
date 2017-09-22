@@ -43,6 +43,31 @@
                 "tfv_tarjeta":"tamparadora"
             },
             "import": "CTC/TFV.json"
+        },
+        {
+            "stage_name": "TV_INICIAL",
+            "enable":"true",
+            "description":"*********************  Stage TFV Inicial",
+            "template_vars":{},
+            "import": "CTC/TV_INICIAL.json"
+        },
+        {
+            "stage_name": "TV_TARJETA_REEXPEDIDAD",
+            "enable":"false",
+            "description":"*********************  Stage TV por tarjeta reexpedida",
+            "template_vars":{
+                "tfv_tarjeta":"treexpedida"
+            },
+            "import": "CTC/TV.json"
+        },
+        {
+            "stage_name": "TV_TARJETA_AMPARADA",
+            "enable":"false",
+            "description":"*********************  Stage TV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
+            },
+            "import": "CTC/TV.json"
         }
     ]
 }
