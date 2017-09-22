@@ -166,6 +166,14 @@ class DataFrameEngineUtils():
 
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             hive.clearCache()
+            
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("persist replace 5.1, tablas en memoria")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+            
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
