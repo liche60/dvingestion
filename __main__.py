@@ -108,11 +108,12 @@ class DataFrameEngineUtils():
             count = str(newtable.count())
             LOGGER.debug("** persist.REPLACE: La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
+            count = " -- "
             try:
                 table = DataFrameEngineUtils.execute_query("select * from "+name)
                 tmp = table.cache()
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
-                df = dataframe.unionAll(tmp)
+                df = tmp.unionAll(dataframe)
                 count = str(tmp.count())
                 LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
             except:
