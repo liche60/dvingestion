@@ -118,6 +118,7 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
