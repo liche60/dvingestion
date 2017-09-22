@@ -17,6 +17,7 @@ from pyspark.context import SparkContext
 from pyspark.sql import SQLContext,HiveContext
 from pyspark import SparkConf, SparkContext
 from pyspark.sql.types import *
+
 """
 
 """
@@ -120,9 +121,11 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
             newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
-            os.system('read -s -n 1 -p "Press any key to continue..."')
+            LOGGER.debug("Esperando 30 segundos")
+            time.sleep(30) 
             DataFrameEngineUtils.execute_query("drop table "+name)
-            os.system('read -s -n 1 -p "Press any key to continue..."')
+            LOGGER.debug("Esperando 30 segundos")
+            time.sleep(30) 
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
