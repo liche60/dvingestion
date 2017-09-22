@@ -164,7 +164,7 @@ class DataFrameEngineUtils():
             dataframe.cache()
         except:
             LOGGER.error("\t\t *** El Query no se pudo cachar!")
-        count = dataframe.count())
+        count = dataframe.count()
         LOGGER.debug("\t\t *** El Query retorno "+str(count)+" registros!")
         return dataframe
 
