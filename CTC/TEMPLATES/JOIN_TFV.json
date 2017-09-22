@@ -19,7 +19,7 @@
     "source_table":"${origen}",
     "destination_table":"${destino}",
     "join":[
-        {"source": "tarjeta","destination":"${tarjeta}"},
+        {"source": "${tarjeta}","destination":"tarjeta"},
         {"source": "fecha","destination":"fecha"},
         {"source": "valor","destination":"valor"}
     ],
