@@ -100,6 +100,7 @@ class DataFrameEngineUtils():
                 continue
         if not fisica:
             LOGGER.error("Registrando en memoria la tabla: "+name+"!")
+            dataframe.cache()            
             dataframe.registerTempTable(name)
             dataframe.show()
         else:
