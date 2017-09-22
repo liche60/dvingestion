@@ -114,7 +114,7 @@ class DataFrameEngineUtils():
                 print("1===========")
                 table.show()
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
-                df = dataframe.union(table)
+                df = dataframe.unionAll(table)
             except:
                 df = dataframe
             print("2===========")
