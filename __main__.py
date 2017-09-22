@@ -110,13 +110,13 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             try:
                 table = DataFrameEngineUtils.execute_query("select * from "+name)
-                table = table.cache()
+                tmp = table.cache()
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
-                df = dataframe.unionAll(table)
+                df = dataframe.unionAll(tmp)
+                count = str(tmp.count())
+                LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
             except:
                 df = dataframe
-            count = str(table.count())
-            LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
             LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros de la tabla actual")
             df.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
