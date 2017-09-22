@@ -57,7 +57,7 @@
                 "valor":"valor",
                 "treexpedida":"treexpedida",
                 "tamparadora":"tamparadora",
-                "output_mem_nomatch":"SN_NM_MEMEXPERTO"
+                "output_mem_nomatch":"SN_NM_EXPERTO"
             },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
