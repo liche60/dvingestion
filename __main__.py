@@ -111,11 +111,11 @@ class DataFrameEngineUtils():
     def persist_dataframe(name,method,dataframe):
         dataframe = dataframe.cache()
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        countdf = str(dataframe.count())
+        countdf = dataframe.count()
         id = DataFrameEngineUtils.id_generator()
         id_p = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            LOGGER.debug("Creando la tabla "+name+" con "+countdf+" registros")
+            LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
@@ -132,23 +132,22 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             if countdf > 0:
                 try:
-                    LOGGER.debug("Renomabrando tabla en Hive: "+name+" por "+name+"_"+id_p)
-                    DataFrameEngineUtils.execute_query("ALTER TABLE "+name+" RENAME TO "+name+"_"+id_p)
-                    currentData = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
-                    currentData.cache()
+                    LOGGER.debug(countdf+" registros seran insertada en la tabla en Hive: "+name)
+                    currentData = DataFrameEngineUtils.execute_query("select * from "+name)
                     newdata = currentData.unionAll(dataframe)
                     newdata.show()
+                    DataFrameEngineUtils.persist_dataframe(name,"REPLACE",newdata)
                 except:
                     LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
                     newdata = dataframe
-                DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,newdata)
-                DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                hive.dropTempTable(name+"_"+id)
-                DataFrameEngineUtils.execute_query("drop table if exists "+name+"_"+id_p)
-                newtable = hive.table(name)
-                newtable.show()
-                count = str(newtable.count())
-                LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
+                #DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,newdata)
+                #DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
+                #hive.dropTempTable(name+"_"+id)
+                #DataFrameEngineUtils.execute_query("drop table if exists "+name+"_"+id_p)
+                #newtable = hive.table(name)
+                #newtable.show()
+                #count = str(newtable.count())
+                #LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
             else:
                 LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
 
