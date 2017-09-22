@@ -469,12 +469,12 @@ class Process():
         LOGGER.info("Ejecutando Stages...")
         for stage_config in self.stages:
             tdf = hive.tables().filter("isTemporary = True").collect()
-            self.debug("Limpiando cahce de spark!")
+            LOGGER.debug("Limpiando cahce de spark!")
             hive.clearCache()
-            self.debug("Limpiando dataframes en memoria!")
+            LOGGER.debug("Limpiando dataframes en memoria!")
             for t in tdf:
                 name = t["tableName"]
-                self.debug("\t ** Limpiando tabla: !"+name)
+                LOGGER.debug("\t ** Limpiando tabla: !"+name)
                 hive.dropTempTable(name)
             stage = Stage(self,stage_config)
             stage.execute()
