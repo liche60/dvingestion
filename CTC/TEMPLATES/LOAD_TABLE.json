@@ -27,7 +27,7 @@
     "outputs":[
         {
             "description":"Salida de los que no hacen match en experto, esta salida queda persistida en Hive",
-            "table": "${output_mem_table_nomatch}",
+            "table": "${output_mem_nomatch}",
             "persist": "FALSE",
             "filters":[]
         }

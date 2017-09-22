@@ -12,7 +12,7 @@
                 "valor":"valor",
                 "treexpedida":"treexpedida",
                 "tamparadora":"tamparadora"},
-                "output_mem_table_nomatch":"SN_NM_MEMCDAV",
+                "output_mem_nomatch":"SN_NM_MEMCDAV",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
 
