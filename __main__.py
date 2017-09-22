@@ -258,22 +258,16 @@ class InputEngineUtils():
     @staticmethod
     def process_outputs(outputs,dataframe):
         for output_item in outputs:
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
-            for t in tdf:
-                tmp = hive.table(t["tableName"])
-                count = str(tmp.count())
-                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+
+            LOGGER.log_mem_table_state(0)
+
+
             table = output_item.get("table")
             filters = output_item.get("filters")
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
 
-            tdf = hive.tables().filter("isTemporary = True").collect()
-            LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
-            for t in tdf:
-                tmp = hive.table(t["tableName"])
-                count = str(tmp.count())
-                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+            LOGGER.log_mem_table_state(0)
+            
             persist = output_item.get("persist")
             if persist == "TRUE":
                 persist_method = output_item.get("persist_method")
