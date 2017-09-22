@@ -27,7 +27,7 @@
         },
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
@@ -81,7 +81,7 @@
         },
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
