@@ -468,8 +468,17 @@ class Process():
     def execute(self):
         LOGGER.info("Ejecutando Stages...")
         for stage_config in self.stages:
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            self.debug("Limpiando cahce de spark!")
+            hive.clearCache()
+            self.debug("Limpiando dataframes en memoria!")
+            for t in tdf:
+                name = t["tableName"]
+                self.debug("\t ** Limpiando tabla: !"+name)
+                hive.dropTempTable(name)
             stage = Stage(self,stage_config)
             stage.execute()
+
         
 if __name__ == "__main__":
     with open("conf.json") as f_in:
