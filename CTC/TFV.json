@@ -42,11 +42,6 @@
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
-            "step_name":"RECUPERAR_SOLO_NULAS_EN_NMEXPERTO",
-            "template_vars":{"tabla":"EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
-            "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
-        },
-        {
             "step_name":"NEW_NOMATCH_CDAV",
             "template_vars":{"tabla":"CDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
@@ -80,11 +75,6 @@
             "step_name":"NEW_NOMATCH_CDAV",
             "template_vars":{"tabla":"CDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
-        },
-        {
-            "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
-            "template_vars":{"tabla":"CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
-            "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
 
     ]
