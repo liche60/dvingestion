@@ -14,7 +14,7 @@
                 "valor":"${columna_experto_valor}",
                 "treexpedida":"${columna_experto_tarjeta_reexpedida}",
                 "tamparadora":"${columna_experto_tarjeta_amparadora}"},
-                "output_mem_table_nomatch":"MEMEXPERTO",
+                "output_mem_table_nomatch":"ORIG_MEMEXPERTO",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
@@ -26,14 +26,14 @@
                 "valor":"${columna_cdav_valor}",
                 "treexpedida":"${columna_cdav_tarjeta_reexpedida}",
                 "tamparadora":"${columna_cdav_tarjeta_amparadora}"},
-                "output_mem_table_nomatch":"MEMCDAV",
+                "output_mem_table_nomatch":"ORIG_MEMCDAV",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
             "step_name":"JOIN_TFV_EXPERTO_CEDAV",
             "template_vars":{"tarjeta":"tarjeta","origen":"MEMEXPERTO","destino":"MEMCDAV","filtro":"1 = 1",
             "output_nm_mem_table_experto":"NM_MEMEXPERTO","output_nm_mem_table_cdav":"NM_MEM_CDAV","output_mem_table_match":"MEM_EC_MATCH",
-            "input_origen":"MEMEXPERTO","input_destino":"MEMCDAV"
+            "input_origen":"ORIG_MEMEXPERTO","input_destino":"ORIG_MEMCDAV"
             },
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
