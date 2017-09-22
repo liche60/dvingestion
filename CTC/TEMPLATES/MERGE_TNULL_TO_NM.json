@@ -2,7 +2,7 @@
     "description":"Merge de la tabla cdav en memoria con los que no hicieron match",
     "inputs": [
         {
-            "source": "NM_${tabla}",
+            "source": "NM_MEM_${tabla}",
             "destination": "NM_${tabla}_NT",
             "filters":[
                 {"expression" : "${filtro}"}

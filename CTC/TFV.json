@@ -4,17 +4,7 @@
     "inputs": [],
     "steps":[
 
-        {
-            "step_name":"LOAD_NM_EXPERTO_SOLO_NULAS",
-            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
-                "idconsecutivo":"idconsecutivo",
-                "tarjeta":"tarjeta",
-                "fecha":"fecha",
-                "valor":"valor",
-                "treexpedida":"treexpedida",
-                "tamparadora":"tamparadora"},
-            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
-        },
+        
         {
             "step_name":"LOAD_NM_CDAV_SOLO_NULAS",
             "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
@@ -53,6 +43,17 @@
         },
 
 
+        {
+            "step_name":"LOAD_NM_EXPERTO_SOLO_NULAS",
+            "template_vars":{"source": "NM_EXPERTO","tabla":"MEM_EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora"},
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
         {
             "step_name":"JOIN_TFV_NMEXPERTO_NMCDAV",
             "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"EXPERTO","destino":"CDAV","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''"},
