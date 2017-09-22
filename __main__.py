@@ -35,7 +35,7 @@ class Logger:
         self.process_name = process_name
         self.log = self.setup_custom_logger()
         self.table_state = False
-        self.debug = False
+        self.debug_state = False
         self.table_state_step = 0
         self.table_state_step_m = 0
 
@@ -61,7 +61,7 @@ class Logger:
         self.log.info(prefix+" "+message)
 
     def debug(self,message):
-        if self.debug:
+        if self.debug_state:
             prefix = "["+self.process_name+"]"
             if STAGE_NAME != "":
                 prefix = prefix + "["+STAGE_NAME+"]"
@@ -88,7 +88,7 @@ class Logger:
                     self.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
     def show_dataframe_console(self,dataframe):
-        if self.debug:
+        if self.debug_state:
             dataframe.show()
 
 class DataFrameEngineUtils():
@@ -161,7 +161,6 @@ class DataFrameEngineUtils():
             LOGGER.log_mem_table_state(5)
 
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            #hive.clearCache()
             
             LOGGER.log_mem_table_state(6)
             
@@ -176,27 +175,12 @@ class DataFrameEngineUtils():
 
         elif method == "APPEND":
             if countdf > 0:
-                #try:
                 LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
-                #currentData = DataFrameEngineUtils.execute_query("select * from "+name)
-                #countdf = currentData.count()
                 DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
                 newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
                 newdata = DataFrameEngineUtils.execute_query("select * from "+name)
                 LOGGER.show_dataframe_console(newdata)
-                    #DataFrameEngineUtils.persist_dataframe(name,"REPLACE",newdata)
-                #except:
-                #    LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
-                #    newdata = dataframe
-                #DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,newdata)
-                #DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                #hive.dropTempTable(name+"_"+id)
-                #DataFrameEngineUtils.execute_query("drop table if exists "+name+"_"+id_p)
-                #newtable = hive.table(name)
-                #newtable.show()
-                #count = str(newtable.count())
-                #LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
             else:
                 LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
             
