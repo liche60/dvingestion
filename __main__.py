@@ -245,6 +245,7 @@ class MergeStep():
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dataframe = dataframe.unionAll(dftmp)
+            dataframe.show()
         LOGGER.info("Merge ejecutado!")
         return dataframe
 
@@ -287,6 +288,7 @@ class JoinStep():
         LOGGER.info("Ejecutando Join...")        
         join_query = self.join_query_builder()
         dataframe = DataFrameEngineUtils.execute_query(join_query)
+        dataframe.show()
         LOGGER.info("Join ejecutado!")        
         return dataframe
 
