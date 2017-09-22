@@ -3,11 +3,22 @@
     "stage_name": "TFV_MOV",
     "inputs": [],
     "steps":[
+        { 
+            "step_name":"LOAD_MOV_FILTRADO_FECHA",
+            "template_vars":{"source": "${tabla_cdav}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}'",
+                "idconsecutivo":"${columna_mov_id}",
+                "tarjeta":"${columna_mov_tarjeta}",
+                "fecha":"${columna_mov_fecha}",
+                "valor":"${columna_mov_valor}",
+                "output_mem_nomatch":"ORIG_MEMMOV"
+            },
+            "import":"CTC/TEMPLATES/LOAD_TABLE_CM.json"
+        },
         {
             "step_name":"JOIN_TV_CDAV_MOV",
             "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAV","destino":"MEMMOV","filtro":"1 = 1",
             "output_nm_mem_table_origen":"NM_MEMCDAV","output_nm_mem_table_destino":"NM_MEMMOV","output_mem_table_match":"MEM_CM_MATCH",
-            "input_origen":"NM_CDAV","input_destino":"NM_MOV"
+            "input_origen":"NM_CDAV","input_destino":"ORIG_MEMMOV"
             },
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
@@ -21,13 +32,13 @@
             "step_name":"CREAR_NM_CDAV_NUEVO",
             "description":"Se creara un nuevo CDAV con los que no hacen match",
             "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE_CM.json"
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"CREAR_NM_MOV_NUEVO",
             "description":"Se creara un nuevo MOV con los que no hacen match",
             "template_vars":{"tabla":"MEMMOV","output_nomatch_table":"NM_MOV","input_nm_mem_tabla":"NM_MEMMOV","persist":"TRUE","persist_method":"REPLACE"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE_CM.json"
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_MOV.json"
         }
 
     ]

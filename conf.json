@@ -16,7 +16,12 @@
                 "columna_cdav_tarjeta_reexpedida":"tarjeta_2",
                 "columna_cdav_tarjeta_amparadora":"tarjamparadora",
                 "columna_cdav_fecha":"fec_proc_ok",
-                "columna_cdav_valor":"valor"
+                "columna_cdav_valor":"valor",
+                "tabla_mov":"MOV_CTC_IN",
+                "columna_mov_id":"idconsecutivo",
+                "columna_mov_tarjeta":"numtarjeta_mov",
+                "columna_mov_fecha":"fechacomprobanteok",
+                "columna_mov_valor":"valorok"
             },
     "stages": [
         {
