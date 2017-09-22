@@ -91,55 +91,54 @@ class DataFrameEngineUtils():
         return ''.join(random.choice(chars) for _ in range(size))
 
     @staticmethod
+    def persist_memory_dataframe(name,dataframe):
+        tdf = hive.tables().filter("isTemporary = False").collect()
+        fisica = False
+        for t in tdf:
+            if name == t["tableName"]:
+                fisica = True
+                continue
+        if not fisica:
+            dataframe.registerTempTable(name)
+        else:
+            LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
+            exit()
+
+    @staticmethod
     def persist_dataframe(name,method,dataframe):
-        dataframe = dataframe.cache()
         LOGGER.debug("persist: La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            LOGGER.debug("** persist.REPLACE: Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
+            LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
             dataframe.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
-            LOGGER.debug("** persist.REPLACE: La tabla en HIVE "+name+" fue eliminada para ser recreada")
+            LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("** persist.REPLACE: La tabla temporal "+name+"_"+id+" fue eliminada")
+            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = hive.table(name)
             newtable.show() 
             count = str(newtable.count())
-            LOGGER.debug("** persist.REPLACE: La tabla "+name+" fue creada en HIVE con "+count+" registros")
+            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
+            id_alter = DataFrameEngineUtils.id_generator()
             try:
-                table = DataFrameEngineUtils.execute_query("select * from "+name)
-                table = table.cache()
-                print("1===========")
-                table.show()
-                DataFrameEngineUtils.execute_query("drop table if exists "+name)
-                df = dataframe.unionAll(table)
+                LOGGER.debug("Renomabrando tabla en Hive: "+name+" por "+name+"_"+id_alter)
+                DataFrameEngineUtils.execute_query("ALTER TABLE "+name+" RENAME TO "+name+"_"+id_alter)
+                currentData = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_alter)
+                newdata = currentData.unionAll(dataframe)
             except:
-                df = dataframe
-            print("2===========")
-            df.show()
-            count = str(table.count())
-            LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
-            LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros de la tabla actual")
-            df.registerTempTable(name+"_"+id)
+                LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
+                newdata = dataframe
+            newdata.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
+            DataFrameEngineUtils.execute_query("drop table if exists "+name+"_"+id_alter)
             newtable = hive.table(name)
             newtable.show()
             count = str(newtable.count())
             LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            #except Exception as inst:
-                #LOGGER.debug("Ocurrio un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratara de recrear la tabla")
-                #LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
-                #dataframe.registerTempTable(name+"_"+id)
-                #DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                #hive.dropTempTable(name+"_"+id)
-                #LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-        else:
-            LOGGER.error("persist method not supported")
 
     @staticmethod
     def execute_query(query):
