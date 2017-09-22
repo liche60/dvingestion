@@ -109,6 +109,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
+        dataframe = dataframe.cache()
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
