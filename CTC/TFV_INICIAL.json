@@ -48,13 +48,13 @@
         {
             "step_name":"CREAR_NM_EXPERTO_NUEVO",
             "description":"Se creara un nuevo experto con los que no hacen match",
-            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_EXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"TRUE"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_MEMEXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"FALSE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"CREAR_NM_CDAV_NUEVO",
             "description":"Se creara un nuevo cdav con los que no hacen match",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         }
 
