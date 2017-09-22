@@ -190,19 +190,19 @@ class DataFrameEngineUtils():
 
         elif method == "APPEND":
             if countdf > 0:
-                try:
-                    LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
-                    currentData = DataFrameEngineUtils.execute_query("select * from "+name)
-                    countdf = currentData.count()
-                    DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-                    newdata = currentData.execute_query("insert into "+name+" select * from "+name+"_"+id)
-                    hive.dropTempTable(name+"_"+id)
-                    currentData = DataFrameEngineUtils.execute_query("select * from "+name)
-                    newdata.show()
+                #try:
+                LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
+                currentData = DataFrameEngineUtils.execute_query("select * from "+name)
+                countdf = currentData.count()
+                DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+                newdata = currentData.execute_query("insert into "+name+" select * from "+name+"_"+id)
+                hive.dropTempTable(name+"_"+id)
+                currentData = DataFrameEngineUtils.execute_query("select * from "+name)
+                newdata.show()
                     #DataFrameEngineUtils.persist_dataframe(name,"REPLACE",newdata)
-                except:
-                    LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
-                    newdata = dataframe
+                #except:
+                #    LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
+                #    newdata = dataframe
                 #DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,newdata)
                 #DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
                 #hive.dropTempTable(name+"_"+id)
