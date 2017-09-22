@@ -125,7 +125,6 @@ class DataFrameEngineUtils():
             df.registerTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
-            hive.dropTempTable(name+"_"+id2)
             newtable = hive.table(name)
             newtable.show()
             count = str(newtable.count())
