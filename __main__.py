@@ -201,6 +201,13 @@ class DataFrameEngineUtils():
                 #LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
             else:
                 LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
+            
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 7, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
     @staticmethod
     def execute_query(query):
@@ -255,7 +262,21 @@ class InputEngineUtils():
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("persist replace 12, tablas en memoria")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+
             DataFrameEngineUtils.persist_memory_dataframe(destination,input_df)
+            
+            tdf = hive.tables().filter("isTemporary = True").collect()
+            LOGGER.debug("persist replace 13, tablas en memoria")
+            for t in tdf:
+                tmp = hive.table(t["tableName"])
+                count = str(tmp.count())
+                LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
         return inputs_result
     
     @staticmethod
@@ -283,6 +304,13 @@ class InputEngineUtils():
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
             else:
                 DataFrameEngineUtils.persist_memory_dataframe(table,dataframe_tmp)
+
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 8, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
 
 
@@ -371,6 +399,14 @@ class JoinStep():
 
 class Step():
     def __init__(self, stage, config):
+
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 10, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+
         self.name = config.get("step_name")
         global STEP_NAME
         STEP_NAME = self.name
@@ -384,8 +420,24 @@ class Step():
         self.config = InputEngineUtils.process_template_vars(self.config,stage.process.process_vars)
         self.stage = stage
         self.type = self.config.get("type")
+
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 11, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+
         self.inputs = InputEngineUtils.get_inputs(self.config.get("inputs"))
         self.outputs = self.config.get("outputs")
+
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 14, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+
         LOGGER.info("Step iniciado!")
 
     def execute(self):
@@ -400,6 +452,14 @@ class Step():
             step = MergeStep(self)
             outputdf = step.execute()
             InputEngineUtils.process_outputs(self.outputs,outputdf)
+        
+        tdf = hive.tables().filter("isTemporary = True").collect()
+        LOGGER.debug("persist replace 9, tablas en memoria")
+        for t in tdf:
+            tmp = hive.table(t["tableName"])
+            count = str(tmp.count())
+            LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+        
         LOGGER.info("Step finalizado")
         STEP_NAME = ""
         
