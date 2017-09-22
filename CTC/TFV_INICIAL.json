@@ -17,8 +17,8 @@
                 "output_mem_nomatch":"ORIG_MEMEXPERTO"
             },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
-        },
-        {
+        }, 
+        { 
             "step_name":"LOAD_CDAV_FILTRADO_FECHA",
             "template_vars":{"source": "${tabla_cdav}","tabla":"MEMCDAV","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_cdav_id}",
