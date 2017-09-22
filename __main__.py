@@ -79,7 +79,7 @@ class Logger:
         if self.table_state:
             if step >= self.table_state_step and step <= self.table_state_step_m:
                 tdf = hive.tables().filter("isTemporary = True").collect()
-                self.debug("persist replace "+step+", tablas en memoria")
+                self.debug("persist replace "+str(step)+", tablas en memoria")
                 for t in tdf:
                     tmp = hive.table(t["tableName"])
                     count = str(tmp.count())
