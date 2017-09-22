@@ -29,8 +29,8 @@
             "table": "TMP_NM_MEM_EXPERTO",
             "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_tarjeta is null or CDAV_tarjeta is null"},
-                {"expression" : "EXPERTO_tarjeta is not null"}
+                {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
+                {"expression" : "${origen}_tarjeta is not null"}
             ]
         },
         {
@@ -38,8 +38,8 @@
             "table": "TMP_NM_MEM_CDAV",
             "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_tarjeta is null or CDAV_tarjeta is null"},
-                {"expression" : "CDAV_tarjeta is not null"}
+                {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
+                {"expression" : "${destino}_tarjeta is not null"}
             ]
         },
         {
@@ -47,7 +47,7 @@
             "table": "TMP_M_MEM",
             "persist": "FALSE",
             "filters":[
-                {"expression" : "EXPERTO_tarjeta is not null and CDAV_tarjeta is not null"}
+                {"expression" : "${origen}_tarjeta is not null and ${destino}_tarjeta is not null"}
             ]
         }
     ]

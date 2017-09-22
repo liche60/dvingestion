@@ -7,7 +7,7 @@
 
         {
             "step_name":"LOAD_EXPERTO_FILTRADO_FECHA",
-            "template_vars":{"source": "${tabla_experto}","tabla":"EXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source": "${tabla_experto}","tabla":"MEMEXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_experto_id}",
                 "tarjeta":"${columna_experto_tarjeta}",
                 "fecha":"${columna_experto_fecha}",
@@ -18,7 +18,7 @@
         },
         {
             "step_name":"LOAD_CDAV_FILTRADO_FECHA",
-            "template_vars":{"source": "${tabla_cdav}","tabla":"CDAV","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source": "${tabla_cdav}","tabla":"MEMCDAV","filtro":"${columna_cdav_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_cdav_id}",
                 "tarjeta":"${columna_cdav_tarjeta}",
                 "fecha":"${columna_cdav_fecha}",
@@ -29,7 +29,7 @@
         },
         {
             "step_name":"JOIN_TFV_EXPERTO_CEDAV",
-            "template_vars":{"tarjeta":"tarjeta","origen":"EXPERTO","destino":"CDAV","filtro":"1 = 1"},
+            "template_vars":{"tarjeta":"tarjeta","origen":"MEMEXPERTO","destino":"MEMCDAV","filtro":"1 = 1"},
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
