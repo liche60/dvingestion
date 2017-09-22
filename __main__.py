@@ -99,7 +99,9 @@ class DataFrameEngineUtils():
                 fisica = True
                 continue
         if not fisica:
+            LOGGER.error("Registrando en memoria la tabla: "+name+"!")
             dataframe.registerTempTable(name)
+            dataframe.show()
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
             exit()
@@ -110,8 +112,7 @@ class DataFrameEngineUtils():
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
-            dataframe.registerTempTable(name+"_"+id)
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
@@ -131,7 +132,7 @@ class DataFrameEngineUtils():
             except:
                 LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
                 newdata = dataframe
-            newdata.registerTempTable(name+"_"+id)
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,newdata)
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name+"_"+id_alter)
@@ -193,7 +194,7 @@ class InputEngineUtils():
         for input_item in inputs:
             input_df = InputEngineUtils.get_input(input_item)
             destination = input_item.get("destination")
-            input_df.registerTempTable(destination)
+            DataFrameEngineUtils.persist_memory_dataframe(destination,input_df)
         return inputs_result
     
     @staticmethod
@@ -207,7 +208,7 @@ class InputEngineUtils():
                 persist_method = output_item.get("persist_method")
                 DataFrameEngineUtils.persist_dataframe(table,persist_method,dataframe_tmp)
             else:
-                dataframe_tmp.registerTempTable(table)
+                DataFrameEngineUtils.persist_memory_dataframe(table,dataframe_tmp)
 
 
 class MergeStep():
@@ -357,21 +358,21 @@ class Stage():
             LOGGER.info("Ejecutando Steps...")
             for step_config in self.steps:
                 step = Step(self,step_config)
-                tdf = hive.tables().filter("isTemporary = True").collect()
-                LOGGER.debug("Tablas en memoria para la ejecucion del step")
-                for t in tdf:
-                    tmp = hive.table(t["tableName"])
-                    count = str(tmp.count())
-                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
-                    tmp.show()
+                #tdf = hive.tables().filter("isTemporary = True").collect()
+                #LOGGER.debug("Tablas en memoria para la ejecucion del step")
+                #for t in tdf:
+                #    tmp = hive.table(t["tableName"])
+                #    count = str(tmp.count())
+                #    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+                #    tmp.show()
                 step.execute()
-                tdf = hive.tables().filter("isTemporary = True").collect()
-                LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
-                for t in tdf:
-                    tmp = hive.table(t["tableName"])
-                    count = str(tmp.count())
-                    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
-                    tmp.show()
+                #tdf = hive.tables().filter("isTemporary = True").collect()
+                #LOGGER.debug("Tablas en memoria luego de la ejecucion del step")
+                #for t in tdf:
+                #    tmp = hive.table(t["tableName"])
+                #    count = str(tmp.count())
+                #    LOGGER.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
+                #    tmp.show()
 
 class Process():
     def __init__(self, config):
