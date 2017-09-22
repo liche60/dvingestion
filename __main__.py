@@ -34,8 +34,9 @@ class Logger:
     def __init__(self, process_name):
         self.process_name = process_name
         self.log = self.setup_custom_logger()
-        self.table_state = False
+        self.table_state = True
         self.table_state_step = 0
+        self.table_state_step_m = 0
 
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -76,7 +77,7 @@ class Logger:
     
     def log_mem_table_state(self,step):
         if self.table_state:
-            if step >= self.table_state_step: 
+            if step >= self.table_state_step and step <= self.table_state_step_m:
                 tdf = hive.tables().filter("isTemporary = True").collect()
                 self.debug("persist replace "+step+", tablas en memoria")
                 for t in tdf:
@@ -267,7 +268,7 @@ class InputEngineUtils():
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
 
             LOGGER.log_mem_table_state(0)
-            
+
             persist = output_item.get("persist")
             if persist == "TRUE":
                 persist_method = output_item.get("persist_method")
