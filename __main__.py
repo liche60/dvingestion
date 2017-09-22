@@ -109,7 +109,7 @@ class DataFrameEngineUtils():
             LOGGER.debug("** persist.REPLACE: La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
             try:
-                table = hive.table(name)
+                table = DataFrameEngineUtils.execute_query("select * from "+name)
                 table.cache()
                 print("1===========")
                 table.show()
