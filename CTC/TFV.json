@@ -12,31 +12,36 @@
                 "valor":"valor",
                 "treexpedida":"treexpedida",
                 "tamparadora":"tamparadora"},
+                "output_mem_table_nomatch":"NM_MEMCDAV",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
+
         {
             "step_name":"JOIN_TFV_NMCDAV_NMEXPERTO",
             "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"MEMCDAV","destino":"MEMEXPERTO","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''"},
+            "output_nm_mem_table_experto":"NM_MEM_CDAV","output_nm_mem_table_cdav":"NM_MEM_EXPERTO","output_mem_table_match":"MEM_EC_MATCH",
+            "input_origen":"NM_MEMCDAV","input_destino":"NM_EXPERTO",
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV"},
+            "template_vars":{"tabla":"MEMCDAV","output_hive_nomatch_table":"NM_CDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
-            "template_vars":{"tabla":"MEMEXPERTO"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_hive_nomatch_table":"NM_EXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"APPEND_TO_MATCH",
-            "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV"},
-            "import":"CTC/TEMPLATES/APPEND_TO_MATCH.json"
+            "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV","table_hive_match":"EC_MATCH","persist_method":"APPEND",
+            "input_mem_match_table":"MEM_EC_MATCH"},
+            "import":"CTC/TEMPLATES/MATCH.json"
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
-            "template_vars":{"tabla":"CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
+            "template_vars":{"tabla_origen":"MEMCDAV","tabla_destino":"NM_MEM_CDAV","output_hive_nm_tabla":"NM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]

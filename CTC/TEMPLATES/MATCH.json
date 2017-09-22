@@ -5,7 +5,7 @@
     "destination_columns":[ "fecha","id_experto","id_cdav" ],
     "source_tables":[
         {
-            "table": "TMP_M_MEM",
+            "table": "${input_mem_match_table}",
             "columns": {
                 "fecha":"${destino}_fecha",
                 "id_experto":"${origen}_idconsecutivo",
@@ -16,9 +16,9 @@
     "outputs":[
         {
             "description":"Salida de los que hicieron match entre cdav y experto desde el origen",
-            "table": "EC_MATCH",
+            "table": "${table_hive_match}",
             "persist": "TRUE",
-            "persist_method": "APPEND",
+            "persist_method": "${persist_method}",
             "filters":[]
         }
     ]

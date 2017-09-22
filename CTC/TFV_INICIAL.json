@@ -7,13 +7,14 @@
 
         {
             "step_name":"LOAD_EXPERTO_FILTRADO_FECHA",
-            "template_vars":{"source": "${tabla_experto}","tabla":"MEMEXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source":"${tabla_experto}","tabla":"MEMEXPERTO","filtro":"${columna_experto_fecha} = '${fecha_proceso}'",
                 "idconsecutivo":"${columna_experto_id}",
                 "tarjeta":"${columna_experto_tarjeta}",
                 "fecha":"${columna_experto_fecha}",
                 "valor":"${columna_experto_valor}",
                 "treexpedida":"${columna_experto_tarjeta_reexpedida}",
                 "tamparadora":"${columna_experto_tarjeta_amparadora}"},
+                "output_mem_table_nomatch":"NM_MEMEXPERTO",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
@@ -25,27 +26,33 @@
                 "valor":"${columna_cdav_valor}",
                 "treexpedida":"${columna_cdav_tarjeta_reexpedida}",
                 "tamparadora":"${columna_cdav_tarjeta_amparadora}"},
+                "output_mem_table_nomatch":"NM_MEMCDAV",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
         {
             "step_name":"JOIN_TFV_EXPERTO_CEDAV",
-            "template_vars":{"tarjeta":"tarjeta","origen":"MEMEXPERTO","destino":"MEMCDAV","filtro":"1 = 1"},
+            "template_vars":{"tarjeta":"tarjeta","origen":"MEMEXPERTO","destino":"MEMCDAV","filtro":"1 = 1",
+            "output_nm_mem_table_experto":"NM_MEM_EXPERTO","output_nm_mem_table_cdav":"NM_MEM_CDAV","output_mem_table_match":"MEM_EC_MATCH",
+            "input_origen":"NM_MEMEXPERTO","input_destino":"NM_MEMCDAV"
+            },
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
             "step_name":"MATCH_INICIAL",
-            "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV"},
-            "import":"CTC/TEMPLATES/NEW_MATCH.json"},
+            "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV","table_hive_match":"EC_MATCH","persist_method":"REPLACE",
+            "input_mem_match_table":"MEM_EC_MATCH"},
+            "import":"CTC/TEMPLATES/MATCH.json"
+        },
         {
             "step_name":"CREAR_NM_EXPERTO_NUEVO",
             "description":"Se creara un nuevo experto con los que no hacen match",
-            "template_vars":{"tabla":"MEMEXPERTO"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_hive_nomatch_table":"NM_EXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"CREAR_NM_CDAV_NUEVO",
             "description":"Se creara un nuevo cdav con los que no hacen match",
-            "template_vars":{"tabla":"MEMCDAV"},
+            "template_vars":{"tabla":"MEMCDAV","output_hive_nomatch_table":"NM_CDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         }
 

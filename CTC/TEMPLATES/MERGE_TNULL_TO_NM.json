@@ -2,8 +2,8 @@
     "description":"Merge de la tabla cdav en memoria con los que no hicieron match",
     "inputs": [
         {
-            "source": "NM_MEM_${tabla}",
-            "destination": "NM_${tabla}_NT",
+            "source": "${tabla_origen}",
+            "destination": "${tabla_destino}",
             "filters":[
                 {"expression" : "${filtro}"}
             ]
@@ -13,7 +13,7 @@
     "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor","treexpedida","tamparadora" ],
     "source_tables":[
         {
-            "table": "NM_${tabla}",
+            "table": "${tabla_origen}",
             "columns": {
                 "idconsecutivo":"idconsecutivo",
                 "tarjeta":"tarjeta",
@@ -24,7 +24,7 @@
             }
         },
         {
-            "table": "NM_${tabla}_NT",
+            "table": "${tabla_destino}",
             "columns": {
                 "idconsecutivo":"idconsecutivo",
                 "tarjeta":"tarjeta",
@@ -38,7 +38,7 @@
     "outputs":[
         {
             "description":"Salida de los que no hacen match en cdav, esta salida queda persistida en Hive",
-            "table": "NM_${tabla}",
+            "table": "${output_hive_nm_tabla}",
             "persist": "TRUE",
             "persist_method": "REPLACE",
             "filters":[]

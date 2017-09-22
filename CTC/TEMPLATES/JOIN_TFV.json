@@ -2,14 +2,14 @@
     "description": "Cuadre de Cdav, Experto o Experto, Cdav por tajeta reexpedida o amparada, fecha y valor",
     "inputs": [
             {
-            "source": "NM_${origen}",
+            "source": "${input_origen}",
             "destination": "${origen}",
             "filters":[
                 {"expression" : "${filtro}"}
             ]
         },
         {
-            "source": "NM_${destino}",
+            "source": "${input_destino}",
             "destination": "${destino}",
             "filters":[]
         }
@@ -26,7 +26,7 @@
     "outputs":[
         {
             "description":"Salida de los que no hacen match, pero solo para experto, esta salida no queda persistida en Memoria",
-            "table": "TMP_NM_MEM_EXPERTO",
+            "table": "${output_nm_mem_table_experto}",
             "persist": "FALSE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
@@ -35,7 +35,7 @@
         },
         {
             "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
-            "table": "TMP_NM_MEM_CDAV",
+            "table": "${output_nm_mem_table_cdav}",
             "persist": "FALSE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
@@ -44,7 +44,7 @@
         },
         {
             "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
-            "table": "TMP_M_MEM",
+            "table": "${output_mem_table_match}",
             "persist": "FALSE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is not null and ${destino}_tarjeta is not null"}
