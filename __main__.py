@@ -136,6 +136,7 @@ class DataFrameEngineUtils():
                     DataFrameEngineUtils.execute_query("ALTER TABLE "+name+" RENAME TO "+name+"_"+id_p)
                     currentData = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
                     newdata = currentData.unionAll(dataframe)
+                    newdata.show()
                 except:
                     LOGGER.debug("La tabla "+name+" no existe en Hive, creando...")
                     newdata = dataframe
