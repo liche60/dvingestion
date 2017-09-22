@@ -109,26 +109,33 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
-        dataframe = dataframe.cache()
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = dataframe.count()
         id = DataFrameEngineUtils.id_generator()
         id_p = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
-            LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
-            DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             DataFrameEngineUtils.execute_query("drop table if exists "+name)
-            LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
-            DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             newtable.show()
             count = str(newtable.count())
             LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
+            #LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
+            #DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
+            #DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
+            #DataFrameEngineUtils.execute_query("drop table if exists "+name)
+            #LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
+            #DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
+            #newtable = DataFrameEngineUtils.execute_query("select * from "+name)
+            #hive.dropTempTable(name+"_"+id)
+            #LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
+            #newtable = DataFrameEngineUtils.execute_query("select * from "+name)
+            #newtable.show()
+            #count = str(newtable.count())
+            #LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
             if countdf > 0:
                 try:
