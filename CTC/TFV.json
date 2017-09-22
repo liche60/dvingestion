@@ -12,25 +12,25 @@
                 "valor":"valor",
                 "treexpedida":"treexpedida",
                 "tamparadora":"tamparadora"},
-                "output_mem_table_nomatch":"NM_MEMCDAV",
+                "output_mem_table_nomatch":"SN_NM_MEMCDAV",
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
 
         {
             "step_name":"JOIN_TFV_NMCDAV_NMEXPERTO",
             "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"MEMCDAV","destino":"MEMEXPERTO","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''"},
-            "output_nm_mem_table_experto":"NM_MEM_CDAV","output_nm_mem_table_cdav":"NM_MEM_EXPERTO","output_mem_table_match":"MEM_EC_MATCH",
+            "output_nm_mem_table_experto":"NM_MEMCDAV","output_nm_mem_table_cdav":"NM_MEMEXPERTO","output_mem_table_match":"MEM_EC_MATCH",
             "input_origen":"NM_MEMCDAV","input_destino":"NM_EXPERTO",
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_hive_nomatch_table":"NM_CDAV"},
+            "template_vars":{"tabla":"MEMCDAV","output_hive_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCEDAV"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
-            "template_vars":{"tabla":"MEMEXPERTO","output_hive_nomatch_table":"NM_EXPERTO"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_hive_nomatch_table":"NM_EXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
@@ -41,7 +41,7 @@
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
-            "template_vars":{"tabla_origen":"MEMCDAV","tabla_destino":"NM_MEM_CDAV","output_hive_nm_tabla":"NM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
+            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_MEMCDAV","output_hive_nm_tabla":"NM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]

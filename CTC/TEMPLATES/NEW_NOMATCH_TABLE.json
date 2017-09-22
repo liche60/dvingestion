@@ -5,7 +5,7 @@
     "destination_columns":[ "idconsecutivo","tarjeta","fecha","valor","treexpedida","tamparadora" ],
     "source_tables":[
         {
-            "table": "TMP_NM_MEM_${tabla}",
+            "table": "${input_nm_mem_tabla}",
             "columns": {
                 "idconsecutivo":"${tabla}_idconsecutivo",
                 "tarjeta":"${tabla}_tarjeta",
