@@ -37,7 +37,7 @@
         },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
-            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_EXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"TRUE"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_MEMEXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"FALSE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
