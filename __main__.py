@@ -119,6 +119,7 @@ class DataFrameEngineUtils():
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
+            newtable = DataFrameEngineUtils.execute_query("truncate table"+name)
             DataFrameEngineUtils.execute_query("drop table "+name)
             LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
             DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
