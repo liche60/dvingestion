@@ -94,7 +94,7 @@ class DataFrameEngineUtils():
     def persist_memory_dataframe(name,dataframe):
         tdf = hive.tables().filter("isTemporary = False").collect()
         fisica = False
-        for t in tdf:
+        for t in tdf: 
             if name.lower() == t["tableName"].lower():
                 fisica = True
                 continue
@@ -108,7 +108,7 @@ class DataFrameEngineUtils():
 
     @staticmethod
     def persist_dataframe(name,method,dataframe):
-        LOGGER.debug("persist: La tabla "+name+" se guardara permanentemente en HIVE")
+        LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
         countdf = str(dataframe.count())
         id = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
@@ -119,7 +119,7 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            newtable = hive.sql("select * from "+name)
+            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             newtable.show() 
             count = str(newtable.count())
             LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
