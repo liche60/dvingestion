@@ -111,14 +111,10 @@ class DataFrameEngineUtils():
             try:
                 table = DataFrameEngineUtils.execute_query("select * from "+name)
                 table = table.cache()
-                print("1===========")
-                table.show()
                 DataFrameEngineUtils.execute_query("drop table if exists "+name)
                 df = dataframe.unionAll(table)
             except:
                 df = dataframe
-            print("2===========")
-            df.show()
             count = str(table.count())
             LOGGER.debug("La Tabla: "+name+" ya existe, y tiene "+count+" registros, se insertaran los registros nuevos!")
             LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros que seran unidos con los "+count+" registros de la tabla actual")
@@ -126,17 +122,9 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
             newtable = hive.table(name)
-            newtable.show()
             count = str(newtable.count())
             LOGGER.debug("La tabla "+name+"fue creada en HIVE con "+count+" registros")
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            #except Exception as inst:
-                #LOGGER.debug("Ocurrio un error insertando los nuevos registros a la tabla: "+name+"_"+id+" se tratara de recrear la tabla")
-                #LOGGER.debug("Creando tabla temporal: "+name+"_"+id+" con "+countdf+" registros")
-                #dataframe.registerTempTable(name+"_"+id)
-                #DataFrameEngineUtils.execute_query("create table "+name+" as select * from "+name+"_"+id)
-                #hive.dropTempTable(name+"_"+id)
-                #LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
         else:
             LOGGER.error("persist method not supported")
 
