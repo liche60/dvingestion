@@ -95,7 +95,7 @@ class DataFrameEngineUtils():
         tdf = hive.tables().filter("isTemporary = False").collect()
         fisica = False
         for t in tdf:
-            if name == t["tableName"]:
+            if name.lower() == t["tableName"].lower():
                 fisica = True
                 continue
         if not fisica:
