@@ -105,6 +105,7 @@ class DataFrameEngineUtils():
             hive.dropTempTable(name+"_"+id)
             LOGGER.debug("** persist.REPLACE: La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = hive.table(name)
+            newtable.show()
             count = str(newtable.count())
             LOGGER.debug("** persist.REPLACE: La tabla "+name+" fue creada en HIVE con "+count+" registros")
         elif method == "APPEND":
