@@ -137,7 +137,8 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        tableExist = dataframe.filter(dataframe["tableName"].rlike(("(?i)^"+name+"$"))).count()
+        tdf = hive.tables().filter("isTemporary = False")
+        tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.debug("La tabla "+name+" no existe, se creara en HIVE")
             id = DataFrameEngineUtils.id_generator()
@@ -403,7 +404,7 @@ class Stage():
                 LOGGER.log_mem_table_state(0)
 
                 step.execute()
-                tdf = hive.tables().filter("isTemporary = True").collect()
+                #tdf = hive.tables().filter("isTemporary = True").collect()
 
                 LOGGER.log_mem_table_state(0)
 
