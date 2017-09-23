@@ -154,12 +154,13 @@ class DataFrameEngineUtils():
             #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             
             LOGGER.info("Contando registros de "+name+"_"+id)
+            sc.setLogLevel("ON")
             co = dataframe.count()
-
+            sc.setLogLevel("OFF")
             LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
 
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
-
+            
             LOGGER.log_mem_table_state(3)
 
             #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
