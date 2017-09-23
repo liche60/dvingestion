@@ -104,12 +104,12 @@ class DataFrameEngineUtils():
         LOGGER.debug(" *** Filtrando dataframe...")
         for filter_item in filters:
             count = LOGGER.count_dataframe_for_logging(dataframe)
-            LOGGER.debug(" *** Registros antes del filtro: "+count)
+            LOGGER.debug(" *** Registros antes del filtro: "+str(count))
             exp = filter_item.get("expression")
             LOGGER.debug("\t\t *** Filtro: "+exp)
             dataframe = dataframe.filter(exp)
             count = LOGGER.count_dataframe_for_logging(dataframe)
-            LOGGER.debug(" *** Registros despues del filtro: "+count)
+            LOGGER.debug(" *** Registros despues del filtro: "+str(count))
         return dataframe
 
     @staticmethod
@@ -175,7 +175,7 @@ class DataFrameEngineUtils():
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             LOGGER.show_dataframe_console(newtable)
             count = LOGGER.count_dataframe_for_logging(newtable)
-            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
+            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+str(count)+" registros")
             
             LOGGER.log_mem_table_state(7)
 
@@ -197,7 +197,7 @@ class DataFrameEngineUtils():
         LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
         count = LOGGER.count_dataframe_for_logging(dataframe)
-        LOGGER.debug("\t\t *** El Query retorno "+count+" registros!")
+        LOGGER.debug("\t\t *** El Query retorno "+str(count)+" registros!")
         return dataframe
 
     @staticmethod
