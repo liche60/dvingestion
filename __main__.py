@@ -34,10 +34,10 @@ class Logger:
     def __init__(self, process_name):
         self.process_name = process_name
         self.log = self.setup_custom_logger()
-        self.table_state = False
-        self.debug_state = False
+        self.table_state = True
+        self.debug_state = True
         self.table_state_step = 0
-        self.table_state_step_m = 0
+        self.table_state_step_m = 100
 
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
