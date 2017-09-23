@@ -76,7 +76,13 @@ class Logger:
             if STEP_NAME != "":
                 prefix = prefix + "["+STEP_NAME+"]"
         self.log.error(prefix+" "+message)
-    
+
+    def count_dataframe_for_logging(self,dataframe):
+        count = 0
+        if self.debug_state
+            count = dataframe.count()
+        return count
+
     def log_mem_table_state(self,step):
         if self.table_state:
             if step >= self.table_state_step and step <= self.table_state_step_m:
@@ -97,15 +103,15 @@ class DataFrameEngineUtils():
     def get_filtered_dataframe(dataframe,filters):
         LOGGER.debug(" *** Filtrando dataframe...")
         for filter_item in filters:
-            count = str(dataframe.count())
+            count = LOGGER.count_dataframe_for_logging(dataframe)
             LOGGER.debug(" *** Registros antes del filtro: "+count)
             exp = filter_item.get("expression")
             LOGGER.debug("\t\t *** Filtro: "+exp)
             dataframe = dataframe.filter(exp)
-            count = str(dataframe.count())
+            count = LOGGER.count_dataframe_for_logging(dataframe)
             LOGGER.debug(" *** Registros despues del filtro: "+count)
         return dataframe
-    
+
     @staticmethod
     def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
@@ -168,7 +174,7 @@ class DataFrameEngineUtils():
             LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
             newtable = DataFrameEngineUtils.execute_query("select * from "+name)
             LOGGER.show_dataframe_console(newtable)
-            count = str(newtable.count())
+            count = LOGGER.count_dataframe_for_logging(newtable)
             LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+count+" registros")
             
             LOGGER.log_mem_table_state(7)
@@ -190,7 +196,7 @@ class DataFrameEngineUtils():
     def execute_query(query):
         LOGGER.debug(" *** Ejecutando query: "+query)
         dataframe = hive.sql(query)
-        count = str(dataframe.count())
+        count = LOGGER.count_dataframe_for_logging(dataframe)
         LOGGER.debug("\t\t *** El Query retorno "+count+" registros!")
         return dataframe
 
