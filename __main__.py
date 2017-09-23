@@ -145,18 +145,27 @@ class DataFrameEngineUtils():
         if method == "REPLACE":
 
             LOGGER.log_mem_table_state(1)
+            
+            LOGGER.info("Cachando df")
+            dataframe.cache()
 
             LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
 
             LOGGER.log_mem_table_state(2)
+            
+            #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
+            
+            LOGGER.info("Contando registros de "+name+"_"+id)
+            co = dataframe.count()
 
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
+            LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
+
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
 
             LOGGER.log_mem_table_state(3)
 
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
+            #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
             newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
 
             LOGGER.log_mem_table_state(4)
@@ -185,10 +194,6 @@ class DataFrameEngineUtils():
             #if countdf > 0:
              #   LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-            newdata = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
-            LOGGER.info("Contando registros de "+name+"_"+id)
-            co = newdata.count()
-            LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
             newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
             hive.dropTempTable(name+"_"+id)
             newdata = DataFrameEngineUtils.execute_query("select * from "+name)
