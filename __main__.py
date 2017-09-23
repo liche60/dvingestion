@@ -137,7 +137,7 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        tableExist = h.tables().filter("tableName = '"+name+"'").count()
+        tableExist = hive.tables().filter("tableName = '"+name+"'").count()
         if tableExist == 0:
             LOGGER.debug("La tabla "+name+" no existe, se creara en HIVE")
             id = DataFrameEngineUtils.id_generator()
