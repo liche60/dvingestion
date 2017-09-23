@@ -79,7 +79,7 @@ class Logger:
 
     def count_dataframe_for_logging(self,dataframe):
         count = 0
-        if self.debug_state
+        if self.debug_state:
             count = dataframe.count()
         return count
 
