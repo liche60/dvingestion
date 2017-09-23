@@ -137,12 +137,12 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        tableExist = hive.tables().filter("tableName = '"+name+"'").count()
+        tableExist = t.filter(t["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.debug("La tabla "+name+" no existe, se creara en HIVE")
             id = DataFrameEngineUtils.id_generator()
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+name+"_"+id+" where 0=1")
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe.filter("0 = 1"))
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+name+"_"+id)
             LOGGER.debug("La tabla "+name+" se ha creado en Hive")
             hive.dropTempTable(name+"_"+id)
         if method == "REPLACE":
