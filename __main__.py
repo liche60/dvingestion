@@ -135,24 +135,61 @@ class DataFrameEngineUtils():
             exit()
 
     @staticmethod
-    def persist_dataframe(name,method,dataframe):
-        LOGGER.info("La tabla "+name+" se guardara permanentemente en HIVE")
-        tdf = hive.tables().filter("isTemporary = False")
+    def replace_table_hive(name,dataframe):
+        id = DataFrameEngineUtils.id_generator()
+        tmpTableName = name+"_tmp_"+id
+        tmpMemTableName = name+"_"+id
+        DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
         tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
-            id = DataFrameEngineUtils.id_generator()
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe.filter("0 = 1"))
-            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+name+"_"+id)
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
             LOGGER.info("La tabla "+name+" se ha creado en Hive")
-            hive.dropTempTable(name+"_"+id)
+            dataframe.write.mode("append").format("json").saveAsTable(name)
+        else:
+            LOGGER.info("Creando tabla temporal "+tmpTableName)
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+tmpTableName+" as select * from "+tmpMemTableName)
+            LOGGER.info("Insertando datos a "+tmpTableName)
+            dataframe.write.mode("append").format("json").saveAsTable(tmpTableName)
+            LOGGER.info("Eliminando tabla "+name)
+            DataFrameEngineUtils.execute_query("DROP TABLE "+name)
+            LOGGER.info("Renombrando table "+tmpTableName+" por "+name)
+            DataFrameEngineUtils.execute_query("ALTER TABLE "+tmpTableName+" RENAME TO "+name)
+            LOGGER.info("Consultando datos desde "+name)
+            dataframe = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
+            LOGGER.info("Cachando...")
+            dataframe.cache()
+            LOGGER.info("Mostrando...")
+            dataframe.show()
+            LOGGER.info("Contando...")
+            LOGGER.info("datos "+str(dataframe.count()))
+        hive.dropTempTable(tmpMemTableName)
+
+    @staticmethod
+    def append_table_hive(name,dataframe):
+        id = DataFrameEngineUtils.id_generator()
+        tmpMemTableName = name+"_"+id
+        DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+        tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
+        if tableExist == 0:
+            LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+            LOGGER.info("La tabla "+name+" se ha creado en Hive")
+            dataframe.write.mode("append").format("json").saveAsTable(name)
+        else:
+            dataframe.write.mode("append").format("json").saveAsTable(name)
+        hive.dropTempTable(tmpMemTableName)
+
+    @staticmethod
+    def persist_dataframe(name,method,dataframe):
+        LOGGER.info("La tabla "+name+" se guardara permanentemente en HIVE")
         if method == "REPLACE":
-            if tableExist == 1:
-                LOGGER.info("La tabla "+name+" existe en Hive, se reemplazara con nuevos datos")
-                DataFrameEngineUtils.execute_query("truncate table "+name)
+            LOGGER.info("La tabla "+name+" sera sobreescrita en Hive")
+            DataFrameEngineUtils.replace_table_hive(name,dataframe)
         elif method == "APPEND":
             LOGGER.info("La tabla "+name+" existe en Hive, se insertaran los con nuevos datos")
-        dataframe.write.mode("append").format("json").saveAsTable(name)
+            DataFrameEngineUtils.append_table_hive(name,dataframe)
+        
 
 
     @staticmethod
