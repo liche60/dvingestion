@@ -35,7 +35,7 @@ class Logger:
         self.process_name = process_name
         self.log = self.setup_custom_logger()
         self.table_state = False
-        self.debug_state = False
+        self.debug_state = True
         self.table_state_step = 0
         self.table_state_step_m = 100
 
@@ -152,11 +152,11 @@ class DataFrameEngineUtils():
             
             #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             
-            LOGGER.info("Contando registros de "+name+"_"+id)
-            sc.setLogLevel("INFO")
-            co = dataframe.count()
-            sc.setLogLevel("OFF")
-            LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
+            #LOGGER.info("Contando registros de "+name+"_"+id)
+            #sc.setLogLevel("INFO")
+            #co = dataframe.count()
+            #sc.setLogLevel("OFF")
+            #LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
 
             DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
             
