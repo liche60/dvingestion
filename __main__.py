@@ -137,68 +137,22 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        #countdf = dataframe.count()
-        countdf = 0
-        id = DataFrameEngineUtils.id_generator()
-        id_p = DataFrameEngineUtils.id_generator()
+        tableExist = h.tables().filter("tableName = '"+name+"'").count()
+        if tableExist == 0:
+            LOGGER.debug("La tabla "+name+" no existe, se creará en HIVE")
+            id = DataFrameEngineUtils.id_generator()
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+name+"_"+id+" where 0=1")
+            LOGGER.debug("La tabla "+name+" se ha creado en Hive")
+            hive.dropTempTable(name+"_"+id)
         if method == "REPLACE":
-
-            LOGGER.log_mem_table_state(1)
-
-            LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-
-            LOGGER.log_mem_table_state(2)
-            
-            #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
-            
-            #LOGGER.info("Contando registros de "+name+"_"+id)
-            #sc.setLogLevel("INFO")
-            #co = dataframe.count()
-            #sc.setLogLevel("OFF")
-            #LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
-
-            DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
-            
-            LOGGER.log_mem_table_state(3)
-
-            #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
-            newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
-
-            LOGGER.log_mem_table_state(4)
-
-            DataFrameEngineUtils.execute_query("drop table "+name)
-            LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
-            DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
-
-            LOGGER.log_mem_table_state(5)
-
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            
-            LOGGER.log_mem_table_state(6)
-            
-            hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            LOGGER.show_dataframe_console(newtable)
-            count = LOGGER.count_dataframe_for_logging(newtable)
-            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+str(count)+" registros")
-            
-            LOGGER.log_mem_table_state(7)
-
+            if tableExist == 1:
+                LOGGER.debug("La tabla "+name+" existe en Hive, se reemplazará con nuevos datos")
+                DataFrameEngineUtils.execute_query("truncate table "+name)
         elif method == "APPEND":
-           # countdf = dataframe.count()
-            #if countdf > 0:
-             #   LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-            newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
-            hive.dropTempTable(name+"_"+id)
-            newdata = DataFrameEngineUtils.execute_query("select * from "+name)
-            LOGGER.show_dataframe_console(newdata)
-            #else:
-            #    LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
-            
-        LOGGER.log_mem_table_state(8)
+            LOGGER.debug("La tabla "+name+" existe en Hive, se insertarán los con nuevos datos")
+        dataframe.write.mode("append").format("json").saveAsTable(name)
+
 
     @staticmethod
     def execute_query(query):
