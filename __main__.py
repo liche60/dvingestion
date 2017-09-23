@@ -129,7 +129,7 @@ class DataFrameEngineUtils():
             dataframe.cache()            
 
             LOGGER.show_dataframe_console(dataframe)
-            
+            dataframe.repartition(30)
             dataframe.registerTempTable(name)
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
@@ -145,9 +145,6 @@ class DataFrameEngineUtils():
         if method == "REPLACE":
 
             LOGGER.log_mem_table_state(1)
-            
-            LOGGER.info("Cachando df")
-            dataframe.cache()
 
             LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
             DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
