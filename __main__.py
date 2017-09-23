@@ -129,7 +129,6 @@ class DataFrameEngineUtils():
             dataframe.cache()            
 
             LOGGER.show_dataframe_console(dataframe)
-            dataframe.repartition(30)
             dataframe.registerTempTable(name)
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
@@ -154,7 +153,7 @@ class DataFrameEngineUtils():
             #newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
             
             LOGGER.info("Contando registros de "+name+"_"+id)
-            sc.setLogLevel("ALL")
+            sc.setLogLevel("INFO")
             co = dataframe.count()
             sc.setLogLevel("OFF")
             LOGGER.info("la tabla temporal "+name+"_"+id+" tiene "+str(co)+" registros")
