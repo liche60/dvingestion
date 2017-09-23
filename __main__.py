@@ -35,7 +35,7 @@ class Logger:
         self.process_name = process_name
         self.log = self.setup_custom_logger()
         self.table_state = False
-        self.debug_state = True
+        self.debug_state = False
         self.table_state_step = 0
         self.table_state_step_m = 100
 
