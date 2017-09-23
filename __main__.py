@@ -137,7 +137,7 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        tableExist = dataframe.filter(t["tableName"].rlike(("(?i)^"+name+"$"))).count()
+        tableExist = dataframe.filter(dataframe["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.debug("La tabla "+name+" no existe, se creara en HIVE")
             id = DataFrameEngineUtils.id_generator()
