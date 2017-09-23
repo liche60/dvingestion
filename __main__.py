@@ -140,6 +140,7 @@ class DataFrameEngineUtils():
         tmpTableName = name+"_tmp_"+id
         tmpMemTableName = name+"_"+id
         DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+        tdf = hive.tables().filter("isTemporary = False")
         tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
@@ -170,6 +171,7 @@ class DataFrameEngineUtils():
         id = DataFrameEngineUtils.id_generator()
         tmpMemTableName = name+"_"+id
         DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+        tdf = hive.tables().filter("isTemporary = False")
         tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
         if tableExist == 0:
             LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
