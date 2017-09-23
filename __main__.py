@@ -34,8 +34,8 @@ class Logger:
     def __init__(self, process_name):
         self.process_name = process_name
         self.log = self.setup_custom_logger()
-        self.table_state = True
-        self.debug_state = True
+        self.table_state = False
+        self.debug_state = False
         self.table_state_step = 0
         self.table_state_step_m = 100
 
@@ -138,7 +138,8 @@ class DataFrameEngineUtils():
     @staticmethod
     def persist_dataframe(name,method,dataframe):
         LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        countdf = dataframe.count()
+        #countdf = dataframe.count()
+        countdf = 0
         id = DataFrameEngineUtils.id_generator()
         id_p = DataFrameEngineUtils.id_generator()
         if method == "REPLACE":
@@ -180,15 +181,16 @@ class DataFrameEngineUtils():
             LOGGER.log_mem_table_state(7)
 
         elif method == "APPEND":
-            if countdf > 0:
-                LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
-                DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-                newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
-                hive.dropTempTable(name+"_"+id)
-                newdata = DataFrameEngineUtils.execute_query("select * from "+name)
-                LOGGER.show_dataframe_console(newdata)
-            else:
-                LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
+           # countdf = dataframe.count()
+            #if countdf > 0:
+             #   LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
+            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
+            newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
+            hive.dropTempTable(name+"_"+id)
+            newdata = DataFrameEngineUtils.execute_query("select * from "+name)
+            LOGGER.show_dataframe_console(newdata)
+            #else:
+            #    LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
             
         LOGGER.log_mem_table_state(8)
 
