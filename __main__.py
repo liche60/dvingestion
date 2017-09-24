@@ -221,6 +221,10 @@ class DataFrameEngineUtils():
         elif method == "APPEND":
             LOGGER.info("La tabla "+name+" existe en Hive, se insertaran los con nuevos datos")
             DataFrameEngineUtils.append_table_hive(name,dataframe)
+        LOGGER.info("La tabla "+name+" se persiste en Hive")
+        result = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
+        result.show()
+
         
 
 
