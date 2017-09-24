@@ -28,10 +28,9 @@
             "table": "${output_nm_mem_table_origen}",
             "persist": "TRUE",
             "persist_method": "REPLACE",
-
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
-                {"expression" : "${destino}_tarjeta is not null"}
+                {"expression" : "${origen}_tarjeta is not null"}
             ]
         },
         {
@@ -41,7 +40,7 @@
             "persist_method": "REPLACE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
-                {"expression" : "${origen}_tarjeta is not null"}
+                {"expression" : "${destino}_tarjeta is not null"}
             ]
         },
         {
