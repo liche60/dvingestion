@@ -174,10 +174,10 @@ class DataFrameEngineUtils():
             id = DataFrameEngineUtils.id_generator()
             tmpTableName = name+"_tmp_"+id
             tmpMemTableName = name+"_"+id
-            DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
             tdf = hive.tables().filter("isTemporary = False")
             tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
             if tableExist == 0:
+                DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
                 LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
@@ -185,7 +185,7 @@ class DataFrameEngineUtils():
             else:
                 LOGGER.info("La tabla "+name+" se truncara")
                 DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
-                LOGGER.info("Almacenando nueos datos en "+name)
+                LOGGER.info("Almacenando nuevos datos en "+name)
                 dataframe.write.mode("append").format("json").saveAsTable(name)
             hive.dropTempTable(tmpMemTableName)
         else:
@@ -198,10 +198,10 @@ class DataFrameEngineUtils():
         if cantidad > 0:
             id = DataFrameEngineUtils.id_generator()
             tmpMemTableName = name+"_"+id
-            DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
             tdf = hive.tables().filter("isTemporary = False")
             tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
             if tableExist == 0:
+                DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
                 LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
