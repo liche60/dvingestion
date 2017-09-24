@@ -37,12 +37,12 @@
         },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
-            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_MEMEXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"FALSE"},
+            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_MEMEXPERTOCN","input_nm_mem_tabla":"NM_MEMEXPERTO","persist":"FALSE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMEXPERTO",
-            "template_vars":{"tabla_origen":"SN_NM_EXPERTO","tabla_destino":"NM_MEMEXPERTO","output_hive_nm_tabla":"NM_EXPERTO"},
+            "template_vars":{"tabla_origen":"SN_NM_EXPERTO","tabla_destino":"NM_MEMEXPERTOCN","output_hive_nm_tabla":"NM_EXPERTO"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]

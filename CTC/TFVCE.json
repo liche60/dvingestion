@@ -39,12 +39,12 @@
 
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE","persist_method":"REPLACE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAVCN","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
-            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_MEMCDAV","output_hive_nm_tabla":"NM_CDAV"},
+            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_MEMCDAVCN","output_hive_nm_tabla":"NM_CDAV"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]

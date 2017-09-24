@@ -38,7 +38,7 @@
         },
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE","persist_method":"REPLACE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAVCN","input_nm_mem_tabla":"NM_MEMCDAV","persist":"FALSE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
