@@ -182,12 +182,12 @@ class DataFrameEngineUtils():
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
                 dataframe.write.mode("append").format("json").saveAsTable(name)
+                hive.dropTempTable(tmpMemTableName)
             else:
                 LOGGER.info("La tabla "+name+" se truncara")
                 DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
                 LOGGER.info("Almacenando nuevos datos en "+name)
                 dataframe.write.mode("append").format("json").saveAsTable(name)
-            hive.dropTempTable(tmpMemTableName)
         else:
             DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
 
@@ -206,9 +206,9 @@ class DataFrameEngineUtils():
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
                 dataframe.write.mode("append").format("json").saveAsTable(name)
+                hive.dropTempTable(tmpMemTableName)
             else:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
-            hive.dropTempTable(tmpMemTableName)
         else:
             LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
 
