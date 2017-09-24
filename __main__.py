@@ -207,7 +207,7 @@ class DataFrameEngineUtils():
             tmpMemTableName = name+"_"+id
             tdf = hive.tables().filter("isTemporary = False")
             tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
-            stage_udf = udf(DataFrameEngineUtils.as_string, StringType())
+            stage_udf = udf(lambda x: STAGE_NAME, StringType())
             if tableExist == 0:
                 DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
                 LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
