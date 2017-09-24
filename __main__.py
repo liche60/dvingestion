@@ -312,12 +312,15 @@ class MergeStep():
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
                 dataframe.cache()
+                dataframe.count()
                 first = False
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dftmp.cache()
+                dataframe.count()
                 dataframe = dataframe.unionAll(dftmp)
                 dataframe.cache()
+                dataframe.count()
             LOGGER.show_dataframe_console(dataframe)
         LOGGER.info("Merge ejecutado!")
         return dataframe
