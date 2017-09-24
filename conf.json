@@ -2,7 +2,7 @@
     "process_name": "CTC",
     "hive_database": "pruebas_cuadre",
     "process_vars":{
-                "fecha_proceso":"2017-08-16",
+                "fecha_proceso":"2017-09-20",
                 "tabla_experto":"EXPERTO_CTC_IN",
                 "columna_experto_id":"idconsecutivo",
                 "columna_experto_tarjeta":"nrocuenta",
