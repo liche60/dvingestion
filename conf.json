@@ -33,7 +33,7 @@
         },
         {
             "stage_name": "TFV_TARJETA_REEXPEDIDAD_CE",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
