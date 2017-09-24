@@ -296,11 +296,13 @@ class InputEngineUtils():
 
             LOGGER.log_mem_table_state(0)
 
-            LOGGER.info("procesando output table "+table)
-            dataframe.show()
-            
             table = output_item.get("table")
             filters = output_item.get("filters")
+
+            LOGGER.info("procesando output table "+table)
+            dataframe.show()
+
+
 
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
 
