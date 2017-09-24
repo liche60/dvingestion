@@ -309,26 +309,15 @@ class MergeStep():
             table = table_item.get("table")
             columns = table_item.get("columns")
             query = self.build_table_query(table,columns)
-            LOGGER.info("Merge Iniciado! "+table)
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
                 dataframe.cache()
-                LOGGER.info("tabla 1, contando")
-                dataframe.count()
-                LOGGER.info("tabla 1, ok")
                 first = False
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
                 dftmp.cache()
-                LOGGER.info("otra tabla, contando")
-                dftmp.count()
-                LOGGER.info("otra tabla, ok")
                 dataframe = dataframe.unionAll(dftmp)
                 dataframe.cache()
-                LOGGER.info("union con la anterior tabla, contando")
-                dataframe.count()
-                LOGGER.info("otra tabla, ok")
-                
             LOGGER.show_dataframe_console(dataframe)
         LOGGER.info("Merge ejecutado!")
         return dataframe
