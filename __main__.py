@@ -212,11 +212,13 @@ class DataFrameEngineUtils():
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
                 dataframe.write.mode("append").format("json").saveAsTable(name)
                 dataframetrace = dataframe.withColumn("stage", col('stage'))
+                dataframetrace.show()
                 dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
                 hive.dropTempTable(tmpMemTableName)
             else:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
                 dataframetrace = dataframe.withColumn("stage", stage_udf())
+                dataframetrace.show()
                 dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
         else:
             LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
