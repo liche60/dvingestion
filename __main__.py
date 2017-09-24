@@ -161,10 +161,10 @@ class DataFrameEngineUtils():
             dataframe = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
             LOGGER.info("Cachando...")
             dataframe.cache()
-            LOGGER.info("Mostrando...")
-            dataframe.show()
-            LOGGER.info("Contando...")
-            LOGGER.info("datos "+str(dataframe.count()))
+            #LOGGER.info("Mostrando...")
+            #dataframe.show()
+            #LOGGER.info("Contando...")
+            #LOGGER.info("datos "+str(dataframe.count()))
         hive.dropTempTable(tmpMemTableName)
 
 
@@ -224,7 +224,7 @@ class DataFrameEngineUtils():
             DataFrameEngineUtils.append_table_hive(name,dataframe)
         LOGGER.info("La tabla "+name+" se persiste en Hive")
         result = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
-        result.show()
+        #result.show()
 
         
 
@@ -301,7 +301,7 @@ class InputEngineUtils():
             filters = output_item.get("filters")
 
             LOGGER.info("procesando output table "+table)
-            dataframe.show()
+            #dataframe.show()
 
 
 
