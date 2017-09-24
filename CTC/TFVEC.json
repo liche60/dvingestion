@@ -5,7 +5,7 @@
     "steps":[
         {
             "step_name":"LOAD_NM_EXPERTO_SOLO_NULAS",
-            "template_vars":{"source": "NM_MEMEXPERTO","tabla":"MEM_EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
+            "template_vars":{"source": "NM_MEXPERTO","tabla":"MEM_EXPERTO","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
                 "idconsecutivo":"idconsecutivo",
                 "tarjeta":"tarjeta",
                 "fecha":"fecha",
