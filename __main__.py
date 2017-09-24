@@ -90,6 +90,7 @@ class Logger:
                 self.debug("persist replace "+str(step)+", tablas en memoria")
                 for t in tdf:
                     tmp = hive.table(t["tableName"])
+                    self.debug("\tTabla: "+t["tableName"]+" Registros: ")
                     count = str(tmp.count())
                     self.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
