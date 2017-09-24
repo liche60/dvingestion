@@ -196,8 +196,8 @@ class DataFrameEngineUtils():
 
 
     @staticmethod
-    def as_string(val):
-        return str(val)
+    def as_string(col):
+        return STAGE_NAME
 
     @staticmethod
     def append_table_hive(name,dataframe):
@@ -215,12 +215,12 @@ class DataFrameEngineUtils():
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+"_trace as select *, stage from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
                 dataframe.write.mode("append").format("json").saveAsTable(name)
-                dataframetrace = dataframe.withColumn("stage", stage_udf(STAGE_NAME))
+                dataframetrace = dataframe.withColumn("stage", stage_udf('stage'))
                 dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
                 hive.dropTempTable(tmpMemTableName)
             else:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
-                dataframetrace = dataframe.withColumn("stage", stage_udf(STAGE_NAME))
+                dataframetrace = dataframe.withColumn("stage", stage_udf('stage'))
                 dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
         else:
             LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
