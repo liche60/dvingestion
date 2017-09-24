@@ -26,7 +26,8 @@
         {
             "description":"Salida de los que no hacen match, pero solo para experto, esta salida no queda persistida en Memoria",
             "table": "${output_nm_mem_table_origen}",
-            "persist": "FALSE",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
                 {"expression" : "${origen}_tarjeta is not null"}
@@ -35,7 +36,8 @@
         {
             "description":"Salida de los que no hacen match, pero solo para cdav, esta salida no queda persistida en Memoria",
             "table": "${output_nm_mem_table_destino}",
-            "persist": "FALSE",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is null or ${destino}_tarjeta is null"},
                 {"expression" : "${destino}_tarjeta is not null"}
