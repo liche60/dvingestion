@@ -45,7 +45,8 @@
         {
             "description":"Salida general de los que hacen match, esta salida queda persistida en Hive",
             "table": "${output_mem_table_match}",
-            "persist": "FALSE",
+            "persist": "TRUE",
+            "persist_method": "REPLACE",
             "filters":[
                 {"expression" : "${origen}_tarjeta is not null and ${destino}_tarjeta is not null"}
             ]

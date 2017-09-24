@@ -16,7 +16,6 @@
             },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
-
         {
             "step_name":"JOIN_TFV_NMCDAV_NMEXPERTO",
             "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"MEMCDAV","destino":"MEMEXPERTO","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''",
@@ -36,10 +35,9 @@
             "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_EXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTOCE","persist":"TRUE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
-
         {
             "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAVCN","input_nm_mem_tabla":"NM_MEMCDAVCE","persist":"FALSE","persist_method":"REPLACE"},
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAVCN","input_nm_mem_tabla":"NM_MEMCDAVCE","persist":"FALSE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
