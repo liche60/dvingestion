@@ -217,7 +217,7 @@ class DataFrameEngineUtils():
                 hive.dropTempTable(tmpMemTableName)
             else:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
-                dataframetrace = dataframe.withColumn("stage", col(STEP_NAME+" "+stage))
+                dataframetrace = dataframe.withColumn("stage", "stage" = STAGE_NAME)
                 dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
         else:
             LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
