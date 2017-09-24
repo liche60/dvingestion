@@ -42,7 +42,7 @@
         },
         {
             "stage_name": "TFV_TARJETA_REEXPEDIDA_EC",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
@@ -51,7 +51,7 @@
         },
         {
             "stage_name": "TFV_TARJETA_AMPARADA_CE",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV por tarjeta amparadora",
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
@@ -60,7 +60,7 @@
         },
         {
             "stage_name": "TFV_TARJETA_AMPARADA_EC",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV por tarjeta amparadora",
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
