@@ -205,11 +205,16 @@ class DataFrameEngineUtils():
                 DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
                 LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
                 DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+                DataFrameEngineUtils.execute_query("CREATE TABLE "+name+"_trace as select *, stage from "+tmpMemTableName)
                 LOGGER.info("La tabla "+name+" se ha creado en Hive")
                 dataframe.write.mode("append").format("json").saveAsTable(name)
+                dataframetrace = dataframe.withColumn("stage", STAGE_NAME)
+                dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
                 hive.dropTempTable(tmpMemTableName)
             else:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
+                dataframetrace = dataframe.withColumn("stage", STAGE_NAME)
+                dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
         else:
             LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
 
