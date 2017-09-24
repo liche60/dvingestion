@@ -25,15 +25,15 @@
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
         {
-            "step_name":"NEW_NOMATCH_CDAV",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
-            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
-        },
-        {
             "step_name":"APPEND_TO_MATCH",
             "template_vars":{"origen":"MEMEXPERTO","destino":"MEMCDAV","table_hive_match":"EC_MATCH","persist_method":"APPEND",
             "input_mem_match_table":"MEM_EC_MATCH"},
             "import":"CTC/TEMPLATES/MATCH.json"
+        },
+        {
+            "step_name":"NEW_NOMATCH_CDAV",
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
             "step_name":"NEW_NOMATCH_EXPERTO",
