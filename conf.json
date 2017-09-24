@@ -32,15 +32,6 @@
             "import": "CTC/TFV_INICIAL.json"
         },
         {
-            "stage_name": "TFV_TARJETA_REEXPEDIDA_EC",
-            "enable":"true",
-            "description":"*********************  Stage TFV por tarjeta reexpedida",
-            "template_vars":{
-                "tfv_tarjeta":"treexpedida"
-            },
-            "import": "CTC/TFVEC.json"
-        },
-        {
             "stage_name": "TFV_TARJETA_REEXPEDIDAD_CE",
             "enable":"true",
             "description":"*********************  Stage TFV por tarjeta reexpedida",
@@ -50,11 +41,11 @@
             "import": "CTC/TFVCE.json"
         },
         {
-            "stage_name": "TFV_TARJETA_AMPARADA_EC",
+            "stage_name": "TFV_TARJETA_REEXPEDIDA_EC",
             "enable":"true",
-            "description":"*********************  Stage TFV por tarjeta amparadora",
+            "description":"*********************  Stage TFV por tarjeta reexpedida",
             "template_vars":{
-                "tfv_tarjeta":"tamparadora"
+                "tfv_tarjeta":"treexpedida"
             },
             "import": "CTC/TFVEC.json"
         },
@@ -68,20 +59,20 @@
             "import": "CTC/TFVCE.json"
         },
         {
+            "stage_name": "TFV_TARJETA_AMPARADA_EC",
+            "enable":"true",
+            "description":"*********************  Stage TFV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
+            },
+            "import": "CTC/TFVEC.json"
+        },
+        {
             "stage_name": "TV_INICIAL",
             "enable":"true",
             "description":"*********************  Stage TFV Inicial",
             "template_vars":{},
             "import": "CTC/TV_INICIAL.json"
-        },
-        {
-            "stage_name": "TV_TARJETA_REEXPEDIDAD_EC",
-            "enable":"false",
-            "description":"*********************  Stage TV por tarjeta reexpedida",
-            "template_vars":{
-                "tfv_tarjeta":"treexpedida"
-            },
-            "import": "CTC/TVEC.json"
         },
         {
             "stage_name": "TV_TARJETA_REEXPEDIDAD_CE",
@@ -93,11 +84,11 @@
             "import": "CTC/TVCE.json"
         },
         {
-            "stage_name": "TV_TARJETA_AMPARADA_EC",
+            "stage_name": "TV_TARJETA_REEXPEDIDAD_EC",
             "enable":"false",
-            "description":"*********************  Stage TV por tarjeta amparadora",
+            "description":"*********************  Stage TV por tarjeta reexpedida",
             "template_vars":{
-                "tfv_tarjeta":"tamparadora"
+                "tfv_tarjeta":"treexpedida"
             },
             "import": "CTC/TVEC.json"
         },
@@ -109,6 +100,15 @@
                 "tfv_tarjeta":"tamparadora"
             },
             "import": "CTC/TVCE.json"
+        },
+        {
+            "stage_name": "TV_TARJETA_AMPARADA_EC",
+            "enable":"false",
+            "description":"*********************  Stage TV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
+            },
+            "import": "CTC/TVEC.json"
         },
         {
             "stage_name": "TFV_CDAV_MOV",
