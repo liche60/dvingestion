@@ -12,7 +12,7 @@
                 "valor":"valor",
                 "treexpedida":"treexpedida",
                 "tamparadora":"tamparadora",
-                "output_mem_nomatch":"SN_NM_EXPERTO"
+                "output_mem_nomatch":"SN_NM_MEMEXPERTO"
             },
             "import":"CTC/TEMPLATES/LOAD_TABLE.json"
         },
@@ -42,7 +42,7 @@
         },
         {
             "step_name":"RECUPERAR_SOLO_NULAS_EN_NMEXPERTO",
-            "template_vars":{"tabla_origen":"SN_NM_EXPERTO","tabla_destino":"NM_MEMEXPERTOCN","output_hive_nm_tabla":"NM_EXPERTO"},
+            "template_vars":{"tabla_origen":"SN_NM_MEMEXPERTO","tabla_destino":"NM_MEMEXPERTOCN","output_hive_nm_tabla":"NM_EXPERTO"},
             "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
         }
     ]

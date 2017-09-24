@@ -69,14 +69,14 @@
         },
         {
             "stage_name": "TV_INICIAL",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV Inicial",
             "template_vars":{},
             "import": "CTC/TV_INICIAL.json"
         },
         {
             "stage_name": "TV_TARJETA_REEXPEDIDAD_CE",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
@@ -85,7 +85,7 @@
         },
         {
             "stage_name": "TV_TARJETA_REEXPEDIDAD_EC",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
@@ -94,7 +94,7 @@
         },
         {
             "stage_name": "TV_TARJETA_AMPARADA_CE",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta amparadora",
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
@@ -103,7 +103,7 @@
         },
         {
             "stage_name": "TV_TARJETA_AMPARADA_EC",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta amparadora",
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
@@ -112,7 +112,7 @@
         },
         {
             "stage_name": "TFV_CDAV_MOV",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TFV entre CDAV y MOV",
             "template_vars":{},
             "import": "CTC/TFV_CM.json"
