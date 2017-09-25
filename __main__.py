@@ -552,7 +552,7 @@ def main(argv):
             outputfile = arg 
     with open(CONFDIR+"/"+"conf.json") as f_in:
         data = json.load(f_in)
-    
+        data = json.dumps(data)
     data = data.replace("${argument_date}",date)
     process_config = json.loads(data)
     process = Process(process_config)
