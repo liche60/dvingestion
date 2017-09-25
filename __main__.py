@@ -30,7 +30,7 @@ sc.setLogLevel("OFF")
 hive = HiveContext(sc)
 STAGE_NAME = ""
 STEP_NAME = ""
-CONFIDR = "."
+CONFDIR = "."
 
 class Logger:
 
@@ -45,7 +45,7 @@ class Logger:
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                                     datefmt='%Y-%m-%d %H:%M:%S')
-        handler = logging.FileHandler(CONFIDR+'log.txt', mode='w')
+        handler = logging.FileHandler(CONFDIR+'log.txt', mode='w')
         handler.setFormatter(formatter)
         screen_handler = logging.StreamHandler(stream=sys.stdout)
         screen_handler.setFormatter(formatter)
@@ -258,7 +258,7 @@ class InputEngineUtils():
             import_stage = json_file.get("import")
         if "template_vars" in json_file:
             template_vars = json_file.get("template_vars")
-        with open(CONFIDR+"/"+import_stage) as f_in:
+        with open(CONFDIR+"/"+import_stage) as f_in:
             json_file = json.load(f_in)
         json_file = InputEngineUtils.process_template_vars(json_file,template_vars)
         return {"config":json_file,"template_vars":template_vars}
@@ -541,15 +541,18 @@ def main(argv):
         print('test.py -c <conf directory> -d <date>')
         sys.exit(2)
     for opt, arg in opts:
-      if opt == '-h':
-        print('test.py -c <conf directory> -d <date>')
-        sys.exit()
-      elif opt in ("-c", "--confdir"):
-        CONFDIR = arg
-      elif opt in ("-d", "--date"):
-        outputfile = arg 
-    with open(CONFIDR+"/"+"conf.json") as f_in:
+        print(opt)
+        print(arg)
+        if opt == '-h':
+            print('test.py -c <conf directory> -d <date>')
+            sys.exit()
+        elif opt in ("-c", "--confdir"):
+            CONFDIR = arg
+        elif opt in ("-d", "--date"):
+            outputfile = arg 
+    with open(CONFDIR+"/"+"conf.json") as f_in:
         data = json.load(f_in)
+    
     data = data.replace("${argument_date}",date)
     process_config = json.loads(data)
     process = Process(process_config)
