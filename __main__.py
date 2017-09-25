@@ -17,6 +17,8 @@ from pyspark.context import SparkContext
 from pyspark.sql import SQLContext,HiveContext
 from pyspark import SparkConf, SparkContext
 from pyspark.sql.types import *
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
 
 """
 
@@ -38,7 +40,7 @@ class Logger:
         self.table_state = False
         self.debug_state = False
         self.table_state_step = 0
-        self.table_state_step_m = 0
+        self.table_state_step_m = 100
 
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -91,6 +93,7 @@ class Logger:
                 self.debug("persist replace "+str(step)+", tablas en memoria")
                 for t in tdf:
                     tmp = hive.table(t["tableName"])
+                    self.debug("\tTabla: "+t["tableName"]+" Registros: ")
                     count = str(tmp.count())
                     self.debug("\tTabla: "+t["tableName"]+" Registros: "+count)
 
@@ -130,69 +133,109 @@ class DataFrameEngineUtils():
             dataframe.cache()            
 
             LOGGER.show_dataframe_console(dataframe)
-            
             dataframe.registerTempTable(name)
         else:
             LOGGER.error("La tabla ya se encuentra creada en Hive, saliendo!")
             exit()
 
     @staticmethod
-    def persist_dataframe(name,method,dataframe):
-        LOGGER.debug("La tabla "+name+" se guardara permanentemente en HIVE")
-        countdf = dataframe.count()
+    def replace_table_hive_old(name,dataframe):
         id = DataFrameEngineUtils.id_generator()
-        id_p = DataFrameEngineUtils.id_generator()
-        if method == "REPLACE":
+        tmpTableName = name+"_tmp_"+id
+        tmpMemTableName = name+"_"+id
+        DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+        tdf = hive.tables().filter("isTemporary = False")
+        tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
+        if tableExist == 0:
+            LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+            LOGGER.info("La tabla "+name+" se ha creado en Hive")
+            dataframe.write.mode("append").format("json").saveAsTable(name)
+        else:
+            LOGGER.info("Creando tabla temporal "+tmpTableName)
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+tmpTableName+" as select * from "+tmpMemTableName)
+            LOGGER.info("Insertando datos a "+tmpTableName)
+            dataframe.write.mode("append").format("json").saveAsTable(tmpTableName)
+            LOGGER.info("Eliminando tabla "+name)
+            DataFrameEngineUtils.execute_query("DROP TABLE "+name)
+            LOGGER.info("Renombrando table "+tmpTableName+" por "+name)
+            DataFrameEngineUtils.execute_query("ALTER TABLE "+tmpTableName+" RENAME TO "+name)
+            LOGGER.info("Consultando datos desde "+name)
+            dataframe = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
+            LOGGER.info("Cachando...")
+            dataframe.cache()
+            #LOGGER.info("Mostrando...")
+            #dataframe.show()
+            #LOGGER.info("Contando...")
+            #LOGGER.info("datos "+str(dataframe.count()))
+        hive.dropTempTable(tmpMemTableName)
 
-            LOGGER.log_mem_table_state(1)
 
-            LOGGER.debug("Creando la tabla "+name+" con "+str(countdf)+" registros")
-            DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-
-            LOGGER.log_mem_table_state(2)
-
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id)
-            DataFrameEngineUtils.execute_query("create table "+name+"_"+id_p+" as select * from "+name+"_"+id)
-
-            LOGGER.log_mem_table_state(3)
-
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name+"_"+id_p)
-            newtable = DataFrameEngineUtils.execute_query("truncate table "+name)
-
-            LOGGER.log_mem_table_state(4)
-
-            DataFrameEngineUtils.execute_query("drop table "+name)
-            LOGGER.debug("La tabla en HIVE "+name+" fue eliminada para ser recreada")
-            DataFrameEngineUtils.execute_query("ALTER TABLE "+name+"_"+id_p+" RENAME TO "+name)
-
-            LOGGER.log_mem_table_state(5)
-
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            
-            LOGGER.log_mem_table_state(6)
-            
-            hive.dropTempTable(name+"_"+id)
-            LOGGER.debug("La tabla temporal "+name+"_"+id+" fue eliminada")
-            newtable = DataFrameEngineUtils.execute_query("select * from "+name)
-            LOGGER.show_dataframe_console(newtable)
-            count = LOGGER.count_dataframe_for_logging(newtable)
-            LOGGER.debug("La tabla "+name+" fue creada en HIVE con "+str(count)+" registros")
-            
-            LOGGER.log_mem_table_state(7)
-
-        elif method == "APPEND":
-            if countdf > 0:
-                LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
-                DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
-                newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
-                #newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select *,'["+STAGE_NAME+"]["+STEP_NAME+"]' step from "+name+"_"+id)
-                hive.dropTempTable(name+"_"+id)
-                newdata = DataFrameEngineUtils.execute_query("select * from "+name)
-                LOGGER.show_dataframe_console(newdata)
+    @staticmethod
+    def replace_table_hive(name,dataframe):
+        cantidad = dataframe.count()
+        if cantidad > 0:
+            id = DataFrameEngineUtils.id_generator()
+            tmpTableName = name+"_tmp_"+id
+            tmpMemTableName = name+"_"+id
+            tdf = hive.tables().filter("isTemporary = False")
+            tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
+            if tableExist == 0:
+                DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+                LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
+                DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+                LOGGER.info("La tabla "+name+" se ha creado en Hive")
+                dataframe.write.mode("append").format("json").saveAsTable(name)
+                hive.dropTempTable(tmpMemTableName)
             else:
-                LOGGER.debug("La tabla en memoria que se desea concatener con la ta tabla en Hive: "+name+" no tiene datos, continuando...")
-            
-        LOGGER.log_mem_table_state(8)
+                LOGGER.info("La tabla "+name+" se truncara")
+                DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
+                LOGGER.info("Almacenando nuevos datos en "+name)
+                dataframe.write.mode("append").format("json").saveAsTable(name)
+        else:
+            DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
+
+
+    @staticmethod
+    def append_table_hive(name,dataframe):
+        cantidad = dataframe.count()
+        if cantidad > 0:
+            id = DataFrameEngineUtils.id_generator()
+            tmpMemTableName = name+"_"+id
+            tdf = hive.tables().filter("isTemporary = False")
+            tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
+            stage_udf = udf(lambda: STAGE_NAME, StringType())
+            if tableExist == 0:
+                DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+                LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
+                DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+                DataFrameEngineUtils.execute_query("CREATE TABLE "+name+"_trace as select *,'' stage from "+tmpMemTableName)
+                LOGGER.info("La tabla "+name+" se ha creado en Hive")
+                dataframe.write.mode("append").format("json").saveAsTable(name)
+                dataframetrace = dataframe.withColumn("stage", stage_udf())
+                dataframetrace.show()
+                dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
+                hive.dropTempTable(tmpMemTableName)
+            else:
+                dataframe.write.mode("append").format("json").saveAsTable(name)
+                dataframetrace = dataframe.withColumn("stage", stage_udf())
+                dataframetrace.show()
+                dataframetrace.write.mode("append").format("json").saveAsTable(name+"_trace")
+        else:
+            LOGGER.info("El data frame "+name+" no tiene datos para insertar, continuando")
+
+    @staticmethod
+    def persist_dataframe(name,method,dataframe):
+        LOGGER.info("La tabla "+name+" se guardara permanentemente en HIVE")
+        if method == "REPLACE":
+            LOGGER.info("La tabla "+name+" sera sobreescrita en Hive")
+            DataFrameEngineUtils.replace_table_hive(name,dataframe)
+        elif method == "APPEND":
+            LOGGER.info("La tabla "+name+" existe en Hive, se insertaran los con nuevos datos")
+            DataFrameEngineUtils.append_table_hive(name,dataframe)
+        LOGGER.info("La tabla "+name+" se persiste en Hive")
+        result = DataFrameEngineUtils.execute_query("SELECT * FROM "+name)
+        #result.show()
 
     @staticmethod
     def execute_query(query):
@@ -262,9 +305,14 @@ class InputEngineUtils():
 
             LOGGER.log_mem_table_state(0)
 
-
             table = output_item.get("table")
             filters = output_item.get("filters")
+
+            LOGGER.info("procesando output table "+table)
+            #dataframe.show()
+
+
+
             dataframe_tmp = DataFrameEngineUtils.get_filtered_dataframe(dataframe,filters)
 
             LOGGER.log_mem_table_state(0)
@@ -311,10 +359,16 @@ class MergeStep():
             query = self.build_table_query(table,columns)
             if first:
                 dataframe = DataFrameEngineUtils.execute_query(query)
+                dataframe.cache()
+                dataframe.count()
                 first = False
             else:
                 dftmp = DataFrameEngineUtils.execute_query(query)
+                dftmp.cache()
+                dataframe.count()
                 dataframe = dataframe.unionAll(dftmp)
+                dataframe.cache()
+                dataframe.count()
             LOGGER.show_dataframe_console(dataframe)
         LOGGER.info("Merge ejecutado!")
         return dataframe
@@ -443,7 +497,7 @@ class Stage():
                 LOGGER.log_mem_table_state(0)
 
                 step.execute()
-                tdf = hive.tables().filter("isTemporary = True").collect()
+                #tdf = hive.tables().filter("isTemporary = True").collect()
 
                 LOGGER.log_mem_table_state(0)
 

@@ -1,0 +1,49 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de expertos y cdav",
+    "stage_name": "TFV",
+    "inputs": [],
+    "steps":[
+        {
+            "step_name":"LOAD_NM_CDAV_SOLO_NULAS",
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"${tfv_tarjeta} is null or ${tfv_tarjeta} = ''",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora",
+                "output_mem_nomatch":"SN_NM_MEMCDAV"
+            },
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
+            "step_name":"JOIN_TFV_NMCDAV_NMEXPERTO",
+            "template_vars":{"tarjeta":"${tfv_tarjeta}","origen":"MEMCDAV","destino":"MEMEXPERTO","filtro":"${tfv_tarjeta} is not null and ${tfv_tarjeta} <> ''",
+            "output_nm_mem_table_origen":"NM_MEMCDAVCE","output_nm_mem_table_destino":"NM_MEMEXPERTOCE","output_mem_table_match":"MEM_EC_MATCH",
+            "input_origen":"NM_CDAV","input_destino":"NM_EXPERTO"
+            },
+            "import":"CTC/TEMPLATES/JOIN_TFV.json"
+        },
+        {
+            "step_name":"APPEND_TO_MATCH",
+            "template_vars":{"origen":"MEMCDAV","destino":"MEMEXPERTO","table_hive_match":"EC_MATCH","persist_method":"APPEND",
+            "input_mem_match_table":"MEM_EC_MATCH"},
+            "import":"CTC/TEMPLATES/MATCH.json"
+        },
+        {
+            "step_name":"NEW_NOMATCH_EXPERTO",
+            "template_vars":{"tabla":"MEMEXPERTO","output_nomatch_table":"NM_EXPERTO","input_nm_mem_tabla":"NM_MEMEXPERTOCE","persist":"TRUE","persist_method":"REPLACE"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "step_name":"NEW_NOMATCH_CDAV",
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_MEMCDAVCN","input_nm_mem_tabla":"NM_MEMCDAVCE","persist":"FALSE"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "step_name":"RECUPERAR_SOLO_NULAS_EN_NMCDAV",
+            "template_vars":{"tabla_origen":"SN_NM_MEMCDAV","tabla_destino":"NM_MEMCDAVCN","output_hive_nm_tabla":"NM_CDAV"},
+            "import":"CTC/TEMPLATES/MERGE_TNULL_TO_NM.json"
+        }
+    ]
+}

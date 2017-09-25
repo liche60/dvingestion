@@ -32,13 +32,13 @@
             "import": "CTC/TFV_INICIAL.json"
         },
         {
-            "stage_name": "TFV_TARJETA_REEXPEDIDAD",
+            "stage_name": "TFV_TARJETA_REEXPEDIDAD_CE",
             "enable":"true",
             "description":"*********************  Stage TFV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
             },
-            "import": "CTC/TFV.json"
+            "import": "CTC/TFVCE.json"
         },
         {
             "stage_name": "TFV_TARJETA_AMPARADA", 
@@ -47,7 +47,16 @@
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
             },
-            "import": "CTC/TFV.json"
+            "import": "CTC/TFVCE.json"
+        },
+        {
+            "stage_name": "TFV_TARJETA_AMPARADA_EC",
+            "enable":"true",
+            "description":"*********************  Stage TFV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
+            },
+            "import": "CTC/TFVEC.json"
         },
         {
             "stage_name": "TV_INICIAL",
@@ -63,7 +72,7 @@
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
             },
-            "import": "CTC/TV.json"
+            "import": "CTC/TVCE.json"
         },
         {
             "stage_name": "TV_TARJETA_AMPARADA",
@@ -72,11 +81,20 @@
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
             },
-            "import": "CTC/TV.json"
+            "import": "CTC/TVCE.json"
+        },
+        {
+            "stage_name": "TV_TARJETA_AMPARADA_EC",
+            "enable":"true",
+            "description":"*********************  Stage TV por tarjeta amparadora",
+            "template_vars":{
+                "tfv_tarjeta":"tamparadora"
+            },
+            "import": "CTC/TVEC.json"
         },
         {
             "stage_name": "TFV_CDAV_MOV",
-            "enable":"true",
+            "enable":"false",
             "description":"*********************  Stage TFV entre CDAV y MOV",
             "template_vars":{},
             "import": "CTC/TFV_CM.json"
