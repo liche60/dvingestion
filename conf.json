@@ -41,7 +41,7 @@
             "import": "CTC/TFV.json"
         },
         {
-            "stage_name": "TFV_TARJETA_AMPARADA",
+            "stage_name": "TFV_TARJETA_AMPARADA", 
             "enable":"true",
             "description":"*********************  Stage TFV por tarjeta amparadora",
             "template_vars":{
