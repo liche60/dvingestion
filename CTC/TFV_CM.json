@@ -16,7 +16,7 @@
         },
         {
             "step_name":"JOIN_TV_CDAV_MOV",
-            "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAV","destino":"MEMMOV","filtro":"1 = 1",
+            "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAVCM","destino":"MEMMOV","filtro":"fecha = '${fecha_proceso}",
             "output_nm_mem_table_origen":"NM_MEMCDAV","output_nm_mem_table_destino":"NM_MEMMOV","output_mem_table_match":"MEM_CM_MATCH",
             "input_origen":"NM_CDAV","input_destino":"ORIG_MEMMOV"
             },
@@ -24,14 +24,14 @@
         },
         {
             "step_name":"MATCH_INICIAL",
-            "template_vars":{"origen":"MEMCDAV","destino":"MEMMOV","table_hive_match":"CM_MATCH","persist_method":"APPEND",
+            "template_vars":{"origen":"MEMCDAVCM","destino":"MEMMOV","table_hive_match":"CM_MATCH","persist_method":"APPEND",
             "input_mem_match_table":"MEM_CM_MATCH"},
             "import":"CTC/TEMPLATES/MATCH_CM.json"
         },
         {
             "step_name":"CREAR_NM_CDAV_NUEVO",
             "description":"Se creara un nuevo CDAV con los que no hacen match",
-            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
+            "template_vars":{"tabla":"MEMCDAVCM","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
             "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
         },
         {
