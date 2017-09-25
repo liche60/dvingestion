@@ -9,7 +9,7 @@ import json
 import logging
 import string
 import random
-import sys
+import sys,getopt
 
 #from impala.dbapi import connect
 #from impala.util import as_pandas
@@ -28,6 +28,7 @@ sc.setLogLevel("OFF")
 hive = HiveContext(sc)
 STAGE_NAME = ""
 STEP_NAME = ""
+CONFIDR = "."
 
 class Logger:
 
@@ -42,7 +43,7 @@ class Logger:
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                                     datefmt='%Y-%m-%d %H:%M:%S')
-        handler = logging.FileHandler('log.txt', mode='w')
+        handler = logging.FileHandler(CONFIDR+'log.txt', mode='w')
         handler.setFormatter(formatter)
         screen_handler = logging.StreamHandler(stream=sys.stdout)
         screen_handler.setFormatter(formatter)
@@ -184,6 +185,7 @@ class DataFrameEngineUtils():
                 LOGGER.debug(str(countdf)+" registros seran insertada en la tabla en Hive: "+name)
                 DataFrameEngineUtils.persist_memory_dataframe(name+"_"+id,dataframe)
                 newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select * from "+name+"_"+id)
+                #newdata = DataFrameEngineUtils.execute_query("insert into "+name+" select *,'["+STAGE_NAME+"]["+STEP_NAME+"]' step from "+name+"_"+id)
                 hive.dropTempTable(name+"_"+id)
                 newdata = DataFrameEngineUtils.execute_query("select * from "+name)
                 LOGGER.show_dataframe_console(newdata)
@@ -213,7 +215,7 @@ class InputEngineUtils():
             import_stage = json_file.get("import")
         if "template_vars" in json_file:
             template_vars = json_file.get("template_vars")
-        with open(import_stage) as f_in:
+        with open(CONFIDR+"/"+import_stage) as f_in:
             json_file = json.load(f_in)
         json_file = InputEngineUtils.process_template_vars(json_file,template_vars)
         return {"config":json_file,"template_vars":template_vars}
@@ -476,9 +478,28 @@ class Process():
             stage = Stage(self,stage_config)
             stage.execute()
 
-        
-if __name__ == "__main__":
-    with open("conf.json") as f_in:
-        process_config = json.load(f_in)
+def main(argv):
+    global CONFDIR
+    date = ''
+    try:
+        opts, args = getopt.getopt(argv,"hc:d:",["confdir=","date="])
+    except getopt.GetoptError:
+        print('test.py -c <conf directory> -d <date>')
+        sys.exit(2)
+    for opt, arg in opts:
+      if opt == '-h':
+        print('test.py -c <conf directory> -d <date>')
+        sys.exit()
+      elif opt in ("-c", "--confdir"):
+        CONFDIR = arg
+      elif opt in ("-d", "--date"):
+        outputfile = arg 
+    with open(CONFIDR+"/"+"conf.json") as f_in:
+        data = json.load(f_in)
+    data = data.replace("${argument_date}",date)
+    process_config = json.loads(data)
     process = Process(process_config)
     process.execute()
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

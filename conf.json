@@ -2,7 +2,7 @@
     "process_name": "CTC",
     "hive_database": "pruebas_cuadre",
     "process_vars":{
-                "fecha_proceso":"2017-08-17",
+                "fecha_proceso":"${argument_date}",
                 "tabla_experto":"EXPERTO_CTC_IN",
                 "columna_experto_id":"idconsecutivo",
                 "columna_experto_tarjeta":"nrocuenta",
@@ -58,7 +58,7 @@
         },
         {
             "stage_name": "TV_TARJETA_REEXPEDIDAD",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta reexpedida",
             "template_vars":{
                 "tfv_tarjeta":"treexpedida"
@@ -67,7 +67,7 @@
         },
         {
             "stage_name": "TV_TARJETA_AMPARADA",
-            "enable":"false",
+            "enable":"true",
             "description":"*********************  Stage TV por tarjeta amparadora",
             "template_vars":{
                 "tfv_tarjeta":"tamparadora"
