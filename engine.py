@@ -174,28 +174,28 @@ class DataFrameEngineUtils():
     @staticmethod
     def replace_table_hive(name,dataframe):
         cantidad = dataframe.count()
-        if cantidad > 0:
-            id = DataFrameEngineUtils.id_generator()
-            tmpTableName = name+"_tmp_"+id
-            tmpMemTableName = name+"_"+id
-            tdf = hive.tables().filter("isTemporary = False")
-            tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
-            if tableExist == 0:
-                DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
-                LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
-                DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
-                LOGGER.info("La tabla "+name+" se ha creado en Hive")
+        id = DataFrameEngineUtils.id_generator()
+        tmpTableName = name+"_tmp_"+id
+        tmpMemTableName = name+"_"+id
+        tdf = hive.tables().filter("isTemporary = False")
+        tableExist = tdf.filter(tdf["tableName"].rlike(("(?i)^"+name+"$"))).count()
+        if tableExist == 0:
+            DataFrameEngineUtils.persist_memory_dataframe(tmpMemTableName,dataframe.filter("0 = 1"))
+            LOGGER.info("La tabla "+name+" no existe, se creara en HIVE")
+            DataFrameEngineUtils.execute_query("CREATE TABLE "+name+" as select * from "+tmpMemTableName)
+            LOGGER.info("La tabla "+name+" se ha creado en Hive")
+            if cantidad > 0:
                 dataframe.write.mode("append").format("json").saveAsTable(name)
                 hive.dropTempTable(tmpMemTableName)
             else:
-                LOGGER.info("La tabla "+name+" se truncara")
                 DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
-                LOGGER.info("Almacenando nuevos datos en "+name)
-                dataframe.write.mode("append").format("json").saveAsTable(name)
         else:
+            LOGGER.info("La tabla "+name+" se truncara")
             DataFrameEngineUtils.execute_query("TRUNCATE TABLE "+name)
-
-
+            LOGGER.info("Almacenando nuevos datos en "+name)
+            if cantidad > 0:
+                dataframe.write.mode("append").format("json").saveAsTable(name)
+        
     @staticmethod
     def append_table_hive(name,dataframe):
         cantidad = dataframe.count()
