@@ -45,7 +45,7 @@ class Logger:
     def setup_custom_logger(self):
         formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s',
                                     datefmt='%Y-%m-%d %H:%M:%S')
-        handler = logging.FileHandler(CONFDIR+'log.txt', mode='w')
+        handler = logging.FileHandler(CONFDIR+'/log.txt', mode='w')
         handler.setFormatter(formatter)
         screen_handler = logging.StreamHandler(stream=sys.stdout)
         screen_handler.setFormatter(formatter)
@@ -549,7 +549,7 @@ def main(argv):
         elif opt in ("-c", "--confdir"):
             CONFDIR = arg
         elif opt in ("-d", "--date"):
-            outputfile = arg 
+            date = arg 
     with open(CONFDIR+"/"+"conf.json") as f_in:
         data = json.load(f_in)
         data = json.dumps(data)
