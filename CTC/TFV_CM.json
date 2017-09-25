@@ -5,7 +5,7 @@
     "steps":[
         { 
             "step_name":"LOAD_MOV_FILTRADO_FECHA",
-            "template_vars":{"source": "${tabla_mov}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}'",
+            "template_vars":{"source": "${tabla_mov}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}' and ${columna_mov_tarjeta} is not null and ${columna_mov_tarjeta} <> ''",
                 "idconsecutivo":"${columna_mov_id}",
                 "tarjeta":"${columna_mov_tarjeta}",
                 "fecha":"${columna_mov_fecha}",
@@ -14,11 +14,24 @@
             },
             "import":"CTC/TEMPLATES/LOAD_TABLE_CM.json"
         },
+{
+        "step_name":"LOAD_NM_CDAV",
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"fecha = '${fecha_proceso}'",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora",
+                "output_mem_nomatch":"ORG_MEMCDAV"
+            },
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
         {
             "step_name":"JOIN_TV_CDAV_MOV",
-            "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAVCM","destino":"MEMMOV","filtro":"fecha = '${fecha_proceso}'",
+            "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAVCM","destino":"MEMMOV","filtro":" 1=1 ",
             "output_nm_mem_table_origen":"NM_MEMCDAV","output_nm_mem_table_destino":"NM_MEMMOV","output_mem_table_match":"MEM_CM_MATCH",
-            "input_origen":"NM_CDAV","input_destino":"ORIG_MEMMOV"
+            "input_origen":"ORG_MEMCDAV","input_destino":"ORIG_MEMMOV"
             },
             "import":"CTC/TEMPLATES/JOIN_TFV.json"
         },
