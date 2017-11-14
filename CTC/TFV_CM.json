@@ -1,0 +1,58 @@
+{
+    "description": "Stage inicial donde solo se toma como insumo la tabla de CDAVs y MOV",
+    "stage_name": "TFV_MOV",
+    "inputs": [],
+    "steps":[
+        { 
+            "step_name":"LOAD_MOV_FILTRADO_FECHA",
+            "template_vars":{"source": "${tabla_mov}","tabla":"MEMMOV","filtro":"${columna_mov_fecha} = '${fecha_proceso}' and ${columna_mov_tarjeta} is not null and ${columna_mov_tarjeta} <> ''",
+                "idconsecutivo":"${columna_mov_id}",
+                "tarjeta":"${columna_mov_tarjeta}",
+                "fecha":"${columna_mov_fecha}",
+                "valor":"${columna_mov_valor}",
+                "output_mem_nomatch":"ORIG_MEMMOV"
+            },
+            "import":"CTC/TEMPLATES/LOAD_TABLE_CM.json"
+        },
+{
+        "step_name":"LOAD_NM_CDAV",
+            "template_vars":{"source": "NM_CDAV","tabla":"MEM_CDAV","filtro":"fecha = '${fecha_proceso}'",
+                "idconsecutivo":"idconsecutivo",
+                "tarjeta":"tarjeta",
+                "fecha":"fecha",
+                "valor":"valor",
+                "treexpedida":"treexpedida",
+                "tamparadora":"tamparadora",
+                "output_mem_nomatch":"ORG_MEMCDAV"
+            },
+            "import":"CTC/TEMPLATES/LOAD_TABLE.json"
+        },
+        {
+            "step_name":"JOIN_TV_CDAV_MOV",
+            "template_vars":{"tarjeta":"tarjeta","origen":"MEMCDAV","destino":"MEMMOV","filtro":" 1=1 ",
+            "output_nm_mem_table_origen":"NM_MEMCDAV","output_nm_mem_table_destino":"NM_MEMMOV","output_mem_table_match":"MEM_CM_MATCH",
+            "input_origen":"ORG_MEMCDAV","input_destino":"ORIG_MEMMOV"
+            },
+            "import":"CTC/TEMPLATES/JOIN_TFV.json"
+        },
+        {
+            "step_name":"MATCH_INICIAL",
+            "template_vars":{"origen":"MEMCDAV","destino":"MEMMOV","table_hive_match":"CM_MATCH","persist_method":"APPEND",
+            "input_mem_match_table":"MEM_CM_MATCH"},
+            "import":"CTC/TEMPLATES/MATCH_CM.json"
+        },
+        {
+            "step_name":"CREAR_NM_CDAV_NUEVO",
+            "description":"Se creara un nuevo CDAV con los que no hacen match",
+            "template_vars":{"tabla":"MEMCDAV","output_nomatch_table":"NM_CDAV","input_nm_mem_tabla":"NM_MEMCDAV","persist":"TRUE","persist_method":"REPLACE"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_TABLE.json"
+        },
+        {
+            "step_name":"CREAR_NM_MOV_NUEVO",
+            "description":"Se creara un nuevo MOV con los que no hacen match",
+            "template_vars":{"tabla":"MEMMOV","output_nomatch_table":"NM_MOV","input_nm_mem_tabla":"NM_MEMMOV","persist":"TRUE","persist_method":"REPLACE"},
+            "import":"CTC/TEMPLATES/NEW_NOMATCH_MOV.json"
+        }
+
+    ]
+}
